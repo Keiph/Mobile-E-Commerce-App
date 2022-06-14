@@ -26,8 +26,8 @@ class _QuantityCounterState extends State<QuantityCounter> {
             height: 32,
             child: Icon(Icons.remove),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              border: Border.all()
+                borderRadius: BorderRadius.circular(5.0),
+                border: Border.all()
             ),
           ),
           onTap: _decrementValidator,
@@ -45,14 +45,13 @@ class _QuantityCounterState extends State<QuantityCounter> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
-              
+
             ),
           ),
         ),
 
         SizedBox(
           width: 10,
-          height: 10,
         ),
 
         GestureDetector(

@@ -3,6 +3,7 @@ import 'package:boogle_mobile/providers/product_list.dart';
 import 'package:boogle_mobile/screens/forgot_password_screen.dart';
 
 import 'package:boogle_mobile/screens/login_screen.dart';
+import 'package:boogle_mobile/screens/payment_screen.dart';
 import 'package:boogle_mobile/screens/product_screen.dart';
 import 'package:boogle_mobile/screens/search_screen.dart';
 
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           ForgotPasswordScreen.routeName: (_) { return ForgotPasswordScreen(); },
           SearchScreen.routeName: (_) { return SearchScreen();},
           ProductScreen.routeName: (_) {return ProductScreen();},
+          PaymentScreen.routeName: (_) {return PaymentScreen();}
 
 
         },

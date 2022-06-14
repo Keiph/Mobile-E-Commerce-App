@@ -1,15 +1,31 @@
 import 'package:boogle_mobile/models/product.dart';
+import 'package:boogle_mobile/screens/payment_screen.dart';
 import 'package:boogle_mobile/widgets/quantity_counter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class ProductScreen extends StatelessWidget {
+class ProductScreen extends StatefulWidget {
   static String routeName = '/product';
+
+  @override
+  State<ProductScreen> createState() => _ProductScreenState();
+}
+
+class _ProductScreenState extends State<ProductScreen> {
+
+
+
 
   @override
   Widget build(BuildContext context) {
     Product selectedProduct = ModalRoute.of(context)?.settings.arguments as Product;
+
+    void _decrementValidator(){
+      selectedProduct.productCount < 2 ? selectedProduct.productCount: setState((){
+        selectedProduct.productCount-=1;
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedProduct.productName),
@@ -41,6 +57,7 @@ class ProductScreen extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 10,),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -89,7 +106,79 @@ class ProductScreen extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(selectedProduct.productDetails),
                     ),
-                    QuantityCounter()
+
+                    Row(
+                      children: [
+                        GestureDetector(
+                          child: Container(
+                            width: 32,
+                            height: 32,
+                            child: Icon(Icons.remove),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all()
+                            ),
+                          ),
+                          onTap: _decrementValidator,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+
+                        Container(
+                          width: 64,
+                          height: 32,
+                          child: Center(
+                            child: Text('${selectedProduct.productCount}'),
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            border: Border.all(
+
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(
+                          width: 10,
+                        ),
+
+                        GestureDetector(
+                          child: Container(
+                            width: 32,
+                            height: 32,
+                            child: Icon(Icons.add),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all()
+                            ),
+                          ),
+                          onTap: ()=> setState(() => selectedProduct.productCount+=1),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          onPressed: (){Navigator.of(context).pushNamed(PaymentScreen.routeName, arguments: selectedProduct );},
+                          child: Text('Buy Now'),
+                          style: ElevatedButton.styleFrom(
+                            primary: const Color(0xff00AB66),
+                            side: BorderSide(),
+                          )
+                        ),
+                        ElevatedButton(
+                            onPressed: (){ },
+                            child: Text('Add to Cart'),
+                            style: ElevatedButton.styleFrom(
+                              primary: const Color(0xff5890FF),
+                              side: BorderSide(),
+                            )
+                        ),
+                      ],
+                    )
 
                   ],
                 ),
