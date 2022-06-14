@@ -52,6 +52,7 @@ class _QuantityCounterState extends State<QuantityCounter> {
 
         SizedBox(
           width: 10,
+          height: 10,
         ),
 
         GestureDetector(
