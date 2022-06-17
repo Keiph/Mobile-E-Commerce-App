@@ -18,7 +18,11 @@ class ProductList with ChangeNotifier {
 
   ];
 
-  List<Product> getHomeProductList(){
+
+
+
+
+  List<Product> getAllProductList(){
     return myProductList;
   }
 
@@ -26,6 +30,8 @@ class ProductList with ChangeNotifier {
     List<Product> temp = List.from(myProductList);
     temp.sort((a,b) => b.productRating.compareTo(a.productRating));
     return temp;
-
   }
+
+
+
 }

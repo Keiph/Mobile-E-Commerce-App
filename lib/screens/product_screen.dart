@@ -1,9 +1,13 @@
 import 'package:boogle_mobile/models/product.dart';
 import 'package:boogle_mobile/screens/payment_screen.dart';
+import 'package:boogle_mobile/widgets/like_button.dart';
 import 'package:boogle_mobile/widgets/quantity_counter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/liked_list.dart';
 
 class ProductScreen extends StatefulWidget {
   static String routeName = '/product';
@@ -13,12 +17,12 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-
-
-
+  int i=0;
+  bool isLiked = false;
 
   @override
   Widget build(BuildContext context) {
+    LikedList allLikedProduct = Provider.of<LikedList>(context);
     Product selectedProduct = ModalRoute.of(context)?.settings.arguments as Product;
 
     void _decrementValidator(){
@@ -42,6 +46,31 @@ class _ProductScreenState extends State<ProductScreen> {
                     (
                     aspectRatio: 16/9,
                       child: Image.network(selectedProduct.productImg,),
+                  ),
+                  Container(
+                    child:Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white
+                      ),
+
+                      child: IconButton(
+                        icon: isLiked
+                            ? Icon(CupertinoIcons.heart_fill)
+                            : Icon(CupertinoIcons.heart),
+                        onPressed: () { setState(() {
+                          isLiked =!isLiked;
+                          print(selectedProduct);
+                          if(isLiked){
+                            allLikedProduct.addToLiked(selectedProduct.productName, selectedProduct.productImg, selectedProduct.productDetails, selectedProduct.productColors, selectedProduct.productCategory, selectedProduct.productPrice, selectedProduct.productSizes, selectedProduct.productSizeUnit, selectedProduct.productRating, selectedProduct.productCount);
+                          }else{
+                            allLikedProduct.removeFromLiked(i);
+                          }
+                        }); },
+                      ),
+                    ),
                   ),
                 ],
               ),

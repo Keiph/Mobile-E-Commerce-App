@@ -9,7 +9,7 @@ class SearchGridViewBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProductList homeProductList = Provider.of<ProductList>(context);
+    ProductList allProductList = Provider.of<ProductList>(context);
     return GridView.builder(
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 200,
@@ -18,7 +18,7 @@ class SearchGridViewBuilder extends StatelessWidget {
             mainAxisSpacing: 20),
 
         itemBuilder: (ctx, i){
-          Product currentProduct = homeProductList.getHomeProductList()[i];
+          Product currentProduct = allProductList.getAllProductList()[i];
           return Container(
             alignment: Alignment.center,
             child: Column(
@@ -39,7 +39,7 @@ class SearchGridViewBuilder extends StatelessWidget {
             ),
           );
         },
-      itemCount: homeProductList.getHomeProductList().length,
+      itemCount: allProductList.getAllProductList().length,
     );
   }
 }

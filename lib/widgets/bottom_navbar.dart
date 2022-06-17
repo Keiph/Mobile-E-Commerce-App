@@ -1,4 +1,6 @@
+import 'package:boogle_mobile/screens/cart_screen.dart';
 import 'package:boogle_mobile/screens/home_screen.dart';
+import 'package:boogle_mobile/screens/liked_screen.dart';
 import 'package:boogle_mobile/widgets/app_drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,7 @@ class _BottomNavState extends State<BottomNav> {
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
   void _onItemTapped(int index) {
-    index == 4 ? _drawerKey.currentState!.openEndDrawer() : setState(() {
+    index == 3 ? _drawerKey.currentState!.openEndDrawer() : setState(() {
       selectedIndex = index;
     });
   }
@@ -24,12 +26,15 @@ class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.shopping_cart),
+        onPressed: () { Navigator.of(context).pushNamed(CartScreen.routeName); },
+      ),
       body: Center(
         child:
         selectedIndex == 0 ? HomeScreen():
         selectedIndex == 1 ? SearchScreen():
-        selectedIndex == 2 ? Text('Cart'):
-        Text('Liked'),
+        LikedScreen(),
       ),
       key: _drawerKey,
       endDrawer: AppDrawer(),
@@ -43,7 +48,6 @@ class _BottomNavState extends State<BottomNav> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.heart), label: 'Liked'),
           BottomNavigationBarItem(icon: Icon(Icons.menu),label: "Menu"),
         ],

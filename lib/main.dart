@@ -1,5 +1,8 @@
 import 'package:boogle_mobile/models/product.dart';
+import 'package:boogle_mobile/providers/liked_list.dart';
+
 import 'package:boogle_mobile/providers/product_list.dart';
+import 'package:boogle_mobile/screens/cart_screen.dart';
 import 'package:boogle_mobile/screens/forgot_password_screen.dart';
 
 import 'package:boogle_mobile/screens/login_screen.dart';
@@ -26,7 +29,11 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ProductList>(
           create: (ctx) => ProductList(),
-        )
+        ),
+        ChangeNotifierProvider<LikedList>(
+          create: (ctx) => LikedList(),
+        ),
+
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -39,7 +46,8 @@ class MyApp extends StatelessWidget {
           ForgotPasswordScreen.routeName: (_) { return ForgotPasswordScreen(); },
           SearchScreen.routeName: (_) { return SearchScreen();},
           ProductScreen.routeName: (_) {return ProductScreen();},
-          PaymentScreen.routeName: (_) {return PaymentScreen();}
+          PaymentScreen.routeName: (_) {return PaymentScreen();},
+          CartScreen.routeName: (_) {return CartScreen();}
 
 
         },
