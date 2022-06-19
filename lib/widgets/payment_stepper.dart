@@ -67,7 +67,9 @@ class _PaymentStepperState extends State<PaymentStepper> {
       isActive: _index >= 0,
       title: Text('Address', style: TextStyle( fontSize: 12, fontWeight: FontWeight.bold),),
       content: Container(
-
+        child: Column(
+          
+        ),
       ),
     ),
     Step(

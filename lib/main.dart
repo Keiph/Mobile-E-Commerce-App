@@ -1,11 +1,13 @@
 import 'package:boogle_mobile/models/product.dart';
 import 'package:boogle_mobile/providers/cart_list.dart';
+import 'package:boogle_mobile/providers/history_list.dart';
 import 'package:boogle_mobile/providers/liked_list.dart';
 
 import 'package:boogle_mobile/providers/product_list.dart';
 import 'package:boogle_mobile/screens/cart_payment_screen.dart';
 import 'package:boogle_mobile/screens/cart_screen.dart';
 import 'package:boogle_mobile/screens/forgot_password_screen.dart';
+import 'package:boogle_mobile/screens/history_screen.dart';
 
 import 'package:boogle_mobile/screens/login_screen.dart';
 import 'package:boogle_mobile/screens/payment_screen.dart';
@@ -38,6 +40,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<CartList>(
           create: (ctx) => CartList(),
         ),
+        ChangeNotifierProvider<HistoryList>(
+          create: (ctx) => HistoryList(),
+        ),
 
       ],
       child: MaterialApp(
@@ -52,7 +57,8 @@ class MyApp extends StatelessWidget {
           ProductScreen.routeName: (_) {return ProductScreen();},
           PaymentScreen.routeName: (_) {return PaymentScreen();},
           CartPaymentScreen.routeName: (_) {return CartPaymentScreen();},
-          CartScreen.routeName: (_) {return CartScreen();}
+          CartScreen.routeName: (_) {return CartScreen();},
+          HistoryScreen.routeName: (_) {return HistoryScreen();},
 
 
         },

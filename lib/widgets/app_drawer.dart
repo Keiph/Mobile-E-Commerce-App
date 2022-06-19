@@ -1,3 +1,4 @@
+import 'package:boogle_mobile/screens/history_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -22,6 +23,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.access_time),
             title: Text('History'),
+            onTap: (){ Navigator.of(context).pushNamed(HistoryScreen.routeName);},
 
           ),
           Divider(

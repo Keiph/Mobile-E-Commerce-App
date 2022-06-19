@@ -1,28 +1,30 @@
+import 'package:boogle_mobile/providers/history_list.dart';
+import 'package:boogle_mobile/screens/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../models/product.dart';
-import '../providers/history_list.dart';
-import '../providers/product_list.dart';
-import '../screens/product_screen.dart';
 
-class SearchGridViewBuilder extends StatelessWidget {
-
+class HistoryScreen extends StatelessWidget {
+  static String routeName = '/history';
 
   @override
   Widget build(BuildContext context) {
-    ProductList allProductList = Provider.of<ProductList>(context);
-    HistoryList historyList= Provider.of<HistoryList>(context);
-    return GridView.builder(
+    HistoryList historyList = Provider.of<HistoryList>(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('History'),
+      ),
+      body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 200,
             childAspectRatio: 1,
             crossAxisSpacing: 20,
-            mainAxisSpacing: 20),
-
+            mainAxisSpacing: 20
+        ),
         itemBuilder: (ctx, i){
-          Product currentProduct = allProductList.getAllProductList()[i];
+          Product historyProduct = historyList.getMyHistoryList()[i];
           return GestureDetector(
             child: Container(
               alignment: Alignment.center,
@@ -37,7 +39,7 @@ class SearchGridViewBuilder extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            currentProduct.productName,
+                            historyProduct.productName,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Colors.white,
@@ -55,7 +57,7 @@ class SearchGridViewBuilder extends StatelessWidget {
                       children: [
                         RatingBar.builder(
                           ignoreGestures: true,
-                          initialRating: currentProduct.productRating,
+                          initialRating: historyProduct.productRating,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
                           itemCount: 5,
@@ -68,7 +70,7 @@ class SearchGridViewBuilder extends StatelessWidget {
                           onRatingUpdate: (rating) {},
                         ),
                         const SizedBox(width: 5.0),
-                        Text('${currentProduct.productRating}',
+                        Text('${historyProduct.productRating}',
                           style: TextStyle(
                             fontSize: 12.0,
                             color: Colors.white,
@@ -86,8 +88,8 @@ class SearchGridViewBuilder extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Expanded(
-                          child: Text(
-                            '\$${currentProduct.productPrice.toStringAsFixed(2)}',
+                          child:Text(
+                            '\$${historyProduct.productPrice.toStringAsFixed(2)}',
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Colors.white,
@@ -96,6 +98,7 @@ class SearchGridViewBuilder extends StatelessWidget {
                             ),
                           ),
                         ),
+
                         Stack(
                           alignment: Alignment.center,
                           children: [
@@ -112,7 +115,7 @@ class SearchGridViewBuilder extends StatelessWidget {
                               height: 10,
                               decoration: BoxDecoration(
                                 border: Border.all(width: 0.5),
-                                color: currentProduct.productColors,
+                                color: historyProduct.productColors,
                                 shape: BoxShape.circle,
                               ),
                             ),
@@ -126,7 +129,7 @@ class SearchGridViewBuilder extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(currentProduct.productImg),
+                  image: NetworkImage(historyProduct.productImg),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                       Colors.black.withOpacity(0.5), BlendMode.darken),
@@ -135,14 +138,12 @@ class SearchGridViewBuilder extends StatelessWidget {
               ),
             ),
             onTap: (){
-              historyList.addToHistory(currentProduct.productName, currentProduct.productImg, currentProduct.productDetails, currentProduct.productColors, currentProduct.productCategory, currentProduct.productPrice, currentProduct.productSizes, currentProduct.productSizeUnit, currentProduct.productRating, currentProduct.productCount);
-
-              Navigator.of(context).pushNamed(ProductScreen.routeName, arguments: currentProduct);
-
+              Navigator.of(context).pushNamed(ProductScreen.routeName, arguments: historyProduct);
             },
           );
         },
-      itemCount: allProductList.getAllProductList().length,
+        itemCount: historyList.getMyHistoryList().length ,
+      ),
     );
   }
 }

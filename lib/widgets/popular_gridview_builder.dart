@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../models/product.dart';
+import '../providers/history_list.dart';
 import '../providers/liked_list.dart';
 import '../providers/product_list.dart';
 
@@ -12,6 +13,7 @@ class PopularGridViewBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ProductList popularProductList = Provider.of<ProductList>(context);
+    HistoryList historyList= Provider.of<HistoryList>(context);
 
     return GridView.builder(
       physics: NeverScrollableScrollPhysics(),
@@ -135,8 +137,9 @@ class PopularGridViewBuilder extends StatelessWidget {
             ),
           ),
           onTap: () {
-            Navigator.of(context)
-                .pushNamed(ProductScreen.routeName, arguments: currentProduct);
+            historyList.addToHistory(currentProduct.productName, currentProduct.productImg, currentProduct.productDetails, currentProduct.productColors, currentProduct.productCategory, currentProduct.productPrice, currentProduct.productSizes, currentProduct.productSizeUnit, currentProduct.productRating, currentProduct.productCount);
+            
+            Navigator.of(context).pushNamed(ProductScreen.routeName, arguments: currentProduct);
           },
         );
       },

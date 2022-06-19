@@ -1,6 +1,8 @@
 import 'package:boogle_mobile/providers/liked_list.dart';
 import 'package:boogle_mobile/screens/payment_screen.dart';
 import 'package:boogle_mobile/screens/product_screen.dart';
+import 'package:boogle_mobile/widgets/empty_cart.dart';
+import 'package:boogle_mobile/widgets/empty_liked.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -49,10 +51,16 @@ class _LikedScreenState extends State<LikedScreen> {
     LikedList allLikedProduct = Provider.of<LikedList>(context);
     CartList cartProduct = Provider.of<CartList>(context);
     Size size = MediaQuery.of(context).size;
+    bool isEmpty = true;
+
+    if (allLikedProduct.getMyLikedList().length > 0) {
+      isEmpty = false;
+    }
 
 
-
-    return SafeArea(
+    return isEmpty
+        ?EmptyLiked()
+        :SafeArea(
       minimum: EdgeInsets.only(
         top: size.height * 0.1,
         left: size.width * 0.02,
