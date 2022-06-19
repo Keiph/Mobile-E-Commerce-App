@@ -8,46 +8,51 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        minimum: const EdgeInsets.symmetric(vertical: 70.0, horizontal: 20.0),
+        minimum: EdgeInsets.symmetric(vertical: size.height *0.1, horizontal: size.width *0.05),
         child: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    contentPadding: EdgeInsets.fromLTRB(30.0, 20.0, 30, 20.0),
-                    hintText: "Search",
+              TextFormField(
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
+                  contentPadding: EdgeInsets.fromLTRB(30.0, 20.0, 30, 20.0),
+                  hintText: "Search",
                 ),
               ),
-              Expanded(
-                child: Text('Search:' + 'Hello', style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                ), ),
+              SizedBox(
+                height: 10,
               ),
-              Expanded(
-                flex: 5,
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(48.0),
+              Text('Search:' + '', style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
 
-                  ),
-                  child: SearchGridViewBuilder(),
+              Container(
+                width: double.infinity,
+                height: size.height *0.55,
+                padding: const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(48.0),
 
-              ),),
+                ),
+                child: SearchGridViewBuilder(),
+
+              ),
             ],
           ),
         ),

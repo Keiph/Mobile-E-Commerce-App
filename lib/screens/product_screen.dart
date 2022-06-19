@@ -1,9 +1,10 @@
 import 'package:boogle_mobile/models/product.dart';
+import 'package:boogle_mobile/providers/cart_list.dart';
 import 'package:boogle_mobile/screens/payment_screen.dart';
-import 'package:boogle_mobile/widgets/like_button.dart';
-import 'package:boogle_mobile/widgets/quantity_counter.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -17,19 +18,26 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  int i=0;
+  int i = 0;
   bool isLiked = false;
 
   @override
   Widget build(BuildContext context) {
     LikedList allLikedProduct = Provider.of<LikedList>(context);
-    Product selectedProduct = ModalRoute.of(context)?.settings.arguments as Product;
+    CartList cartProduct = Provider.of<CartList>(context);
+    Product selectedProduct =
+        ModalRoute.of(context)?.settings.arguments as Product;
 
-    void _decrementValidator(){
-      selectedProduct.productCount < 2 ? selectedProduct.productCount: setState((){
-        selectedProduct.productCount-=1;
-      });
+
+
+    void _decrementValidator() {
+      selectedProduct.productCount < 2
+          ? selectedProduct.productCount
+          : setState(() {
+              selectedProduct.productCount -= 1;
+            });
     }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedProduct.productName),
@@ -41,56 +49,73 @@ class _ProductScreenState extends State<ProductScreen> {
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  Lottie.network('https://assets5.lottiefiles.com/packages/lf20_fvw9spld.json'),
-                  AspectRatio
-                    (
-                    aspectRatio: 16/9,
-                      child: Image.network(selectedProduct.productImg,),
+                  Lottie.network(
+                      'https://assets5.lottiefiles.com/packages/lf20_fvw9spld.json'),
+                  Positioned(
+                    width: 320,
+                    child: Image.network(
+                      selectedProduct.productImg,
+                    ),
                   ),
-                  Container(
-                    child:Container(
+                  Positioned(
+                    top: 30,
+                    right: 30,
+                    child: Container(
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white
-                      ),
-
+                          shape: BoxShape.circle, color: Colors.white),
                       child: IconButton(
                         icon: isLiked
                             ? Icon(CupertinoIcons.heart_fill)
                             : Icon(CupertinoIcons.heart),
-                        onPressed: () { setState(() {
-                          isLiked =!isLiked;
-                          print(selectedProduct);
-                          if(isLiked){
-                            allLikedProduct.addToLiked(selectedProduct.productName, selectedProduct.productImg, selectedProduct.productDetails, selectedProduct.productColors, selectedProduct.productCategory, selectedProduct.productPrice, selectedProduct.productSizes, selectedProduct.productSizeUnit, selectedProduct.productRating, selectedProduct.productCount);
-                          }else{
-                            allLikedProduct.removeFromLiked(i);
-                          }
-                        }); },
+                        onPressed: () {
+                          setState(() {
+                            isLiked = !isLiked;
+
+                            if (isLiked) {
+                              allLikedProduct.addToLiked(
+                                  selectedProduct.productName,
+                                  selectedProduct.productImg,
+                                  selectedProduct.productDetails,
+                                  selectedProduct.productColors,
+                                  selectedProduct.productCategory,
+                                  selectedProduct.productPrice,
+                                  selectedProduct.productSizes,
+                                  selectedProduct.productSizeUnit,
+                                  selectedProduct.productRating,
+                                  selectedProduct.productCount);
+                            } else {
+                              allLikedProduct.removeFromLiked(i);
+                            }
+                          });
+                        },
                       ),
                     ),
                   ),
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 50),
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 50),
                 child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(selectedProduct.productName),
-                        Text('\$${selectedProduct.productPrice}'),
+                        Flexible(child: Text(selectedProduct.productName)),
+                        Text('\$${selectedProduct.productPrice.toStringAsFixed(2)}'),
                       ],
                     ),
-                    SizedBox(height: 10,),
-
+                    SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(selectedProduct.productSizeUnit + ":" + selectedProduct.productSizes),
+                        Text(selectedProduct.productSizeUnit +
+                            ":" +
+                            selectedProduct.productSizes),
                         Stack(
                           alignment: Alignment.center,
                           children: [
@@ -98,15 +123,15 @@ class _ProductScreenState extends State<ProductScreen> {
                               width: 30,
                               height: 30,
                               decoration: BoxDecoration(
-                                color: Colors.grey[100],
+                                color: Colors.white,
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                  color: (selectedProduct.productColors).withOpacity(0.5),
-                                  spreadRadius: 3,
-                                  blurRadius: 5,
-                                  offset: Offset(3,3)
-                                ),
+                                      color: (selectedProduct.productColors)
+                                          .withOpacity(0.5),
+                                      spreadRadius: 3,
+                                      blurRadius: 5,
+                                      offset: Offset(3, 3)),
                                 ],
                               ),
                             ),
@@ -115,6 +140,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               height: 25,
                               decoration: BoxDecoration(
                                 color: selectedProduct.productColors,
+                                border: Border.all(width: 0.5),
                                 shape: BoxShape.circle,
                               ),
                             ),
@@ -124,16 +150,41 @@ class _ProductScreenState extends State<ProductScreen> {
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Rating: ' + ' ${selectedProduct.productRating}'),
+                      child: Row(
+                        children: [
+                          RatingBar.builder(
+                            ignoreGestures: true,
+                            initialRating: selectedProduct.productRating,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 1,
+                            itemSize: 18.0,
+                            itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
+                            itemBuilder: (context, _) => Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (rating) {},
+                          ),
+                          const SizedBox(width: 5.0),
+                          Text(
+                            '${selectedProduct.productRating}',
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text('Details:'),
                     ),
-
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(selectedProduct.productDetails),
+                    Row(
+                      
+                      children: [Flexible(child: Text(selectedProduct.productDetails)),],
                     ),
 
                     Row(
@@ -145,15 +196,13 @@ class _ProductScreenState extends State<ProductScreen> {
                             child: Icon(Icons.remove),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5.0),
-                                border: Border.all()
-                            ),
+                                border: Border.all()),
                           ),
                           onTap: _decrementValidator,
                         ),
                         SizedBox(
                           width: 10,
                         ),
-
                         Container(
                           width: 64,
                           height: 32,
@@ -162,16 +211,12 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5.0),
-                            border: Border.all(
-
-                            ),
+                            border: Border.all(),
                           ),
                         ),
-
                         SizedBox(
                           width: 10,
                         ),
-
                         GestureDetector(
                           child: Container(
                             width: 32,
@@ -179,40 +224,74 @@ class _ProductScreenState extends State<ProductScreen> {
                             child: Icon(Icons.add),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5.0),
-                                border: Border.all()
-                            ),
+                                border: Border.all()),
                           ),
-                          onTap: ()=> setState(() => selectedProduct.productCount+=1),
+                          onTap: () =>
+                              setState(() => selectedProduct.productCount += 1),
                         ),
                       ],
                     ),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ElevatedButton(
-                          onPressed: (){Navigator.of(context).pushNamed(PaymentScreen.routeName, arguments: selectedProduct );},
-                          child: Text('Buy Now'),
-                          style: ElevatedButton.styleFrom(
-                            primary: const Color(0xff00AB66),
-                            side: BorderSide(),
-                          )
-                        ),
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                  PaymentScreen.routeName,
+                                  arguments: selectedProduct);
+                            },
+                            child: Text('Buy Now'),
+                            style: ElevatedButton.styleFrom(
+                              primary: const Color(0xff00AB66),
+                              side: BorderSide(),
+                            )),
                         ElevatedButton(
-                            onPressed: (){ },
+                            onPressed: () {
+                              cartProduct.addToCart(
+                                  selectedProduct.productName,
+                                  selectedProduct.productImg,
+                                  selectedProduct.productDetails,
+                                  selectedProduct.productColors,
+                                  selectedProduct.productCategory,
+                                  selectedProduct.productPrice,
+                                  selectedProduct.productSizes,
+                                  selectedProduct.productSizeUnit,
+                                  selectedProduct.productRating,
+                                  selectedProduct.productCount
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar
+                                    (content:
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                          child: Text(
+                                            selectedProduct.productName + ' has been added to cart', overflow: TextOverflow.ellipsis,
+                                          )
+                                      ),
+                                    ],
+                                  ),
+                                    action: SnackBarAction(
+                                      label: "UNDO",
+                                      onPressed: () {
+                                        cartProduct.removeFromCart(i);
+                                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                      },
+
+                                    ),
+                                  ),
+                              );
+                            },
                             child: Text('Add to Cart'),
                             style: ElevatedButton.styleFrom(
                               primary: const Color(0xff5890FF),
                               side: BorderSide(),
-                            )
-                        ),
+                            )),
                       ],
                     )
-
                   ],
                 ),
               )
-
             ],
           ),
         ),

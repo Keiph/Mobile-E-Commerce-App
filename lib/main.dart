@@ -1,7 +1,9 @@
 import 'package:boogle_mobile/models/product.dart';
+import 'package:boogle_mobile/providers/cart_list.dart';
 import 'package:boogle_mobile/providers/liked_list.dart';
 
 import 'package:boogle_mobile/providers/product_list.dart';
+import 'package:boogle_mobile/screens/cart_payment_screen.dart';
 import 'package:boogle_mobile/screens/cart_screen.dart';
 import 'package:boogle_mobile/screens/forgot_password_screen.dart';
 
@@ -33,6 +35,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<LikedList>(
           create: (ctx) => LikedList(),
         ),
+        ChangeNotifierProvider<CartList>(
+          create: (ctx) => CartList(),
+        ),
 
       ],
       child: MaterialApp(
@@ -44,9 +49,9 @@ class MyApp extends StatelessWidget {
         routes: {
           LoginScreen.routeName: (_) { return LoginScreen(); },
           ForgotPasswordScreen.routeName: (_) { return ForgotPasswordScreen(); },
-          SearchScreen.routeName: (_) { return SearchScreen();},
           ProductScreen.routeName: (_) {return ProductScreen();},
           PaymentScreen.routeName: (_) {return PaymentScreen();},
+          CartPaymentScreen.routeName: (_) {return CartPaymentScreen();},
           CartScreen.routeName: (_) {return CartScreen();}
 
 
@@ -70,9 +75,8 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: Center(
-        child: Text('Hello'),
-      ),
+      resizeToAvoidBottomInset: false,
+      body: Center(),
 
       bottomNavigationBar: BottomNav()
     );

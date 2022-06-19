@@ -87,8 +87,8 @@ class _PaymentStepperState extends State<PaymentStepper> {
         child: Row(
           children: [
             Image.network(purchaseProduct.productImg, height: 100,),
-            Text(purchaseProduct.productName),
-            Text('\$${purchaseProduct.productPrice}'),
+            Expanded(child: Text(purchaseProduct.productName, overflow: TextOverflow.ellipsis,)),
+            Text('\$${purchaseProduct.productPrice.toStringAsFixed(2)}'),
             Text('${purchaseProduct.productCount}'),
           ],
         ),

@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Drawer(
+
       child: ListView(
         padding: EdgeInsets.zero,
         children: [

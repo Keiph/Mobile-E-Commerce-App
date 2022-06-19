@@ -1,13 +1,7 @@
 class Product{
-  String productName;
-  String productImg;
-  String productDetails;
+  String productName,productImg,productDetails,productCategory,productSizes,productSizeUnit;
+  double productPrice,productRating;
   final productColors;
-  String productCategory;
-  double productPrice;
-  String productSizes;
-  String productSizeUnit;
-  int productRating;
   int productCount;
 
 

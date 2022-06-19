@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../models/product.dart';
 import '../providers/product_list.dart';
+import '../screens/product_screen.dart';
 
 class SearchGridViewBuilder extends StatelessWidget {
 
@@ -13,30 +15,127 @@ class SearchGridViewBuilder extends StatelessWidget {
     return GridView.builder(
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 200,
-            childAspectRatio: 3 / 2,
+            childAspectRatio: 1,
             crossAxisSpacing: 20,
             mainAxisSpacing: 20),
 
         itemBuilder: (ctx, i){
           Product currentProduct = allProductList.getAllProductList()[i];
-          return Container(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
+          return GestureDetector(
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.0, bottom:10.0, right: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            currentProduct.productName,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.0, bottom:10.0, right: 10.0),
+                    child: Row(
+                      children: [
+                        RatingBar.builder(
+                          ignoreGestures: true,
+                          initialRating: currentProduct.productRating,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemSize: 18.0,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {},
+                        ),
+                        const SizedBox(width: 5.0),
+                        Text('${currentProduct.productRating}',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
 
-              ],
-            ),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(currentProduct.productImg),
-                fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.25),
-                    BlendMode.darken
-                ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.0, right:10.0, bottom: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '\$${currentProduct.productPrice.toStringAsFixed(2)}',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              width: 15,
+                              height: 15,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                border: Border.all(width: 0.5),
+                                color: currentProduct.productColors,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              borderRadius: BorderRadius.circular(15),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(currentProduct.productImg),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(0.5), BlendMode.darken),
+                ),
+                borderRadius: BorderRadius.circular(15),
+              ),
             ),
+            onTap: (){
+              Navigator.of(context).pushNamed(ProductScreen.routeName, arguments: currentProduct);
+
+            },
           );
         },
       itemCount: allProductList.getAllProductList().length,

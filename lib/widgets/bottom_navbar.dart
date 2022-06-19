@@ -26,10 +26,15 @@ class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
+
         child: Icon(Icons.shopping_cart),
         onPressed: () { Navigator.of(context).pushNamed(CartScreen.routeName); },
+        elevation: 5.0,
+        splashColor: const Color(0xff5890FF),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Center(
         child:
         selectedIndex == 0 ? HomeScreen():
@@ -41,10 +46,9 @@ class _BottomNavState extends State<BottomNav> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: _onItemTapped,
         currentIndex: selectedIndex,
-        backgroundColor: Colors.white60,
+        backgroundColor: Colors.white,
         selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.red,
-        type: BottomNavigationBarType.fixed,
+        unselectedItemColor: Colors.grey[700],
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
