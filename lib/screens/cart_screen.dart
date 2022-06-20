@@ -136,8 +136,33 @@ class _CartScreenState extends State<CartScreen> {
                                                     splashColor: Colors.red[
                                                         300], // Splash color
                                                     onTap: () {
-                                                      allCartProduct
-                                                          .removeFromCart(i);
+                                                      allCartProduct.removeFromCart(i);
+
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                        SnackBar(
+                                                          content: Row(
+                                                            children: [
+                                                              Flexible(
+                                                                child: Text(
+                                                                  cartProduct.productName + ' has been removed to cart',
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          behavior: SnackBarBehavior.floating,
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(24),
+                                                          ),
+                                                          action: SnackBarAction(
+                                                            label: "UNDO",
+                                                            onPressed: () {
+                                                              allCartProduct.addToCart(cartProduct.productName, cartProduct.productImg, cartProduct.productDetails, cartProduct.productColors, cartProduct.productCategory, cartProduct.productPrice, cartProduct.productSizes, cartProduct.productRating, cartProduct.productCount);
+                                                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                                            },
+
+                                                          ),
+                                                        ),
+                                                      );
                                                     },
                                                     child: SizedBox(
                                                       width: 32,
@@ -175,8 +200,14 @@ class _CartScreenState extends State<CartScreen> {
                                                       width: 15,
                                                       height: 15,
                                                       decoration: BoxDecoration(
-                                                        color: Colors.grey[300],
+                                                        color: Colors.white,
                                                         shape: BoxShape.circle,
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                              color: Colors.black.withOpacity(0.3),
+                                                              blurRadius: 1,
+                                                              offset: Offset(3, 3)),
+                                                        ],
                                                       ),
                                                     ),
                                                     Container(
@@ -277,7 +308,7 @@ class _CartScreenState extends State<CartScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Total',
+                            Text('Total:',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,

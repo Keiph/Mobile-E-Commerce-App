@@ -10,8 +10,8 @@ class CartList with ChangeNotifier{
     return myCartList;
   }
 
-  void addToCart(productName,productImg,productDetails,productColors,productCategory,productPrice,productSizes,productSizeUnit,productRating,productCount){
-    myCartList.insert(0, Product(productName: productName, productImg: productImg, productDetails: productDetails, productCategory: productCategory, productColors: productColors, productPrice: productPrice, productSizes: productSizes, productSizeUnit: productSizeUnit, productRating: productRating, productCount: productCount));
+  void addToCart(productName,productImg,productDetails,productColors,productCategory,productPrice,productSizes,productRating,productCount){
+    myCartList.insert(0, Product(productName: productName, productImg: productImg, productDetails: productDetails, productCategory: productCategory, productColors: productColors, productPrice: productPrice, productSizes: productSizes, productRating: productRating, productCount: productCount));
     notifyListeners();
   }
   void removeFromCart(i){

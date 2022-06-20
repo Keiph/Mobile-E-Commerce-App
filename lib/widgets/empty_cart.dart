@@ -9,8 +9,8 @@ class EmptyCart extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('Oh No!'),
-          Image.asset('images/pngfind.com-cart-png-2727925.png'),
-          Text('You have not add any items into cart yet!')
+          Expanded(child:Image.asset('images/pngfind.com-cart-png-2727925.png')),
+          Expanded(child:Text('You have not add any items into cart yet!')),
         ],
       ),
     );

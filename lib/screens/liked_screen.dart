@@ -181,8 +181,14 @@ class _LikedScreenState extends State<LikedScreen> {
                                         width: 15,
                                         height: 15,
                                         decoration: BoxDecoration(
-                                          color: Colors.grey[300],
+                                          color: Colors.white,
                                           shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.black.withOpacity(0.3),
+                                                blurRadius: 1,
+                                                offset: Offset(3, 3)),
+                                          ],
                                         ),
                                       ),
                                       Container(
@@ -192,6 +198,7 @@ class _LikedScreenState extends State<LikedScreen> {
                                           color: likedProduct.productColors,
                                           border: Border.all(width: 0.5),
                                           shape: BoxShape.circle,
+
                                         ),
                                       ),
                                     ],
@@ -276,7 +283,6 @@ class _LikedScreenState extends State<LikedScreen> {
                                         likedProduct.productCategory,
                                         likedProduct.productPrice,
                                         likedProduct.productSizes,
-                                        likedProduct.productSizeUnit,
                                         likedProduct.productRating,
                                         likedProduct.productCount
                                     );},

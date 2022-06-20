@@ -52,9 +52,9 @@ class _ProductScreenState extends State<ProductScreen> {
                   Lottie.network(
                       'https://assets5.lottiefiles.com/packages/lf20_fvw9spld.json'),
                   Positioned(
-                    width: 320,
                     child: Image.network(
                       selectedProduct.productImg,
+                      width: 320,
                     ),
                   ),
                   Positioned(
@@ -67,7 +67,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           shape: BoxShape.circle, color: Colors.white),
                       child: IconButton(
                         icon: isLiked
-                            ? Icon(CupertinoIcons.heart_fill)
+                            ? Icon(CupertinoIcons.heart_fill, color: Colors.red,)
                             : Icon(CupertinoIcons.heart),
                         onPressed: () {
                           setState(() {
@@ -82,7 +82,6 @@ class _ProductScreenState extends State<ProductScreen> {
                                   selectedProduct.productCategory,
                                   selectedProduct.productPrice,
                                   selectedProduct.productSizes,
-                                  selectedProduct.productSizeUnit,
                                   selectedProduct.productRating,
                                   selectedProduct.productCount);
                             } else {
@@ -101,43 +100,59 @@ class _ProductScreenState extends State<ProductScreen> {
                 child: Column(
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Flexible(child: Text(selectedProduct.productName)),
-                        Text('\$${selectedProduct.productPrice.toStringAsFixed(2)}'),
+                        Flexible(
+                          child: Text(selectedProduct.productName,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          ),
+                        ),
+                        SizedBox(width: 20,),
+                        Text('\$${selectedProduct.productPrice.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(selectedProduct.productSizeUnit +
-                            ":" +
-                            selectedProduct.productSizes),
+                        Text( 'Size: ' + selectedProduct.productSizes,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
                         Stack(
                           alignment: Alignment.center,
                           children: [
                             Container(
-                              width: 30,
-                              height: 30,
+                              width: 25,
+                              height: 25,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                      color: (selectedProduct.productColors)
-                                          .withOpacity(0.5),
-                                      spreadRadius: 3,
-                                      blurRadius: 5,
-                                      offset: Offset(3, 3)),
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 1,
+                                      offset: Offset(5, 5)),
                                 ],
                               ),
                             ),
                             Container(
-                              width: 25,
-                              height: 25,
+                              width: 20,
+                              height: 20,
                               decoration: BoxDecoration(
                                 color: selectedProduct.productColors,
                                 border: Border.all(width: 0.5),
@@ -148,17 +163,18 @@ class _ProductScreenState extends State<ProductScreen> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 20,),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Row(
                         children: [
                           RatingBar.builder(
                             ignoreGestures: true,
-                            initialRating: selectedProduct.productRating,
+                            initialRating: 1,
                             direction: Axis.horizontal,
                             allowHalfRating: true,
                             itemCount: 1,
-                            itemSize: 18.0,
+                            itemSize: 32.0,
                             itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
                             itemBuilder: (context, _) => Icon(
                               Icons.star,
@@ -170,22 +186,39 @@ class _ProductScreenState extends State<ProductScreen> {
                           Text(
                             '${selectedProduct.productRating}',
                             style: TextStyle(
-                              fontSize: 12.0,
+                              fontSize: 16.0,
                               color: Colors.black,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
                     ),
+                    SizedBox(height: 20,),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Details:'),
+                      child: Text('Details:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
+                    SizedBox(height: 5,),
                     Row(
-                      
-                      children: [Flexible(child: Text(selectedProduct.productDetails)),],
+                      children: [
+                        Flexible(
+                            child: Text(selectedProduct.productDetails,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
+                        ),
+                      ],
                     ),
+
+                    SizedBox(height: 20,),
 
                     Row(
                       children: [
@@ -231,6 +264,9 @@ class _ProductScreenState extends State<ProductScreen> {
                         ),
                       ],
                     ),
+
+                    SizedBox(height: 20,),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -255,19 +291,18 @@ class _ProductScreenState extends State<ProductScreen> {
                                   selectedProduct.productCategory,
                                   selectedProduct.productPrice,
                                   selectedProduct.productSizes,
-                                  selectedProduct.productSizeUnit,
+
                                   selectedProduct.productRating,
                                   selectedProduct.productCount
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar
-                                    (content:
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                          child: Text(
-                                            selectedProduct.productName + ' has been added to cart', overflow: TextOverflow.ellipsis,
-                                          )
+                                SnackBar(
+                                  content: Row(
+                                  children: [
+                                    Flexible(
+                                        child: Text(
+                                          selectedProduct.productName + ' has been added to cart',
+                                        ),
                                       ),
                                     ],
                                   ),

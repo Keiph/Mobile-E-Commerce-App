@@ -107,6 +107,12 @@ class PopularGridViewBuilder extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 1,
+                                    offset: Offset(3, 3)),
+                              ],
                             ),
                           ),
                           Container(
@@ -116,6 +122,7 @@ class PopularGridViewBuilder extends StatelessWidget {
                               border: Border.all(width: 0.5),
                               color: currentProduct.productColors,
                               shape: BoxShape.circle,
+
                             ),
                           ),
                         ],
@@ -137,7 +144,7 @@ class PopularGridViewBuilder extends StatelessWidget {
             ),
           ),
           onTap: () {
-            historyList.addToHistory(currentProduct.productName, currentProduct.productImg, currentProduct.productDetails, currentProduct.productColors, currentProduct.productCategory, currentProduct.productPrice, currentProduct.productSizes, currentProduct.productSizeUnit, currentProduct.productRating, currentProduct.productCount);
+            historyList.addToHistory(currentProduct.productName, currentProduct.productImg, currentProduct.productDetails, currentProduct.productColors, currentProduct.productCategory, currentProduct.productPrice, currentProduct.productSizes, currentProduct.productRating, currentProduct.productCount);
             
             Navigator.of(context).pushNamed(ProductScreen.routeName, arguments: currentProduct);
           },

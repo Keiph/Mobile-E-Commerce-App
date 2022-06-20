@@ -1,4 +1,5 @@
 import 'package:boogle_mobile/widgets/purchase_completion.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +44,7 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
         final isLastStep = _index == getPaymentSteps(allCartProduct).length-1;
 
         return Container(
-          margin: EdgeInsets.only(top:50.0),
+          margin: EdgeInsets.only(top:30.0),
           child: Row(
             children: [
               if (_index != 0)
@@ -87,204 +88,164 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
 
       state: _index >2 ?  StepState.complete: StepState.indexed,
       isActive: _index >= 2,
-      title: Text('Checkout', style: TextStyle( fontSize: 12, fontWeight: FontWeight.bold),),
-      content: Column(
-        children: [ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (BuildContext context, int i){
-            Product cartProduct =  allCartProduct.getMyCartList()[i];
+      title: Text('Checkout',
+        style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold
+        ),
+      ),
 
-            Size size = MediaQuery.of(context).size;
+      content: Container(
+        // no margin needed Stepper has default margin
+        padding: EdgeInsets.symmetric(vertical: 5.0),
+        decoration: BoxDecoration(
+          border: Border.all()
+        ),
+        child: Column(
+          children: [
 
-            void _decrementValidator() {
-              cartProduct.productCount < 2
-                  ? cartProduct.productCount
-                  : setState(() {
-                cartProduct.productCount -= 1;
-              });
-            }
+            SizedBox(
+              width: double.infinity,
+              height: 375,
+              child: ListView.builder(
 
-            return Container(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
-                child: Card(
+              itemBuilder: (BuildContext context, int i){
+                Product cartProduct =  allCartProduct.getMyCartList()[i];
+
+                Size size = MediaQuery.of(context).size;
+
+                return Container(
                   child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 10.0),
-                          child: Column(
-                            children: [
-                              ClipRRect(
+                    padding: EdgeInsets.only(bottom: 10.0),
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                 child: Image.network(
                                   cartProduct.productImg,
                                   width: size.width* 0.45,
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.all(10.0),
-                                child: Row(
-                                  children: [
-                                    RatingBar.builder(
-                                      ignoreGestures: true,
-                                      initialRating: cartProduct.productRating,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      itemCount: 5,
-                                      itemSize: 18.0,
-                                      itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
-                                      itemBuilder: (context, _) => Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      onRatingUpdate: (rating) {},
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children:[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      cartProduct.productName,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
-                                  ClipOval(
-                                    child: Material(
-                                      color: Colors.black, // Button color
-                                      child: InkWell(
-                                        splashColor: Colors.red[300], // Splash color
-                                        onTap: () {
-                                          allCartProduct.removeFromCart(i);
-                                        },
-                                        child: SizedBox(
-                                          width: 32,
-                                          height: 32,
-                                          child: Icon(Icons.close,color: Colors.white,),
+                            ),
+                            Expanded(
+                              child: Column(
+                                children:[
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          cartProduct.productName,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 14,
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 10.0),
-                                child: Row(
-                                  children: [
-                                    Text('\$${cartProduct.productPrice.toStringAsFixed(2)}',)
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 10.0),
-                                child: Row(
-                                  children: [
-                                    Stack(
-                                      alignment: Alignment.center,
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                                    child: Row(
                                       children: [
-                                        Container(
-                                          width: 15,
-                                          height: 15,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[300],
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                        Container(
-                                          width: 10,
-                                          height: 10,
-                                          decoration: BoxDecoration(
-                                            color: cartProduct.productColors,
-                                            border: Border.all(width: 0.5),
-                                            shape: BoxShape.circle,
-                                          ),
+                                        Text('\$${cartProduct.productPrice.toStringAsFixed(2)}',)
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 10.0),
+                                    child: Row(
+                                      children: [
+                                        Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Container(
+                                              width: 15,
+                                              height: 15,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                shape: BoxShape.circle,
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 10,
+                                              height: 10,
+                                              decoration: BoxDecoration(
+                                                color: cartProduct.productColors,
+                                                border: Border.all(width: 0.5),
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.black.withOpacity(0.3),
+                                                      blurRadius: 1,
+                                                      offset: Offset(3, 3)),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 10.0),
-                                child: Row(
-                                  children: [
-                                    GestureDetector(
-                                      child: Container(
-                                        width: 24,
-                                        height: 24,
-                                        child: Icon(Icons.remove, size: 12,),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            border: Border.all()),
-                                      ),
-                                      onTap: _decrementValidator,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Container(
-                                      width: 32,
-                                      height: 24,
-                                      child: Center(
-                                        child: Text('${cartProduct.productCount}'),
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        border: Border.all(),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    GestureDetector(
-                                      child: Container(
-                                        width: 24,
-                                        height: 24,
-                                        child: Icon(Icons.add, size: 12,),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            border: Border.all()),
-                                      ),
-                                      onTap: () =>
-                                          setState(() => cartProduct.productCount += 1),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
 
-                            ],
-                          ),
-                        ),
-                      ],),
+                                    children: [Text('X '+'${cartProduct.productCount}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],),
+                      ),
+
+                    ),
+
                   ),
+                );
 
-                ),
 
+              },
+                  itemCount: allCartProduct.getMyCartList().length,
               ),
-            );
-
-
-          },
-              itemCount: allCartProduct.getMyCartList().length,
-          ),
-      ],
+            ),
+            Container(
+              padding: EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        '+ \$30.00 delivery fee',
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 5.0,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Total: '+'\$${allCartProduct.getTotalAmount().toStringAsFixed(2) }',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+        ],
+        ),
       ),
       ),
     

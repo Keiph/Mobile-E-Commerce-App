@@ -10,12 +10,12 @@ class HistoryList with ChangeNotifier{
     return myHistoryList;
   }
 
-  void addToHistory(productName,productImg,productDetails,productColors,productCategory,productPrice,productSizes,productSizeUnit,productRating,productCount){
-    myHistoryList.insert(0, Product(productName: productName, productImg: productImg, productDetails: productDetails, productCategory: productCategory, productColors: productColors, productPrice: productPrice, productSizes: productSizes, productSizeUnit: productSizeUnit, productRating: productRating, productCount: productCount));
+  void addToHistory(productName,productImg,productDetails,productColors,productCategory,productPrice,productSizes,productRating,productCount){
+    myHistoryList.insert(0, Product(productName: productName, productImg: productImg, productDetails: productDetails, productCategory: productCategory, productColors: productColors, productPrice: productPrice, productSizes: productSizes, productRating: productRating, productCount: productCount));
     notifyListeners();
   }
   void clearHistory(){
-    myHistoryList.removeRange(0, myHistoryList.length-1);
+    myHistoryList.removeRange(0, myHistoryList.length);
     notifyListeners();
   }
 }
