@@ -4,6 +4,7 @@ import 'package:boogle_mobile/providers/history_list.dart';
 import 'package:boogle_mobile/providers/liked_list.dart';
 
 import 'package:boogle_mobile/providers/product_list.dart';
+import 'package:boogle_mobile/screens/add_product_screen.dart';
 import 'package:boogle_mobile/screens/cart_payment_screen.dart';
 import 'package:boogle_mobile/screens/cart_screen.dart';
 import 'package:boogle_mobile/screens/forgot_password_screen.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
           PaymentScreen.routeName: (_) {return PaymentScreen();},
           CartPaymentScreen.routeName: (_) {return CartPaymentScreen();},
           CartScreen.routeName: (_) {return CartScreen();},
+          AddProductScreen.routeName: (_) {return AddProductScreen();},
           HistoryScreen.routeName: (_) {return HistoryScreen();},
 
 

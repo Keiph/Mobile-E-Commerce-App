@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+
 class Product{
   String productName,productImg,productDetails,productCategory,productSizes;
   double productPrice,productRating;
-  final productColors;
+  Color productColors;
   int productCount;
 
 

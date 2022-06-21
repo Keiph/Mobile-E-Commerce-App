@@ -31,6 +31,16 @@ class ProductList with ChangeNotifier {
     temp.sort((a,b) => b.productRating.compareTo(a.productRating));
     return temp;
   }
+  void addProduct(productName,productImg,productDetails,productColors,productCategory,productPrice,productSizes,productRating,productCount){
+    myProductList.insert(0, Product(productName: productName, productImg: productImg, productDetails: productDetails, productCategory: productCategory, productColors: productColors, productPrice: productPrice, productSizes: productSizes, productRating: productRating, productCount: productCount));
+    notifyListeners();
+  }
+
+  void deleteProduct(i){
+    myProductList.removeAt(i);
+    notifyListeners();
+  }
+
 
 
 

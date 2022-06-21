@@ -48,6 +48,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     HistoryList historyList = Provider.of<HistoryList>(context);
     return Scaffold(
       appBar: AppBar(
+
         title: Text('History'),
         actions: [
           IconButton(

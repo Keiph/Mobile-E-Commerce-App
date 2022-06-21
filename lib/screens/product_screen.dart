@@ -41,6 +41,9 @@ class _ProductScreenState extends State<ProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedProduct.productName),
+        actions:[
+          
+        ]
       ),
       body: Container(
         child: SingleChildScrollView(
