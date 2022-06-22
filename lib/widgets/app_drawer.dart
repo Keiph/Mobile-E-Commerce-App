@@ -2,42 +2,64 @@ import 'package:boogle_mobile/screens/add_product_screen.dart';
 import 'package:boogle_mobile/screens/history_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
 
 
     return Drawer(
 
       child: ListView(
         children: [
-          UserAccountsDrawerHeader(
-              accountName: Text("Keiph", style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.w500, fontSize: 24),),
-              accountEmail: Text("Keiph@gmail.com", style: TextStyle(color: Colors.white, fontFamily: 'Montserrat'),),
-              currentAccountPicture: CircleAvatar(
-                child: ClipOval(
-                  child: Image.network("https://randomuser.me/api/portraits/men/32.jpg", width: 90, height: 90, fit: BoxFit.cover,),
+          Column(
+            children: [
+              Container(
+                width: double.infinity,
+                color: Colors.blue.shade700,
+                padding: EdgeInsets.only(top: size.height *0.1, bottom: 20),
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 54,
+                      backgroundImage: NetworkImage("https://randomuser.me/api/portraits/men/32.jpg",),
+                    ),
+                    Text("Keiph", style: TextStyle(color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.w500, fontSize: 18),),
+                    Text("Keiph@gmail.com", style: TextStyle(color: Colors.white, fontFamily: 'Montserrat'),),
+                  ],
                 ),
               ),
-          ),
+              Divider(
+                height: 3,
+                color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
+              ),
+
           ListTile(
             leading: Icon(Icons.add),
             title: Text('Add Product'),
-            onTap: (){ Navigator.of(context).pushNamed(AddProductScreen.routeName); },
+            onTap: (){
+              Navigator.pop(context);
+
+              Navigator.of(context).pushNamed(AddProductScreen.routeName); },
           ),
           Divider(
             height: 3,
-            color: Colors.black,
+            color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
           ),
           ListTile(
             leading: Icon(Icons.access_time),
             title: Text('History'),
-            onTap: (){ Navigator.of(context).pushNamed(HistoryScreen.routeName);},
+            onTap: (){
+              Navigator.pop(context);
+
+              Navigator.of(context).pushNamed(HistoryScreen.routeName);},
 
           ),
           Divider(
             height: 3,
-            color: Colors.black,
+            color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
           ),
           ListTile(
             leading: Icon(Icons.account_circle_rounded),
@@ -46,7 +68,7 @@ class AppDrawer extends StatelessWidget {
           ),
           Divider(
             height: 3,
-            color: Colors.black,
+            color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
           ),
           ListTile(
             leading: Icon(Icons.settings),
@@ -55,7 +77,7 @@ class AppDrawer extends StatelessWidget {
           ),
           Divider(
             height: 3,
-            color: Colors.black,
+            color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
           ),
           ListTile(
             leading: Icon(Icons.logout),
@@ -64,11 +86,27 @@ class AppDrawer extends StatelessWidget {
           ),
           Divider(
             height: 3,
-            color: Colors.black,
+            color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
           ),
+              ListTile(
+                leading: Icon(MyApp.themeNotifier.value == ThemeMode.light
+                    ? Icons.dark_mode
+                    : Icons.light_mode),
+                title: Text(MyApp.themeNotifier.value == ThemeMode.light? 'Dark Mode': 'Light Mode'),
+                onTap: (){
+                  MyApp.themeNotifier.value = MyApp.themeNotifier.value == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+                  },
+
+              ),
+              Divider(
+                height: 3,
+                  color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
+              ),
 
         ],
       ),
+    ],
+    ),
     );
   }
 }

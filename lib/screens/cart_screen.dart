@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../main.dart';
 import '../models/product.dart';
 import '../widgets/purchase_completion.dart';
 import 'cart_payment_screen.dart';
@@ -31,11 +32,20 @@ class _CartScreenState extends State<CartScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,
+        ),
+        backgroundColor: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Cart'),
-            Text('Total ' + allCartProduct.getTotalItems().toString() + ' Items'),
+            Text('Cart',
+              style: TextStyle(
+                color:MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
+              ),
+            ),
+            Text('Total ' + allCartProduct.getTotalItems().toString() + ' Items',style: TextStyle(
+                color:MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black),),
 
           ],
         ),
@@ -73,12 +83,17 @@ class _CartScreenState extends State<CartScreen> {
                                       padding: EdgeInsets.only(right: 10.0),
                                       child: Column(
                                         children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0)),
-                                            child: Image.network(
-                                              cartProduct.productImg,
-                                              width: size.width * 0.45,
+                                          Container(
+                                            child: SizedBox(
+                                              width: size.width * 0.4,
+                                              height: size.height * 0.15,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: NetworkImage(cartProduct.productImg),
+                                                fit: BoxFit.cover,
+
+                                              ),
                                             ),
                                           ),
                                           Padding(
@@ -122,7 +137,6 @@ class _CartScreenState extends State<CartScreen> {
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   style: TextStyle(
-                                                    color: Colors.black,
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 14,
                                                   ),
@@ -130,8 +144,7 @@ class _CartScreenState extends State<CartScreen> {
                                               ),
                                               ClipOval(
                                                 child: Material(
-                                                  color: Colors
-                                                      .black, // Button color
+                                                  color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
                                                   child: InkWell(
                                                     splashColor: Colors.red[
                                                         300], // Splash color
@@ -169,7 +182,7 @@ class _CartScreenState extends State<CartScreen> {
                                                       height: 32,
                                                       child: Icon(
                                                         Icons.close,
-                                                        color: Colors.white,
+                                                        color: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,
                                                       ),
                                                     ),
                                                   ),
@@ -242,7 +255,7 @@ class _CartScreenState extends State<CartScreen> {
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(5.0),
-                                                        border: Border.all()),
+                                                        border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white)),
                                                   ),
                                                   onTap: _decrementValidator,
                                                 ),
@@ -260,7 +273,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             5.0),
-                                                    border: Border.all(),
+                                                    border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -278,7 +291,7 @@ class _CartScreenState extends State<CartScreen> {
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(5.0),
-                                                        border: Border.all()),
+                                                        border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white)),
                                                   ),
                                                   onTap: () => setState(() =>
                                                       cartProduct
@@ -331,7 +344,7 @@ class _CartScreenState extends State<CartScreen> {
                               child: Text('Buy Now'),
                               style: ElevatedButton.styleFrom(
                                 primary: const Color(0xff00AB66),
-                                side: BorderSide(),
+                                side: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
                               )),
                             ),
                         ],),],

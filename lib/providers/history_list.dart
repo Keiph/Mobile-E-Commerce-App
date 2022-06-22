@@ -18,4 +18,5 @@ class HistoryList with ChangeNotifier{
     myHistoryList.removeRange(0, myHistoryList.length);
     notifyListeners();
   }
+
 }

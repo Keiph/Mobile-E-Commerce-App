@@ -6,8 +6,10 @@ import 'package:boogle_mobile/widgets/empty_liked.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import '../main.dart';
 import '../models/product.dart';
 import '../providers/cart_list.dart';
 
@@ -18,32 +20,6 @@ class LikedScreen extends StatefulWidget {
 
 class _LikedScreenState extends State<LikedScreen> {
 
-
-  void removeItem(int i, LikedList myLikedList) {
-    showDialog<Null>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Confirmation'),
-            content: Text('Are you sure you want to remove from like?'),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      myLikedList.removeFromLiked(i);
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Yes')),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('No')),
-            ],
-          );
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +43,8 @@ class _LikedScreenState extends State<LikedScreen> {
         right: size.width * 0.02,
       ),
       child: ListView.builder(
+        //preserve scroll position
+        key: const PageStorageKey<String>('page'),
         itemBuilder: (BuildContext context, int i) {
           Product likedProduct = allLikedProduct.getMyLikedList()[i];
 
@@ -91,18 +69,19 @@ class _LikedScreenState extends State<LikedScreen> {
                         padding: EdgeInsets.only(right: 10.0),
                         child: Column(
                           children: [
-                            ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            child: Column(
-                              children: [
-                                Image.network(
-                                  likedProduct.productImg,
-                                  width: size.width * 0.45,
-                                ),
+                            Container(
+                              child: SizedBox(
+                                width: size.width * 0.4,
+                                height: size.height * 0.205,
+                              ),
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(likedProduct.productImg),
+                                  fit: BoxFit.cover,
 
-                              ],
+                                ),
+                              ),
                             ),
-                          ),
                             Padding(
                               padding: EdgeInsets.all(10.0),
                               child: Row(
@@ -138,7 +117,6 @@ class _LikedScreenState extends State<LikedScreen> {
                                   likedProduct.productName,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    color: Colors.black,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 14,
                                   ),
@@ -146,16 +124,26 @@ class _LikedScreenState extends State<LikedScreen> {
                               ),
                               ClipOval(
                                 child: Material(
-                                  color: Colors.black, // Button color
+                                  color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
                                   child: InkWell(
                                     splashColor: Colors.red[300], // Splash color
                                     onTap: () {
-                                      removeItem(i, allLikedProduct);
+                                      allLikedProduct.removeFromLiked(i);
+                                      Fluttertoast.showToast(
+                                          msg: likedProduct.productName + " has been removed from app",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.TOP,
+                                          timeInSecForIosWeb: 5,
+                                          backgroundColor: Colors.black,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0
+                                      );
                                     },
                                     child: SizedBox(
                                       width: 32,
                                       height: 32,
-                                      child: Icon(Icons.close,color: Colors.white,),
+                                      child: Icon(Icons.close,
+                                        color: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,),
                                     ),
                                   ),
                                 ),
@@ -217,7 +205,7 @@ class _LikedScreenState extends State<LikedScreen> {
                                       child: Icon(Icons.remove, size: 12,),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(5.0),
-                                          border: Border.all()),
+                                          border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white)),
                                     ),
                                     onTap: _decrementValidator,
                                   ),
@@ -232,7 +220,7 @@ class _LikedScreenState extends State<LikedScreen> {
                                     ),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5.0),
-                                      border: Border.all(),
+                                      border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
                                     ),
                                   ),
                                   SizedBox(
@@ -245,7 +233,7 @@ class _LikedScreenState extends State<LikedScreen> {
                                       child: Icon(Icons.add, size: 12,),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(5.0),
-                                          border: Border.all()),
+                                          border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white)),
                                     ),
                                     onTap: () =>
                                         setState(() => likedProduct.productCount += 1),
@@ -266,7 +254,7 @@ class _LikedScreenState extends State<LikedScreen> {
                                       child: Icon(Icons.attach_money),
                                       style: ElevatedButton.styleFrom(
                                         primary: const Color(0xff00AB66),
-                                        side: BorderSide(),
+                                        side: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
                                       )),
                                 ),
                                 SizedBox(
@@ -285,11 +273,21 @@ class _LikedScreenState extends State<LikedScreen> {
                                         likedProduct.productSizes,
                                         likedProduct.productRating,
                                         likedProduct.productCount
-                                    );},
+                                    );
+                                    Fluttertoast.showToast(
+                                        msg: likedProduct.productName + " has been added to cart",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.TOP,
+                                        timeInSecForIosWeb: 5,
+                                        backgroundColor: Colors.black,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0
+                                    );
+                                      },
                                     child: Icon(Icons.add_shopping_cart_sharp),
                                     style: ElevatedButton.styleFrom(
                                       primary: const Color(0xff5890FF),
-                                      side: BorderSide(),
+                                      side: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
                                     )),
                                 ),
                               ],

@@ -19,7 +19,6 @@ class PopularGridViewBuilder extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200,
-          childAspectRatio: 1,
           crossAxisSpacing: 20,
           mainAxisSpacing: 20),
       itemBuilder: (ctx, i) {
@@ -127,7 +126,7 @@ class PopularGridViewBuilder extends StatelessWidget {
                           ),
                         ],
                       ),
-                      
+
                     ],
                   ),
                 ),
@@ -145,12 +144,12 @@ class PopularGridViewBuilder extends StatelessWidget {
           ),
           onTap: () {
             historyList.addToHistory(currentProduct.productName, currentProduct.productImg, currentProduct.productDetails, currentProduct.productColors, currentProduct.productCategory, currentProduct.productPrice, currentProduct.productSizes, currentProduct.productRating, currentProduct.productCount);
-            
+
             Navigator.of(context).pushNamed(ProductScreen.routeName, arguments: currentProduct);
           },
         );
       },
-      itemCount: 6,
+      itemCount: popularProductList.getPopularProduct().length ,
     );
   }
 }

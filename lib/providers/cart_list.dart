@@ -18,6 +18,10 @@ class CartList with ChangeNotifier{
     myCartList.removeAt(i);
     notifyListeners();
   }
+  void clearCartUponCompletion(){
+    myCartList.removeRange(0, myCartList.length);
+    notifyListeners();
+  }
 
   double getTotalAmount() {
     double sum = 0;

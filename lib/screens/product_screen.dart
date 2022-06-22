@@ -1,14 +1,18 @@
+import 'package:boogle_mobile/main.dart';
 import 'package:boogle_mobile/models/product.dart';
 import 'package:boogle_mobile/providers/cart_list.dart';
+import 'package:boogle_mobile/providers/history_list.dart';
 import 'package:boogle_mobile/screens/payment_screen.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/liked_list.dart';
+import '../providers/product_list.dart';
 
 class ProductScreen extends StatefulWidget {
   static String routeName = '/product';
@@ -23,10 +27,12 @@ class _ProductScreenState extends State<ProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     LikedList allLikedProduct = Provider.of<LikedList>(context);
     CartList cartProduct = Provider.of<CartList>(context);
-    Product selectedProduct =
-        ModalRoute.of(context)?.settings.arguments as Product;
+    ProductList productList = Provider.of<ProductList>(context);
+
+    Product selectedProduct = ModalRoute.of(context)?.settings.arguments as Product;
 
 
 
@@ -40,10 +46,45 @@ class _ProductScreenState extends State<ProductScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(selectedProduct.productName),
+        iconTheme: IconThemeData(
+          color: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,
+        ),
+        backgroundColor: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
+        title: Text(selectedProduct.productName,
+          style: TextStyle(
+            color:MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black),
+        ),
         actions:[
-          
-        ]
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed:() {
+
+                },
+              ),
+              IconButton(
+              icon: Icon(Icons.delete),
+              onPressed:() {
+
+                productList.deleteProduct(selectedProduct);
+
+                Fluttertoast.showToast(
+                    msg: selectedProduct.productName + " has been removed from app",
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.TOP,
+                    timeInSecForIosWeb: 5,
+                    backgroundColor: Colors.black,
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                );
+
+                Navigator.pop(context);
+              },
+            ),
+            ],
+          ),
+        ],
       ),
       body: Container(
         child: SingleChildScrollView(
@@ -51,13 +92,21 @@ class _ProductScreenState extends State<ProductScreen> {
             children: [
               Stack(
                 alignment: Alignment.center,
+                clipBehavior: Clip.hardEdge,
                 children: [
-                  Lottie.network(
-                      'https://assets5.lottiefiles.com/packages/lf20_fvw9spld.json'),
-                  Positioned(
-                    child: Image.network(
-                      selectedProduct.productImg,
-                      width: 320,
+                  //Lottie Animation only appear as the background when image is smaller than it
+                  Lottie.network('https://assets5.lottiefiles.com/packages/lf20_fvw9spld.json'),
+                  Container(
+                    child: SizedBox(
+                      width: size.width *0.8,
+                      height: size.height *0.25,
+                    ),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(selectedProduct.productImg),
+                        fit: BoxFit.cover,
+
+                      ),
                     ),
                   ),
                   Positioned(
@@ -71,7 +120,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       child: IconButton(
                         icon: isLiked
                             ? Icon(CupertinoIcons.heart_fill, color: Colors.red,)
-                            : Icon(CupertinoIcons.heart),
+                            : Icon(CupertinoIcons.heart, color: Colors.black,),
                         onPressed: () {
                           setState(() {
                             isLiked = !isLiked;
@@ -190,7 +239,6 @@ class _ProductScreenState extends State<ProductScreen> {
                             '${selectedProduct.productRating}',
                             style: TextStyle(
                               fontSize: 16.0,
-                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -232,7 +280,8 @@ class _ProductScreenState extends State<ProductScreen> {
                             child: Icon(Icons.remove),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5.0),
-                                border: Border.all()),
+                                border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white)
+                            ),
                           ),
                           onTap: _decrementValidator,
                         ),
@@ -247,7 +296,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5.0),
-                            border: Border.all(),
+                            border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
                           ),
                         ),
                         SizedBox(
@@ -260,7 +309,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             child: Icon(Icons.add),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5.0),
-                                border: Border.all()),
+                                border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white)),
                           ),
                           onTap: () =>
                               setState(() => selectedProduct.productCount += 1),
@@ -300,6 +349,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
+                                  duration: const Duration(seconds: 3),
                                   content: Row(
                                   children: [
                                     Flexible(

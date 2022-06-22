@@ -9,6 +9,7 @@ import 'package:boogle_mobile/screens/cart_payment_screen.dart';
 import 'package:boogle_mobile/screens/cart_screen.dart';
 import 'package:boogle_mobile/screens/forgot_password_screen.dart';
 import 'package:boogle_mobile/screens/history_screen.dart';
+import 'package:boogle_mobile/screens/home_screen.dart';
 
 import 'package:boogle_mobile/screens/login_screen.dart';
 import 'package:boogle_mobile/screens/payment_screen.dart';
@@ -20,13 +21,22 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  // Using "static" so that we can easily access it later
+  static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +56,18 @@ class MyApp extends StatelessWidget {
         ),
 
       ],
-      child: MaterialApp(
-        theme: ThemeData(
-          fontFamily: 'Montserrat',
-          primarySwatch: Colors.blue,
-        ),
+      child: ValueListenableBuilder<ThemeMode>(
+        valueListenable: themeNotifier,
+        builder: (_, ThemeMode currentMode, HomeScreen){
+          return MaterialApp(
+        debugShowCheckedModeBanner: false,
+
+            theme: ThemeData(
+              fontFamily: 'Montserrat',
+              primarySwatch: Colors.blue,
+            ),
+            darkTheme: ThemeData.dark( ),
+            themeMode: currentMode,
         home: MainScreen(),
         routes: {
           LoginScreen.routeName: (_) { return LoginScreen(); },
@@ -64,7 +81,10 @@ class MyApp extends StatelessWidget {
 
 
         },
-      ),
+      );
+  },
+    ),
+
     );
   }
 }
@@ -88,5 +108,6 @@ class _MainScreenState extends State<MainScreen> {
 
       bottomNavigationBar: BottomNav()
     );
+
   }
 }

@@ -33,6 +33,7 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
         final isLastStep = _index == getPaymentSteps(allCartProduct).length-1;
         if(isLastStep){
           setState(() => isCompleted = true);
+          allCartProduct.clearCartUponCompletion();
           print("Completed");
         }else{
           setState(() => _index +=1);

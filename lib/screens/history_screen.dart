@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../main.dart';
 import '../models/product.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -48,8 +49,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
     HistoryList historyList = Provider.of<HistoryList>(context);
     return Scaffold(
       appBar: AppBar(
-
-        title: Text('History'),
+        iconTheme: IconThemeData(
+          color: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,
+        ),
+        backgroundColor: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
+        title: Text('History',
+            style: TextStyle(
+            color:MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete,),

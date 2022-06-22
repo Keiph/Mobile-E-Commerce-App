@@ -5,6 +5,7 @@ import 'package:boogle_mobile/widgets/app_drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
 import '../screens/search_screen.dart';
 
 class BottomNav extends StatefulWidget {
@@ -43,18 +44,23 @@ class _BottomNavState extends State<BottomNav> {
       ),
       key: _drawerKey,
       endDrawer: AppDrawer(),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: _onItemTapped,
-        currentIndex: selectedIndex,
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey[700],
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.heart), label: 'Liked'),
-          BottomNavigationBarItem(icon: Icon(Icons.menu),label: "Menu"),
-        ],
+      bottomNavigationBar: new Theme(
+        data: Theme.of(context).copyWith(
+            canvasColor: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
+
+        ),
+        child: BottomNavigationBar(
+          onTap: _onItemTapped,
+          currentIndex: selectedIndex,
+          selectedItemColor: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,
+          unselectedItemColor: MyApp.themeNotifier.value == ThemeMode.light? Colors.grey.shade300: Colors.grey.shade700,
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+            BottomNavigationBarItem(icon: Icon(CupertinoIcons.heart), label: 'Liked'),
+            BottomNavigationBarItem(icon: Icon(Icons.menu),label: "Menu"),
+          ],
+        ),
       ),
     );
   }
