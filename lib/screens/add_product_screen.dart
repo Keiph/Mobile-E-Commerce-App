@@ -34,7 +34,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           builder: (context) {
             return AlertDialog(
               title: Text('Confirmation'),
-              content: Text('Are you sure you want to delete?'),
+              content: Text('Are you sure the details of product is correct?'),
               actions: [
                 TextButton(onPressed: (){
                   setState(() {

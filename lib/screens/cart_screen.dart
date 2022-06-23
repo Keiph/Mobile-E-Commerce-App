@@ -89,6 +89,7 @@ class _CartScreenState extends State<CartScreen> {
                                               height: size.height * 0.15,
                                             ),
                                             decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10.0),
                                               image: DecorationImage(
                                                 image: NetworkImage(cartProduct.productImg),
                                                 fit: BoxFit.cover,

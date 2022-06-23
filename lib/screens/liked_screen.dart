@@ -69,15 +69,25 @@ class _LikedScreenState extends State<LikedScreen> {
                         padding: EdgeInsets.only(right: 10.0),
                         child: Column(
                           children: [
-                            Container(
-                              child: SizedBox(
-                                width: size.width * 0.4,
-                                height: size.height * 0.205,
-                              ),
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(likedProduct.productImg),
-                                  fit: BoxFit.cover,
+                            GestureDetector(
+                              onTap:(){
+                                Navigator.of(context).pushNamed(ProductScreen.routeName, arguments: likedProduct);
+                              },
+                              child: Hero(
+                                tag: likedProduct,
+                                child: Container(
+                                  child: SizedBox(
+                                    width: size.width * 0.4,
+                                    height: size.height * 0.205,
+                                  ),
+
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    image: DecorationImage(
+                                      image: NetworkImage(likedProduct.productImg),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
 
                                 ),
                               ),

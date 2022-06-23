@@ -19,20 +19,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+          appBar: AppBar(
+            iconTheme: IconThemeData(
+              color: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,
+            ),
+            backgroundColor: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
+            title: Text('Payment',
+              style: TextStyle(
+                  color:MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black),
+            ),
           ),
-          backgroundColor: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
-          title: Text('Payment',
-            style: TextStyle(
-                color:MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black),
-          ),
-        ),
-        body: Container(
-            margin: EdgeInsets.all(0.0),
-            child: PaymentStepper()),
+          body: Container(
+              margin: EdgeInsets.all(0.0),
+              child: PaymentStepper()),
+      ),
     );
   }
 }

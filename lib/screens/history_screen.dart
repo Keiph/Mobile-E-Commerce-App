@@ -77,121 +77,125 @@ class _HistoryScreenState extends State<HistoryScreen> {
           itemBuilder: (ctx, i){
             Product historyProduct = historyList.getMyHistoryList()[i];
             return GestureDetector(
-              child: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 10.0, bottom:10.0, right: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              historyProduct.productName,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10.0, bottom:10.0, right: 10.0),
-                      child: Row(
-                        children: [
-                          RatingBar.builder(
-                            ignoreGestures: true,
-                            initialRating: historyProduct.productRating,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemSize: 18.0,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
-                            itemBuilder: (context, _) => Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                            onRatingUpdate: (rating) {},
-                          ),
-                          const SizedBox(width: 5.0),
-                          Text('${historyProduct.productRating}',
-                            style: TextStyle(
-                              fontSize: 12.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.only(left: 10.0, right:10.0, bottom: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child:Text(
-                              '\$${historyProduct.productPrice.toStringAsFixed(2)}',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Container(
-                                width: 15,
-                                height: 15,
-                                decoration: BoxDecoration(
+              child: Hero(
+                tag: historyProduct,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 10.0, bottom:10.0, right: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                historyProduct.productName,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
                                   color: Colors.white,
-                                  shape: BoxShape.circle,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14,
                                 ),
                               ),
-                              Container(
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  border: Border.all(width: 0.5),
-                                  color: historyProduct.productColors,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        blurRadius: 1,
-                                        offset: Offset(5, 5)),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-
-                        ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(historyProduct.productImg),
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.5), BlendMode.darken),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10.0, bottom:10.0, right: 10.0),
+                        child: Row(
+                          children: [
+                            RatingBar.builder(
+                              ignoreGestures: true,
+                              initialRating: historyProduct.productRating,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemSize: 18.0,
+                              itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) {},
+                            ),
+                            const SizedBox(width: 5.0),
+                            Text('${historyProduct.productRating}',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.only(left: 10.0, right:10.0, bottom: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child:Text(
+                                '\$${historyProduct.productPrice.toStringAsFixed(2)}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  width: 15,
+                                  height: 15,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(width: 0.5),
+                                    color: historyProduct.productColors,
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          blurRadius: 1,
+                                          offset: Offset(5, 5)),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  borderRadius: BorderRadius.circular(15),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(historyProduct.productImg),
+                      fit: BoxFit.cover,
+                      colorFilter: MyApp.themeNotifier.value == ThemeMode.light
+                          ?ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken)
+                          :ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.darken)
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                 ),
               ),
               onTap: (){

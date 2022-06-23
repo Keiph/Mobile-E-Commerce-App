@@ -3,6 +3,7 @@ import 'package:boogle_mobile/providers/cart_list.dart';
 import 'package:boogle_mobile/providers/history_list.dart';
 import 'package:boogle_mobile/providers/liked_list.dart';
 
+
 import 'package:boogle_mobile/providers/product_list.dart';
 import 'package:boogle_mobile/screens/add_product_screen.dart';
 import 'package:boogle_mobile/screens/cart_payment_screen.dart';
@@ -17,11 +18,14 @@ import 'package:boogle_mobile/screens/product_screen.dart';
 import 'package:boogle_mobile/screens/search_screen.dart';
 
 import 'package:boogle_mobile/widgets/bottom_navbar.dart';
+import 'package:country_code_picker/country_localizations.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+
+
 
 
 void main() {
@@ -58,15 +62,31 @@ class MyApp extends StatelessWidget {
       ],
       child: ValueListenableBuilder<ThemeMode>(
         valueListenable: themeNotifier,
-        builder: (_, ThemeMode currentMode, HomeScreen){
+        builder: (_, ThemeMode currentMode, __){
           return MaterialApp(
+            supportedLocales: [
+              Locale('en','US'),
+              Locale('en','UK'),
+            ],
+        localizationsDelegates: [
+          CountryLocalizations.delegate
+        ],
         debugShowCheckedModeBanner: false,
 
             theme: ThemeData(
               fontFamily: 'Montserrat',
               primarySwatch: Colors.blue,
             ),
-            darkTheme: ThemeData.dark( ),
+            darkTheme: ThemeData.dark().copyWith(
+              textTheme: ThemeData.dark().textTheme.apply(
+                fontFamily: 'Montserrat',
+              ),
+              primaryTextTheme: ThemeData.dark().textTheme.apply(
+                fontFamily: 'Montserrat',
+              ),
+
+            ),
+
             themeMode: currentMode,
         home: MainScreen(),
         routes: {

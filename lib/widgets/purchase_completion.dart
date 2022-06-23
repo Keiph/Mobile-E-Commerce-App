@@ -22,7 +22,7 @@ class PurchaseCompletion extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       child: Text('Shop More'),
-                      onPressed: (){Navigator.of(context).pushNamed(MainScreen.routeName);}
+                      onPressed: (){Navigator.of(context).pushReplacementNamed(MainScreen.routeName);}
                     ),
                   ),
                   const SizedBox(width: 12,),

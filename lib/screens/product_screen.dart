@@ -96,16 +96,19 @@ class _ProductScreenState extends State<ProductScreen> {
                 children: [
                   //Lottie Animation only appear as the background when image is smaller than it
                   Lottie.network('https://assets5.lottiefiles.com/packages/lf20_fvw9spld.json'),
-                  Container(
-                    child: SizedBox(
-                      width: size.width *0.8,
-                      height: size.height *0.25,
-                    ),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(selectedProduct.productImg),
-                        fit: BoxFit.cover,
+                  Hero(
+                    tag: selectedProduct,
+                    child: Container(
+                      child: SizedBox(
+                        width: size.width *0.8,
+                        height: size.height *0.25,
+                      ),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(selectedProduct.productImg),
+                          fit: BoxFit.cover,
 
+                        ),
                       ),
                     ),
                   ),
@@ -331,7 +334,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             child: Text('Buy Now'),
                             style: ElevatedButton.styleFrom(
                               primary: const Color(0xff00AB66),
-                              side: BorderSide(),
+                              side: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
                             )),
                         ElevatedButton(
                             onPressed: () {
@@ -373,7 +376,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             child: Text('Add to Cart'),
                             style: ElevatedButton.styleFrom(
                               primary: const Color(0xff5890FF),
-                              side: BorderSide(),
+                              side: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
                             )),
                       ],
                     )

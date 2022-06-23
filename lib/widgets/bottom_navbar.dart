@@ -29,10 +29,10 @@ class _BottomNavState extends State<BottomNav> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
-
+        backgroundColor: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
         child: Icon(Icons.shopping_cart),
         onPressed: () { Navigator.of(context).pushNamed(CartScreen.routeName); },
-        elevation: 5.0,
+        elevation: 4.0,
         splashColor: const Color(0xff5890FF),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
