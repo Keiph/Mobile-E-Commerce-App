@@ -33,9 +33,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Confirmation'),
-              content: Text('Are you sure the details of product is correct?'),
+              title: Center(child: Text('Confirmation')),
+              content: Text('Are you sure the details of \nproduct is correct?', textAlign: TextAlign.center,),
               actions: [
+                TextButton(onPressed: (){
+                Navigator.of(context).pop();
+              }, child: Text('Discard')),
                 TextButton(onPressed: (){
                   setState(() {
                     productList.addProduct(productName, productImg, productDetails, productColors, productCategory, productPrice, productSizes, productRating, productCount);
@@ -46,10 +49,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Product added successfully!'),));
                   });
                   Navigator.of(context).pop();
-                }, child: Text('Yes')),
-                TextButton(onPressed: (){
-                  Navigator.of(context).pop();
-                }, child: Text('No')),
+                }, child: Text('Create')),
+
               ],
             );
           });

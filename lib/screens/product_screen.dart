@@ -26,6 +26,12 @@ class _ProductScreenState extends State<ProductScreen> {
   bool isLiked = false;
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     LikedList allLikedProduct = Provider.of<LikedList>(context);
@@ -66,7 +72,6 @@ class _ProductScreenState extends State<ProductScreen> {
               IconButton(
               icon: Icon(Icons.delete),
               onPressed:() {
-
                 productList.deleteProduct(selectedProduct);
 
                 Fluttertoast.showToast(
@@ -338,6 +343,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             )),
                         ElevatedButton(
                             onPressed: () {
+                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
                               cartProduct.addToCart(
                                   selectedProduct.productName,
                                   selectedProduct.productImg,
@@ -352,7 +358,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  duration: const Duration(seconds: 3),
+                                  duration: const Duration(seconds: 2),
                                   content: Row(
                                   children: [
                                     Flexible(

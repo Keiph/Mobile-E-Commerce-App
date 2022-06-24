@@ -20,6 +20,13 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     CartList allCartProduct = Provider.of<CartList>(context);
@@ -150,6 +157,8 @@ class _CartScreenState extends State<CartScreen> {
                                                     splashColor: Colors.red[
                                                         300], // Splash color
                                                     onTap: () {
+                                                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
                                                       allCartProduct.removeFromCart(i);
 
                                                       ScaffoldMessenger.of(context).showSnackBar(

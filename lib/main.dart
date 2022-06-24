@@ -16,6 +16,7 @@ import 'package:boogle_mobile/screens/login_screen.dart';
 import 'package:boogle_mobile/screens/payment_screen.dart';
 import 'package:boogle_mobile/screens/product_screen.dart';
 import 'package:boogle_mobile/screens/search_screen.dart';
+import 'package:boogle_mobile/screens/settings_screen.dart';
 
 import 'package:boogle_mobile/widgets/bottom_navbar.dart';
 import 'package:country_code_picker/country_localizations.dart';
@@ -24,8 +25,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
-
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() {
@@ -34,13 +34,19 @@ void main() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
   ]);
+
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // Using "static" so that we can easily access it later
-  static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
+  static ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +67,8 @@ class MyApp extends StatelessWidget {
 
       ],
       child: ValueListenableBuilder<ThemeMode>(
-        valueListenable: themeNotifier,
+        valueListenable: MyApp.themeNotifier,
+        // '_' means the builder requires the arguments, however we are not using it
         builder: (_, ThemeMode currentMode, __){
           return MaterialApp(
             supportedLocales: [
@@ -98,6 +105,7 @@ class MyApp extends StatelessWidget {
           CartScreen.routeName: (_) {return CartScreen();},
           AddProductScreen.routeName: (_) {return AddProductScreen();},
           HistoryScreen.routeName: (_) {return HistoryScreen();},
+          SettingsScreen.routeName: (_) {return SettingsScreen();},
 
 
         },
@@ -109,15 +117,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends StatelessWidget {
   static String routeName = '/';
-
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-
 
   @override
   Widget build(BuildContext context) {

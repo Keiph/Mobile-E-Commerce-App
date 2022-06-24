@@ -228,7 +228,18 @@ class _PaymentStepperState extends State<PaymentStepper> {
                   RadioListTile(
                     value: 'Cash On Delivery',
                     groupValue: selectedRadioBtn,
-                    title: Text('Cash On Delivery'),
+                    title: Row(
+                      children: [
+                        Expanded(child: Text('Credit/Debit Card')),
+                        Row(
+                          children: [
+                            Image.asset('images/mastercard.png',width :30),
+                            SizedBox(width:5.0),
+                            Image.asset('images/visa.png', width:30),
+                          ],
+                        ),
+                      ],
+                    ),
                     onChanged: _handlePaymentChange,
                   ),
                   RadioListTile(

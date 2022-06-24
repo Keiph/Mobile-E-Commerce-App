@@ -22,9 +22,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Delete History'),
-            content: Text('Upon deleting, this is an irreversible action.'),
+            title: Center(child: Text('Delete History')),
+            content: Text('Upon deleting, this is an \nirreversible action.',textAlign: TextAlign.center,),
             actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('No')),
               TextButton(
                   onPressed: () {
                     setState(() {
@@ -32,12 +37,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     });
                     Navigator.of(context).pop();
                   },
-                  child: Text('Yes')),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('No')),
+                  child: Text('Delete')),
+
             ],
           );
         });

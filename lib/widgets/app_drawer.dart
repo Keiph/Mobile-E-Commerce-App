@@ -1,5 +1,6 @@
 import 'package:boogle_mobile/screens/add_product_screen.dart';
 import 'package:boogle_mobile/screens/history_screen.dart';
+import 'package:boogle_mobile/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
@@ -32,7 +33,7 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
               Divider(
-                height: 3,
+                height: 0,
                 color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
               ),
 
@@ -73,6 +74,10 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
+            onTap: (){
+              Navigator.pop(context);
+              Navigator.of(context).pushNamed(SettingsScreen.routeName);
+              },
 
           ),
           Divider(
@@ -88,21 +93,6 @@ class AppDrawer extends StatelessWidget {
             height: 3,
             color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
           ),
-              ListTile(
-                leading: Icon(MyApp.themeNotifier.value == ThemeMode.light
-                    ? Icons.dark_mode
-                    : Icons.light_mode),
-                title: Text(MyApp.themeNotifier.value == ThemeMode.light? 'Dark Mode': 'Light Mode'),
-                onTap: (){
-                  MyApp.themeNotifier.value = MyApp.themeNotifier.value == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-                  },
-
-              ),
-              Divider(
-                height: 3,
-                  color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
-              ),
-
         ],
       ),
     ],

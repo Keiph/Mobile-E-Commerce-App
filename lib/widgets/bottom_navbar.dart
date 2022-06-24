@@ -16,11 +16,18 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   int selectedIndex = 0;
+  PageController _pageController = PageController();
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
   void _onItemTapped(int index) {
     index == 3 ? _drawerKey.currentState!.openEndDrawer() : setState(() {
       selectedIndex = index;
+      _pageController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.easeOut);
     });
   }
 
@@ -36,11 +43,19 @@ class _BottomNavState extends State<BottomNav> {
         splashColor: const Color(0xff5890FF),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: Center(
-        child:
-        selectedIndex == 0 ? HomeScreen():
-        selectedIndex == 1 ? SearchScreen():
-        LikedScreen(),
+      body: SizedBox.expand(
+        child: PageView(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() => selectedIndex = index);
+          },
+          children: [
+            HomeScreen(),
+            SearchScreen(),
+            LikedScreen(),
+          ],
+
+        ),
       ),
       key: _drawerKey,
       endDrawer: AppDrawer(),

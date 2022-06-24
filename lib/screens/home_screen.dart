@@ -1,3 +1,4 @@
+import 'package:boogle_mobile/animations/slide_fade_animation.dart';
 import 'package:boogle_mobile/providers/product_list.dart';
 import 'package:boogle_mobile/screens/login_screen.dart';
 import 'package:boogle_mobile/screens/search_screen.dart';
@@ -57,68 +58,83 @@ class _HomeScreenState extends State<HomeScreen> {
               vertical: size.height *0.1, horizontal: size.width *0.05),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Hello Keiph!',
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Montserrat')),
-                  Container(
-                    padding: EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                      color: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,),
-                    ),
-                    child: Icon(Icons.notifications),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              CarouselAutoSlider(),
-              SizedBox(
-                height: 30,
-              ),
-              Row(
+              SlideFadeAnimation(
+                position: 1,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Popular',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                    Text('Hello Keiph!',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Montserrat')),
+                    Container(
+                      padding: EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                        color: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,),
                       ),
+                      child: Icon(Icons.notifications),
                     ),
                   ],
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              SlideFadeAnimation(
+                position: 2,
+                child: CarouselAutoSlider(),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              SlideFadeAnimation(
+                position: 3,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Popular',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                ),
               ),
               SizedBox(
                 height: 10,
               ),
-              SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      HomeCategory('All', 1),
-                      HomeCategory('Shoes', 2),
-                      HomeCategory('Clothes', 3),
-                      HomeCategory('Computer & Games', 4),
-                      HomeCategory('Grocery', 5),
-                      HomeCategory('Pet Supplies', 6),
-                    ],
+              SlideFadeAnimation(
+                position: 4,
+                child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        HomeCategory('All', 1),
+                        HomeCategory('Shoes', 2),
+                        HomeCategory('Clothes', 3),
+                        HomeCategory('Computer & Games', 4),
+                        HomeCategory('Grocery', 5),
+                        HomeCategory('Pet Supplies', 6),
+                      ],
+                    ),
                   ),
-                ),
+              ),
               SizedBox(
                 height: 30,
               ),
 
-              AspectRatio(
-                aspectRatio: 0.65,
-                child: PopularGridViewBuilder(),
+              SlideFadeAnimation(
+                position: 5,
+                child: AspectRatio(
+                  aspectRatio: 0.65,
+                  child: PopularGridViewBuilder(),
+                ),
               ),
             ],
           ),

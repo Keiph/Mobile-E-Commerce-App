@@ -233,7 +233,18 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                   RadioListTile(
                     value: 'Credit/Debit Card',
                     groupValue: selectedRadioBtn,
-                    title: Text('Credit/Debit Card'),
+                    title: Row(
+                      children: [
+                        Expanded(child: Text('Credit/Debit Card')),
+                        Row(
+                          children: [
+                            Image.asset('images/mastercard.png',width :30),
+                            SizedBox(width:5.0),
+                            Image.asset('images/visa.png', width:30),
+                          ],
+                        ),
+                      ],
+                    ),
                     onChanged: _handlePaymentChange,
                   ),
 
