@@ -228,7 +228,13 @@ class _PaymentStepperState extends State<PaymentStepper> {
                   RadioListTile(
                     value: 'Cash On Delivery',
                     groupValue: selectedRadioBtn,
-                    title: Row(
+                    title: Text('Cash On Delivery'),
+                    onChanged: _handlePaymentChange,
+                  ),
+                  RadioListTile(
+                    value: 'Credit/Debit Card',
+                    groupValue: selectedRadioBtn,
+                    title:Row(
                       children: [
                         Expanded(child: Text('Credit/Debit Card')),
                         Row(
@@ -240,12 +246,6 @@ class _PaymentStepperState extends State<PaymentStepper> {
                         ),
                       ],
                     ),
-                    onChanged: _handlePaymentChange,
-                  ),
-                  RadioListTile(
-                    value: 'Credit/Debit Card',
-                    groupValue: selectedRadioBtn,
-                    title: Text('Credit/Debit Card'),
                     onChanged: _handlePaymentChange,
                   ),
 
@@ -260,6 +260,7 @@ class _PaymentStepperState extends State<PaymentStepper> {
                       child: Column(
                         children: [
                           TextField(
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(label: Text('Card Number'),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
@@ -276,6 +277,7 @@ class _PaymentStepperState extends State<PaymentStepper> {
                               Expanded(
                                 flex:3,
                                 child: TextField(
+                                  keyboardType: TextInputType.number,
                                   decoration: InputDecoration(label: Text('MM/YY'),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
@@ -290,6 +292,7 @@ class _PaymentStepperState extends State<PaymentStepper> {
                               Expanded(
                                 flex: 2,
                                 child: TextField(
+                                  keyboardType: TextInputType.number,
                                   decoration: InputDecoration(label: Text('CVV'),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),

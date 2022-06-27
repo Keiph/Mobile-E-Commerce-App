@@ -2,9 +2,10 @@ import 'package:boogle_mobile/providers/product_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:regexpattern/regexpattern.dart';
 
 import '../main.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 class AddProductScreen extends StatefulWidget {
   static String routeName = '/add-product';
 
@@ -13,6 +14,11 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
+
+  TextEditingController urlController = TextEditingController();
+
+  var urlPattern = r"(https?|http)://";
+
   var form = GlobalKey<FormState>();
 
   String? productName,
@@ -33,27 +39,62 @@ class _AddProductScreenState extends State<AddProductScreen> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Center(child: Text('Confirmation')),
-              content: Text('Are you sure the details of \nproduct is correct?', textAlign: TextAlign.center,),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(12.0))
+              ),
+              actionsPadding: EdgeInsets.all(10.0),
+              title: Center(child: Text('Confirmation',style: TextStyle(fontWeight: FontWeight.bold))),
+              content: Text(
+                  'Have you checked'
+                      '\n if all inputs are correct?',
+                  textAlign: TextAlign.center,
+                  style:TextStyle(fontWeight: FontWeight.w600)
+              ),
               actions: [
-                TextButton(onPressed: (){
-                Navigator.of(context).pop();
-              }, child: Text('Discard')),
-                TextButton(onPressed: (){
-                  setState(() {
-                    productList.addProduct(productName, productImg, productDetails, productColors, productCategory, productPrice, productSizes, productRating, productCount);
-                    FocusScope.of(context).unfocus();
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Discard', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),),
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color(0xffe6f0fd),
+                          elevation: 5,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 20,),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: (){
+                          setState(() {
+                            productList.addProduct(productName, productImg, productDetails, productColors, productCategory, productPrice, productSizes, productRating, productCount);
+                            FocusScope.of(context).unfocus();
 
-                    form.currentState!.reset();
+                            form.currentState!.reset();
 
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Product added successfully!'),));
-                  });
-                  Navigator.of(context).pop();
-                }, child: Text('Create')),
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Product added successfully!'),));
+
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Create', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color(0xff314df8),
+                          elevation: 5,
+                        ),
+                      ),
+
+                    ),
+                  ],
+                ),
 
               ],
             );
           });
+
       /* Checking if Values is properly shown
       print(productName);
       print(productImg);
@@ -96,7 +137,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 children: [
                   TextFormField(
                     decoration:
-                        InputDecoration(label: Text('Enter Product Name')),
+                        InputDecoration(label: Text('Enter Product Name'),enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                        ),
+                          focusedBorder:OutlineInputBorder(
+                            borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                        ),
                     validator: (value) {
                       if (value!.isEmpty)
                         return 'Please provide the name of the product.';
@@ -111,20 +164,76 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                   SizedBox(height: 20,),
                   TextFormField(
-                    decoration:
-                        InputDecoration(label: Text('Enter URL of Image')),
+                    controller: urlController,
+                    decoration: InputDecoration(
+                      label: Text('Enter URL of Image'),
+                      prefixIcon: IconButton(
+                        icon: Icon(Icons.open_in_browser),
+                        onPressed: () async {
+
+                          if (urlController.text.isEmpty){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                duration: const Duration(seconds: 2),
+                                content: Text('Please Enter a URL to access', ),
+                              ),
+                            );
+                          }
+                          //this has to come first to validate if value[0] == ':'
+                          //if not this app crashes for exception handling
+                          else if (!RegExp(urlPattern).hasMatch(urlController.text)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                duration: const Duration(seconds: 2),
+                                content: Text('Invalid URL', ),
+                              ),
+                            );
+                          }
+                          /*once validation done on top, check user's value with flutter default
+                          Url validator (some what redundant)*/
+                          else if (Uri.parse(urlController.text).isAbsolute) {
+                            Uri _url =  Uri.parse(urlController.text);
+                            if(!await launchUrl(
+                                _url,
+                              mode: LaunchMode.inAppWebView,
+                            ))
+                              {
+                                throw 'Could Not Launch $_url';
+                              }
+                          }
+
+                          else{
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                duration: const Duration(seconds: 2),
+                                content: Text('URL cannot be resolve', ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                      ),
+                      focusedBorder:OutlineInputBorder(
+                        borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
+
                     validator: (value) {
-                      var urlPattern = r"(https?|http)://";
-                      RegExp regEx = new RegExp(urlPattern);
 
                       if (value!.isEmpty)
                         return 'Please provide the URL of the image.';
-                      else if (!Uri.parse(value).isAbsolute)
-                        if (!regEx.hasMatch(value))
-                        // Must match regex, if user type :/ it will have an exception . This is to prevent that
-                        return 'Please don\'t try to crash my system add in http or https:// ';
-                      else
-                        return 'Please provide a valid URL';
+                      else if (!value.isUrl())
+                        return 'Invalid URL formatting';
+                      else if (!value.isImage())
+                       return 'Not in Image format! (jpeg| jpg| gif| png| bmp)';
                       else
                         return null;
                     },
@@ -132,13 +241,28 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       productImg = value;
                     },
                   ),
+
+                  SizedBox(height: 10,),
+
                   SizedBox(height: 20,),
                   Row(
                     children: [
                       Expanded(
                         child: TextFormField(
                           decoration:
-                              InputDecoration(label: Text('Enter Product Size')),
+                              InputDecoration(label: Text('Enter Product Size'),enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                              ),
+                                focusedBorder:OutlineInputBorder(
+                                  borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                              ),
                           validator: (value) {
                             if (value!.isEmpty)
                               return 'Please provide the size of the product';
@@ -159,7 +283,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         child: TextFormField(
                           decoration: InputDecoration(
                             label: Text('Enter Price'),
-                            hintText: '\$2.50'
+                            hintText: '\$2.50',
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                            ),
+                            focusedBorder:OutlineInputBorder(
+                              borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                            ),
                           ),
                           keyboardType: TextInputType.number,
                           validator: (value) {
@@ -181,7 +317,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                   DropdownButtonFormField(
                     decoration: InputDecoration(
-                      label: Text('Select One Product Category'),
+                      label: Text('Select One Product Category'),enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                    ),
+                      focusedBorder:OutlineInputBorder(
+                        borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
                     ),
                     items: [
                       DropdownMenuItem(child: Text('Clothes'), value: 'clothes'),
@@ -204,7 +351,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                   DropdownButtonFormField(
                     decoration: InputDecoration(
-                      label: Text('Select One Product Color'),
+                      label: Text('Select One Product Color'),enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                    ),
+                      focusedBorder:OutlineInputBorder(
+                        borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
                     ),
                     items: [
                       DropdownMenuItem(
@@ -404,9 +562,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     child: Container(
                       padding: EdgeInsets.all(10.0),
                       child: TextFormField(
-                        expands: true,
                         maxLines: null,
-                        maxLength: 150,
+                        maxLength: 512,
                         decoration: InputDecoration(
                           label: Text('Enter Product Details'),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -430,7 +587,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         validator: (value) {
                           if (value!.isEmpty)
                             return 'Please provide the detail of the product';
-                          else if (value.length > 150) //this is for redundancy
+                          else if (value.length > 512) //this is for redundancy
                             return 'Do Not Exceed the word limit';
                           else if (value.length < 10)
                             return 'Details is way too short!';

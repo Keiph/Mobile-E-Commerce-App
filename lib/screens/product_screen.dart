@@ -10,6 +10,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:readmore/readmore.dart';
 
 import '../providers/liked_list.dart';
 import '../providers/product_list.dart';
@@ -50,6 +51,84 @@ class _ProductScreenState extends State<ProductScreen> {
             });
     }
 
+    void deleteProduct(selectedProduct) {
+      showDialog<Null>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(12.0))
+              ),
+              actionsPadding: EdgeInsets.all(10.0),
+              title: Center(child: Text('Delete Product?',style: TextStyle(fontWeight: FontWeight.bold))),
+              content: Text(
+                  'Upon deleting, this is an '
+                      '\nirreversible action.',
+                  textAlign: TextAlign.center,
+                  style:TextStyle(fontWeight: FontWeight.w600)
+              ),
+              actions: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Cancel', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),),
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color(0xffe6f0fd),
+                          elevation: 5,
+                        ),
+                      ),
+                      /*TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Cancel')),*/
+                    ),
+                    SizedBox(width: 20,),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: (){
+                          setState(() => productList.deleteProduct(selectedProduct));
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+
+                          Fluttertoast.showToast(
+                              msg: selectedProduct.productName + " has been removed from app",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.TOP,
+                              timeInSecForIosWeb: 5,
+                              backgroundColor: Colors.black,
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          );
+                        },
+                        child: Text('Delete', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color(0xff314df8),
+                          elevation: 5,
+                        ),
+                      ),
+
+                      /*TextButton(
+                        onPressed: () {
+                          setState(() {
+                            historyList.clearHistory();
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Delete')),*/
+                    ),
+                  ],
+                ),
+
+              ],
+            );
+          });
+    }
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -72,19 +151,9 @@ class _ProductScreenState extends State<ProductScreen> {
               IconButton(
               icon: Icon(Icons.delete),
               onPressed:() {
-                productList.deleteProduct(selectedProduct);
+                deleteProduct(selectedProduct);
 
-                Fluttertoast.showToast(
-                    msg: selectedProduct.productName + " has been removed from app",
-                    toastLength: Toast.LENGTH_LONG,
-                    gravity: ToastGravity.TOP,
-                    timeInSecForIosWeb: 5,
-                    backgroundColor: Colors.black,
-                    textColor: Colors.white,
-                    fontSize: 16.0
-                );
 
-                Navigator.pop(context);
               },
             ),
             ],
@@ -187,10 +256,12 @@ class _ProductScreenState extends State<ProductScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text( 'Size: ' + selectedProduct.productSizes,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600
+                        Flexible(
+                          child: Text( 'Size: ' + selectedProduct.productSizes,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600
+                            ),
                           ),
                         ),
                         Stack(
@@ -267,11 +338,17 @@ class _ProductScreenState extends State<ProductScreen> {
                     Row(
                       children: [
                         Flexible(
-                            child: Text(selectedProduct.productDetails,
+                            child: ReadMoreText(
+                              selectedProduct.productDetails,
+                              trimLines: 3,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                               ),
+
+                              trimMode: TrimMode.Line,
+                              trimCollapsedText: '...Read more',
+                              trimExpandedText: ' Less',
                             ),
                         ),
                       ],
@@ -368,6 +445,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                       ),
                                     ],
                                   ),
+
                                     action: SnackBarAction(
                                       label: "UNDO",
                                       onPressed: () {

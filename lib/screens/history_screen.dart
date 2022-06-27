@@ -3,6 +3,7 @@ import 'package:boogle_mobile/screens/product_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../main.dart';
@@ -22,22 +23,71 @@ class _HistoryScreenState extends State<HistoryScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Center(child: Text('Delete History')),
-            content: Text('Upon deleting, this is an \nirreversible action.',textAlign: TextAlign.center,),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12.0))
+            ),
+            actionsPadding: EdgeInsets.all(10.0),
+            title: Center(child: Text('Delete History?',style: TextStyle(fontWeight: FontWeight.bold))),
+            content: Text(
+              'Upon deleting, this is an '
+                  '\nirreversible action.',
+              textAlign: TextAlign.center,
+              style:TextStyle(fontWeight: FontWeight.w600)
+            ),
             actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('No')),
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      historyList.clearHistory();
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Delete')),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Cancel', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffe6f0fd),
+                        elevation: 5,
+                      ),
+                    ),
+                    /*TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Cancel')),*/
+                  ),
+                  SizedBox(width: 20,),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: (){
+                        setState(() => historyList.clearHistory());
+                        Navigator.of(context).pop();
+                        Fluttertoast.showToast(
+                            msg: " all items has been removed from history",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.TOP,
+                            timeInSecForIosWeb: 5,
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
+                      },
+                      child: Text('Delete', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xff314df8),
+                        elevation: 5,
+                      ),
+                    ),
+
+                    /*TextButton(
+                        onPressed: () {
+                          setState(() {
+                            historyList.clearHistory();
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Delete')),*/
+                  ),
+                ],
+              ),
 
             ],
           );
@@ -114,7 +164,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               initialRating: historyProduct.productRating,
                               direction: Axis.horizontal,
                               allowHalfRating: true,
-                              itemCount: 5,
+                              itemCount: 1,
                               itemSize: 18.0,
                               itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
                               itemBuilder: (context, _) => Icon(
@@ -124,7 +174,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               onRatingUpdate: (rating) {},
                             ),
                             const SizedBox(width: 5.0),
-                            Text('${historyProduct.productRating}',
+                            Text('${historyProduct.productRating.toStringAsFixed(1)}',
                               style: TextStyle(
                                 fontSize: 12.0,
                                 color: Colors.white,

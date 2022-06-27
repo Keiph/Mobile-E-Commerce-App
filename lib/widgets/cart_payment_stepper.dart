@@ -259,6 +259,7 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                       child: Column(
                         children: [
                           TextField(
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(label: Text('Card Number'),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
@@ -275,6 +276,7 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                               Expanded(
                                 flex:3,
                                 child: TextField(
+                                  keyboardType: TextInputType.number,
                                   decoration: InputDecoration(label: Text('MM/YY'),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
@@ -289,6 +291,7 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                               Expanded(
                                 flex: 2,
                                 child: TextField(
+                                  keyboardType: TextInputType.number,
                                   decoration: InputDecoration(label: Text('CVV'),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),

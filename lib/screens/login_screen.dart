@@ -64,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       'B GOOD LIKE GOOGLE',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: Colors.black
                       ),
                     ),
                   ),
@@ -94,11 +95,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Padding(
                     padding: EdgeInsets.only(left: 30, top: 20, right: 30),
                     child: TextFormField(
+                      style: TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(),
+                        labelStyle: TextStyle(color: Colors.black),
                         hintText: "Enter Email",
+                        hintStyle: TextStyle(color: Colors.black),
                       ),
                     ),
                   ),
@@ -109,12 +113,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Padding(
                     padding: EdgeInsets.only(left: 30, top: 20, right: 30),
                     child: TextFormField(
+                      style: TextStyle(color: Colors.black),
                       obscureText: _ishidden,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(),
                         hintText: "Enter Password",
+                        hintStyle: TextStyle(color: Colors.black),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _ishidden ? Icons.visibility : Icons.visibility_off,
@@ -144,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               decoration: TextDecoration.underline,
                             ),
                           ),
-                          onPressed: () => Navigator.of(context).pushNamed(ForgotPasswordScreen.routeName),
+                          onPressed: () {} ,
                           child: const Text('Forgot Password?'),
                         ),
                       ],

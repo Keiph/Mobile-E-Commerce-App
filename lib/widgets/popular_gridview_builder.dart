@@ -19,6 +19,7 @@ class PopularGridViewBuilder extends StatelessWidget {
     HistoryList historyList= Provider.of<HistoryList>(context);
 
     return GridView.builder(
+      shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200,
@@ -71,7 +72,7 @@ class PopularGridViewBuilder extends StatelessWidget {
                                 initialRating: currentProduct.productRating,
                                 direction: Axis.horizontal,
                                 allowHalfRating: true,
-                                itemCount: 5,
+                                itemCount: 1,
                                 itemSize: 18.0,
                                 itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
                                 itemBuilder: (context, _) => Icon(
@@ -81,7 +82,7 @@ class PopularGridViewBuilder extends StatelessWidget {
                                 onRatingUpdate: (rating) {},
                               ),
                               const SizedBox(width: 5.0),
-                              Text('${currentProduct.productRating}',
+                              Text('${currentProduct.productRating.toStringAsFixed(1)}',
                                 style: TextStyle(
                                   fontSize: 12.0,
                                   color: Colors.white,

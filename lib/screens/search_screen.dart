@@ -23,9 +23,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
 
   final _controller = TextEditingController();
-  List<Product> searchList = ProductList().getAllProductList();
+  List<Product> searchList = [];
   //this one line of code cost me 8 hours to debug :_)
 
+
+  @override
+  void initState() {
+    searchList = ProductList().getAllProductList();
+    super.initState();
+  }
 
 
   @override
@@ -120,7 +126,18 @@ class _SearchScreenState extends State<SearchScreen> {
                         borderRadius: BorderRadius.circular(18.0),
 
                       ),
-                      child: GridView.builder(
+                      child: searchList.length == 0
+                          ? Center(
+                        child: Container(
+
+                          child: SizedBox(width: double.infinity,height: 300,),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('images/153-1533013_sorry-no-results-found.png'),
+                              fit: BoxFit.fitWidth),
+                          ),
+                        ),
+                      ) :GridView.builder(
                         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                             maxCrossAxisExtent: 200,
                             crossAxisSpacing: 15,
@@ -165,7 +182,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             initialRating: searchProduct.productRating,
                                             direction: Axis.horizontal,
                                             allowHalfRating: true,
-                                            itemCount: 5,
+                                            itemCount: 1,
                                             itemSize: 18.0,
                                             itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
                                             itemBuilder: (context, _) => Icon(
@@ -175,7 +192,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             onRatingUpdate: (rating) {},
                                           ),
                                           const SizedBox(width: 5.0),
-                                          Text('${searchProduct.productRating}',
+                                          Text('${searchProduct.productRating.toStringAsFixed(1)}',
                                             style: TextStyle(
                                               fontSize: 12.0,
                                               color: Colors.white,

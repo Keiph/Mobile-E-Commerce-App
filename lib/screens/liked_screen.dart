@@ -143,7 +143,6 @@ class _LikedScreenState extends State<LikedScreen> {
                                           msg: likedProduct.productName + " has been removed from app",
                                           toastLength: Toast.LENGTH_LONG,
                                           gravity: ToastGravity.TOP,
-                                          timeInSecForIosWeb: 5,
                                           backgroundColor: Colors.black,
                                           textColor: Colors.white,
                                           fontSize: 16.0

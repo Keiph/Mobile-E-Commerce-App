@@ -150,6 +150,38 @@ class _CartScreenState extends State<CartScreen> {
                                                   ),
                                                 ),
                                               ),
+                                              ElevatedButton(
+                                                  onPressed: (){
+                                                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+                                                    allCartProduct.removeFromCart(i);
+
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        duration: Duration(seconds: 1),
+                                                        content: Row(
+                                                          children: [
+                                                            Flexible(
+                                                              child: Text(
+                                                                cartProduct.productName + ' has been removed to cart',
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        behavior: SnackBarBehavior.floating,
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(24),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                child: Icon(Icons.close),
+                                                style: ElevatedButton.styleFrom(
+                                                  shape: CircleBorder(),
+                                                  padding: EdgeInsets.all(2.0),
+                                                ),
+                                              ),
+                                              /*
                                               ClipOval(
                                                 child: Material(
                                                   color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
@@ -157,36 +189,9 @@ class _CartScreenState extends State<CartScreen> {
                                                     splashColor: Colors.red[
                                                         300], // Splash color
                                                     onTap: () {
-                                                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
-                                                      allCartProduct.removeFromCart(i);
-
-                                                      ScaffoldMessenger.of(context).showSnackBar(
-                                                        SnackBar(
-                                                          content: Row(
-                                                            children: [
-                                                              Flexible(
-                                                                child: Text(
-                                                                  cartProduct.productName + ' has been removed to cart',
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          behavior: SnackBarBehavior.floating,
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(24),
-                                                          ),
-                                                          action: SnackBarAction(
-                                                            label: "UNDO",
-                                                            onPressed: () {
-                                                              allCartProduct.addToCart(cartProduct.productName, cartProduct.productImg, cartProduct.productDetails, cartProduct.productColors, cartProduct.productCategory, cartProduct.productPrice, cartProduct.productSizes, cartProduct.productRating, cartProduct.productCount);
-                                                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                                            },
-
-                                                          ),
-                                                        ),
-                                                      );
                                                     },
+
                                                     child: SizedBox(
                                                       width: 32,
                                                       height: 32,
@@ -197,7 +202,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     ),
                                                   ),
                                                 ),
-                                              ),
+                                              ),*/
                                             ],
                                           ),
                                           Padding(
