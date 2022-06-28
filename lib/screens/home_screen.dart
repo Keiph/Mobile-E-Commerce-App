@@ -1,47 +1,58 @@
 import 'package:boogle_mobile/animations/slide_fade_animation.dart';
-import 'package:boogle_mobile/providers/product_list.dart';
-import 'package:boogle_mobile/screens/login_screen.dart';
-import 'package:boogle_mobile/screens/search_screen.dart';
 import 'package:boogle_mobile/widgets/carousel_slider.dart';
 
-
 import 'package:boogle_mobile/widgets/popular_gridview_builder.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../main.dart';
-import '../models/product.dart';
-
+import 'package:boogle_mobile/main.dart';
 
 class HomeScreen extends StatefulWidget {
   static String routeName = '/home';
+
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
+  //initialise activeCategory = 1
   int activeCategory = 1;
 
-  HomeCategory(String text, int index) {
+  /// [homeCategory] is a helper method that generates the following return Widget wherever this method is called under the Build Method
+  /// of [HomeScreen]. [text] and [index] are required arguments wherever this helper method is called.
+  /// [text] holds a String literals that determines the category of product displayed on screen.
+  /// [index] uniquely holds integer value to change (setState} the UI of the widgets in respond with the return
+  /// of [GestureDetector]. In the event, there are multiple same values of index, the UI of all widgets that correspond
+  /// with the index value will change as well.
+  GestureDetector homeCategory(String text, int index) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          this.activeCategory = index;
+          //set value of activeCategory to the value of the passed argument index
+          activeCategory = index;
         });
       },
+
+      // Widget UI of Helper method
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 7.5, horizontal: 15.0),
-        margin: EdgeInsets.symmetric(horizontal: 5.0),
+        padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15.0),
+        margin: const EdgeInsets.symmetric(horizontal: 5.0),
         child: Text(
-            text,
-            style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, color: (index == activeCategory) ? Colors.white : Colors.black)
+          text,
+          style: TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.w500,
+            // if it is selected change text color to white else black
+            color: (index == activeCategory) ? Colors.white : Colors.black,
+          ),
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          color: (index == activeCategory) ? Colors.grey[700] : Colors.grey[200],
+          borderRadius: const BorderRadius.all(
+            Radius.circular(20.0),
+          ),
+          // if it is selected change box decoration color to darker shade of grey else lighter shade of grey
+          color: index == activeCategory ? Colors.grey[700] : Colors.grey[200],
         ),
       ),
     );
@@ -55,81 +66,101 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: SafeArea(
           minimum: EdgeInsets.symmetric(
-              vertical: size.height *0.1, horizontal: size.width *0.05),
+            vertical: size.height * 0.1,
+            horizontal: size.width * 0.05,
+          ),
           child: Column(
             children: [
+              //Onboard Message + Notification
               SlideFadeAnimation(
                 position: 1,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Hello Keiph!',
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Montserrat')),
-                    Container(
-                      padding: EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                        color: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,),
+                    const Text(
+                      'Hello Keiph!',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Montserrat',
                       ),
-                      child: Icon(Icons.notifications),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                        color: MyApp.themeNotifier.value == ThemeMode.light
+                            ? Colors.white
+                            : Colors.black,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: MyApp.themeNotifier.value == ThemeMode.light
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                      ),
+                      child: const Icon(Icons.notifications),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: 30,
-              ),
-              SlideFadeAnimation(
-                position: 2,
-                child: CarouselAutoSlider(),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              SlideFadeAnimation(
-                position: 3,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Popular',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              SlideFadeAnimation(
-                position: 4,
-                child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        HomeCategory('All', 1),
-                        HomeCategory('Shoes', 2),
-                        HomeCategory('Clothes', 3),
-                        HomeCategory('Computer & Games', 4),
-                        HomeCategory('Grocery', 5),
-                        HomeCategory('Pet Supplies', 6),
-                      ],
-                    ),
-                  ),
-              ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
 
+              //Carousel Slider
+              const SlideFadeAnimation(
+                position: 2,
+                // Calls Widget Class
+                child: CarouselAutoSlider(),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+
+              //Heading Text
               SlideFadeAnimation(
+                position: 3,
+                child: Row(
+                  children: const [
+                    Text(
+                      'Popular',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
+              //Filter by category Chips
+              SlideFadeAnimation(
+                position: 4,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      // Calls helper method (homeCategory) to build the Widgets in this format
+                      homeCategory('All', 1),
+                      homeCategory('Shoes', 2),
+                      homeCategory('Clothes', 3),
+                      homeCategory('Computer & Games', 4),
+                      homeCategory('Grocery', 5),
+                      homeCategory('Pet Supplies', 6),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+
+              //GridView Product Cards
+              const SlideFadeAnimation(
                 position: 5,
                 child: AspectRatio(
                   aspectRatio: 0.65,

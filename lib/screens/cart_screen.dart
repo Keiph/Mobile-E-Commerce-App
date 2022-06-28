@@ -1,26 +1,27 @@
+import 'package:boogle_mobile/models/product.dart';
 import 'package:boogle_mobile/providers/cart_list.dart';
-import 'package:boogle_mobile/screens/payment_screen.dart';
+import 'package:boogle_mobile/screens/cart_payment_screen.dart';
+import 'package:boogle_mobile/screens/product_screen.dart';
 import 'package:boogle_mobile/widgets/empty_cart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
-import '../main.dart';
-import '../models/product.dart';
-import '../widgets/purchase_completion.dart';
-import 'cart_payment_screen.dart';
-import 'home_screen.dart';
+import 'package:boogle_mobile/main.dart';
 
 class CartScreen extends StatefulWidget {
+  ///This [CartScreen] mainly uses [CartList] provider with Create, Read and Delete functionality
+  ///The [CartScreen] provides in-built functions like decrementing the count of the Product
+
   static String routeName = '/cart';
+
+  const CartScreen({Key? key}) : super(key: key);
 
   @override
   State<CartScreen> createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -29,45 +30,70 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //call CartList Provider to access to function in the provider
     CartList allCartProduct = Provider.of<CartList>(context);
+
+    //get the size of my screen
     Size size = MediaQuery.of(context).size;
+
+    //initialise isEmpty to true whenever the screen is called
     bool isEmpty = true;
 
-    if (allCartProduct.getMyCartList().length > 0) {
+    //checks if CartList is not empty, if true set isEmpty to false
+    if (allCartProduct.getMyCartList().isNotEmpty) {
       isEmpty = false;
     }
 
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,
+          color: MyApp.themeNotifier.value == ThemeMode.light
+              ? Colors.white
+              : Colors.black,
         ),
-        backgroundColor: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
+        backgroundColor: MyApp.themeNotifier.value == ThemeMode.light
+            ? Colors.black
+            : Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Cart',
+            Text(
+              'Cart',
               style: TextStyle(
-                color:MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
+                color: MyApp.themeNotifier.value == ThemeMode.light
+                    ? Colors.black
+                    : Colors.white,
               ),
             ),
-            Text('Total ' + allCartProduct.getTotalItems().toString() + ' Items',style: TextStyle(
-                color:MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black),),
 
+            //displays the total number for all product in the CartList, by calling the CartList provider function get total items
+            Text(
+              'Total ' + allCartProduct.getTotalItems().toString() + ' Items',
+              style: TextStyle(
+                color: MyApp.themeNotifier.value == ThemeMode.light
+                    ? Colors.white
+                    : Colors.black,
+              ),
+            ),
           ],
         ),
       ),
+
+      // if isEmpty is true, EmptyCart Widget class gets called. Else SafeArea Widget is called
       body: isEmpty
-          ? EmptyCart()
+          ? const EmptyCart()
           : SafeArea(
               child: Column(
                 children: [
                   Expanded(
                     child: ListView.builder(
                       itemBuilder: (BuildContext context, int i) {
+                        //loop through the list of Object to get each object
                         Product cartProduct = allCartProduct.getMyCartList()[i];
 
+                        // this function does event handling when user clicks on '+' and '-' to increase the amount of product they are going to buy
                         void _decrementValidator() {
+                          // if productCount is less than 2 set productCount else set productCount -= 1
                           cartProduct.productCount < 2
                               ? cartProduct.productCount
                               : setState(() {
@@ -75,37 +101,56 @@ class _CartScreenState extends State<CartScreen> {
                                 });
                         }
 
-                        return Container(
+                        //List View product card
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              ProductScreen.routeName,
+                              arguments: cartProduct,
+                            );
+                          },
                           child: Padding(
-                            padding: EdgeInsets.only(bottom: 10.0),
+                            padding: const EdgeInsets.only(bottom: 10.0),
                             child: Card(
                               elevation: 5.0,
                               shape: Border.all(width: 0.5),
                               child: Padding(
-                                padding: EdgeInsets.all(10.0),
+                                padding: const EdgeInsets.all(10.0),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.only(right: 10.0),
+                                      padding:
+                                          const EdgeInsets.only(right: 10.0),
                                       child: Column(
                                         children: [
-                                          Container(
-                                            child: SizedBox(
-                                              width: size.width * 0.4,
-                                              height: size.height * 0.15,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                image: NetworkImage(cartProduct.productImg),
-                                                fit: BoxFit.cover,
-
+                                          //Hero Widgets used for navigation from Screen A to B and vice versa,
+                                          //it is used to animate the navigation, the Hero Widgets looks for similar widget tree
+                                          //for Screen A and B and determine the animation. Which is why tag is required
+                                          Hero(
+                                            tag: cartProduct,
+                                            child: Container(
+                                              child: SizedBox(
+                                                // takes up 4/10 width of screen and 1.5/10 height of screen
+                                                width: size.width * 0.4,
+                                                height: size.height * 0.15,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                    cartProduct.productImg,
+                                                  ),
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
                                           ),
+
+                                          //Rating Star
                                           Padding(
-                                            padding: EdgeInsets.all(10.0),
+                                            padding: const EdgeInsets.all(10.0),
                                             child: Row(
                                               children: [
                                                 RatingBar.builder(
@@ -116,11 +161,12 @@ class _CartScreenState extends State<CartScreen> {
                                                   allowHalfRating: true,
                                                   itemCount: 5,
                                                   itemSize: 18.0,
-                                                  itemPadding:
-                                                      EdgeInsets.symmetric(
-                                                          horizontal: 1.0),
+                                                  itemPadding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 1.0,
+                                                  ),
                                                   itemBuilder: (context, _) =>
-                                                      Icon(
+                                                      const Icon(
                                                     Icons.star,
                                                     color: Colors.amber,
                                                   ),
@@ -139,75 +185,76 @@ class _CartScreenState extends State<CartScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
+                                              // Name of Product placeholder
                                               Expanded(
                                                 child: Text(
                                                   cartProduct.productName,
                                                   overflow:
                                                       TextOverflow.ellipsis,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 14,
                                                   ),
                                                 ),
                                               ),
+
+                                              //Remove Button
                                               ElevatedButton(
-                                                  onPressed: (){
-                                                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                                onPressed: () {
+                                                  // hide any existing snackbar, so it does not overwrites
+                                                  ScaffoldMessenger.of(context)
+                                                      .hideCurrentSnackBar();
 
-                                                    allCartProduct.removeFromCart(i);
+                                                  // calls removeFromCart method from CartList Provider
+                                                  allCartProduct
+                                                      .removeFromCart(i);
 
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      SnackBar(
-                                                        duration: Duration(seconds: 1),
-                                                        content: Row(
-                                                          children: [
-                                                            Flexible(
-                                                              child: Text(
-                                                                cartProduct.productName + ' has been removed to cart',
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        behavior: SnackBarBehavior.floating,
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(24),
-                                                        ),
+                                                  // show snackbar content
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      duration: const Duration(
+                                                        seconds: 1,
                                                       ),
-                                                    );
-                                                  },
-                                                child: Icon(Icons.close),
-                                                style: ElevatedButton.styleFrom(
-                                                  shape: CircleBorder(),
-                                                  padding: EdgeInsets.all(2.0),
-                                                ),
-                                              ),
-                                              /*
-                                              ClipOval(
-                                                child: Material(
-                                                  color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white,
-                                                  child: InkWell(
-                                                    splashColor: Colors.red[
-                                                        300], // Splash color
-                                                    onTap: () {
-
-                                                    },
-
-                                                    child: SizedBox(
-                                                      width: 32,
-                                                      height: 32,
-                                                      child: Icon(
-                                                        Icons.close,
-                                                        color: MyApp.themeNotifier.value == ThemeMode.light? Colors.white: Colors.black,
+                                                      content: Row(
+                                                        children: [
+                                                          Flexible(
+                                                            child: Text(
+                                                              cartProduct
+                                                                      .productName +
+                                                                  ' has been removed to cart',
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      behavior: SnackBarBehavior
+                                                          .floating,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                          24,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
+                                                  );
+                                                },
+                                                child: const Icon(Icons.close),
+                                                style: ElevatedButton.styleFrom(
+                                                  shape: const CircleBorder(),
+                                                  padding:
+                                                      const EdgeInsets.all(2.0),
                                                 ),
-                                              ),*/
+                                              ),
                                             ],
                                           ),
+
+                                          //Product Price Placeholder
                                           Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 10.0),
+                                            padding: const EdgeInsets.only(
+                                              bottom: 10.0,
+                                            ),
                                             child: Row(
                                               children: [
                                                 Text(
@@ -216,9 +263,12 @@ class _CartScreenState extends State<CartScreen> {
                                               ],
                                             ),
                                           ),
+
+                                          //Product Color Placeholder
                                           Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 10.0),
+                                            padding: const EdgeInsets.only(
+                                              bottom: 10.0,
+                                            ),
                                             child: Row(
                                               children: [
                                                 Stack(
@@ -232,9 +282,17 @@ class _CartScreenState extends State<CartScreen> {
                                                         shape: BoxShape.circle,
                                                         boxShadow: [
                                                           BoxShadow(
-                                                              color: Colors.black.withOpacity(0.3),
-                                                              blurRadius: 1,
-                                                              offset: Offset(3, 3)),
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                              0.3,
+                                                            ),
+                                                            blurRadius: 1,
+                                                            offset:
+                                                                const Offset(
+                                                              3,
+                                                              3,
+                                                            ),
+                                                          ),
                                                         ],
                                                       ),
                                                     ),
@@ -242,10 +300,12 @@ class _CartScreenState extends State<CartScreen> {
                                                       width: 10,
                                                       height: 10,
                                                       decoration: BoxDecoration(
-                                                        color: cartProduct.productColors,
-                                                        border: Border.all(
-                                                            width: 0.5),
+                                                        color: cartProduct
+                                                            .productColors,
                                                         shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                          width: 0.5,
+                                                        ),
                                                       ),
                                                     ),
                                                   ],
@@ -253,28 +313,43 @@ class _CartScreenState extends State<CartScreen> {
                                               ],
                                             ),
                                           ),
+
+                                          //Add & Minus Product Count Button
                                           Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 10.0),
+                                            padding: const EdgeInsets.only(
+                                              bottom: 10.0,
+                                            ),
                                             child: Row(
                                               children: [
                                                 GestureDetector(
                                                   child: Container(
                                                     width: 24,
                                                     height: 24,
-                                                    child: Icon(
+                                                    child: const Icon(
                                                       Icons.remove,
                                                       size: 12,
                                                     ),
                                                     decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0),
-                                                        border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                        5.0,
+                                                      ),
+                                                      border: Border.all(
+                                                        color:
+                                                            MyApp.themeNotifier
+                                                                        .value ==
+                                                                    ThemeMode
+                                                                        .light
+                                                                ? Colors.black
+                                                                : Colors.white,
+                                                      ),
+                                                    ),
                                                   ),
+
+                                                  //calls decrementValidator method
                                                   onTap: _decrementValidator,
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 5,
                                                 ),
                                                 Container(
@@ -282,35 +357,56 @@ class _CartScreenState extends State<CartScreen> {
                                                   height: 24,
                                                   child: Center(
                                                     child: Text(
-                                                        '${cartProduct.productCount}'),
+                                                      '${cartProduct.productCount}',
+                                                    ),
                                                   ),
                                                   decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            5.0),
-                                                    border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
+                                                      5.0,
+                                                    ),
+                                                    border: Border.all(
+                                                      color: MyApp.themeNotifier
+                                                                  .value ==
+                                                              ThemeMode.light
+                                                          ? Colors.black
+                                                          : Colors.white,
+                                                    ),
                                                   ),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 5,
                                                 ),
                                                 GestureDetector(
                                                   child: Container(
                                                     width: 24,
                                                     height: 24,
-                                                    child: Icon(
+                                                    child: const Icon(
                                                       Icons.add,
                                                       size: 12,
                                                     ),
                                                     decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0),
-                                                        border: Border.all(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                        5.0,
+                                                      ),
+                                                      border: Border.all(
+                                                        color:
+                                                            MyApp.themeNotifier
+                                                                        .value ==
+                                                                    ThemeMode
+                                                                        .light
+                                                                ? Colors.black
+                                                                : Colors.white,
+                                                      ),
+                                                    ),
                                                   ),
-                                                  onTap: () => setState(() =>
-                                                      cartProduct
-                                                          .productCount += 1),
+
+                                                  //Add function
+                                                  onTap: () => setState(
+                                                    () => cartProduct
+                                                        .productCount += 1,
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -325,44 +421,63 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         );
                       },
+
+                      //GridView Builder to Build the Context according to the total amount of object in myCartList
                       itemCount: allCartProduct.getMyCartList().length,
                     ),
                   ),
+
+                  //Cart Footer
                   Padding(
                     padding: EdgeInsets.all(size.width * 0.05),
                     child: Column(
-                      children:[
+                      children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Total:',
+                            const Text(
+                              'Total:',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
-                            ), ),
-                            Text('\$${allCartProduct.getTotalAmount().toStringAsFixed(2)}',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),)
+                              ),
+                            ),
+
+                            //display total amount of $$ for all items in CartList
+                            Text(
+                              '\$${allCartProduct.getTotalAmount().toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
                           ],
                         ),
                         Row(
                           children: [
                             Expanded(
                               child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pushNamed(
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed(
                                     CartPaymentScreen.routeName,
-                                    arguments: allCartProduct.getMyCartList());
-                              },
-                              child: Text('Buy Now'),
-                              style: ElevatedButton.styleFrom(
-                                primary: const Color(0xff00AB66),
-                                side: BorderSide(color: MyApp.themeNotifier.value == ThemeMode.light? Colors.black: Colors.white),
-                              )),
+                                    arguments: allCartProduct.getMyCartList(),
+                                  );
+                                },
+                                child: const Text('Buy Now'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xff00AB66),
+                                  side: BorderSide(
+                                    color: MyApp.themeNotifier.value ==
+                                            ThemeMode.light
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
+                                ),
+                              ),
                             ),
-                        ],),],
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],

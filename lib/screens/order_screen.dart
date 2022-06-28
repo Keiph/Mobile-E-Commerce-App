@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+/// [OrderScreen] is not fully completed but this is roughly the design for the screen
+
 class OrderScreen extends StatelessWidget {
   const OrderScreen({Key? key}) : super(key: key);
   static String routeName = '/orders';
@@ -11,8 +13,8 @@ class OrderScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Orders'),
-          bottom: TabBar(
+          title: const Text('Orders'),
+          bottom: const TabBar(
             tabs: [
               Text('Pending Orders'),
               Text('Received Orders'),
@@ -22,16 +24,16 @@ class OrderScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             Center(
-              child: Container(
+              child: SizedBox(
                 width: double.infinity,
                 height: double.infinity,
-                  child: Lottie.asset(
-                      'lotties/13892-earth-and-connections.json',
-                      fit: BoxFit.fitWidth,
-                  ),
+                child: Lottie.asset(
+                  'lotties/13892-earth-and-connections.json',
+                  fit: BoxFit.fitWidth,
+                ),
               ),
             ),
-            Center(
+            const Center(
               child: Text('Work in progress'),
             ),
           ],

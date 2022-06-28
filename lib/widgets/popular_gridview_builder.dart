@@ -3,29 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
-import '../main.dart';
-import '../models/product.dart';
-import '../providers/history_list.dart';
-import '../providers/liked_list.dart';
-import '../providers/product_list.dart';
+import 'package:boogle_mobile/main.dart';
+import 'package:boogle_mobile/models/product.dart';
+import 'package:boogle_mobile/providers/history_list.dart';
+import 'package:boogle_mobile/providers/product_list.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class PopularGridViewBuilder extends StatelessWidget {
+  const PopularGridViewBuilder({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     ProductList popularProductList = Provider.of<ProductList>(context);
-    HistoryList historyList= Provider.of<HistoryList>(context);
+    HistoryList historyList = Provider.of<HistoryList>(context);
 
     return GridView.builder(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20),
-      itemCount: popularProductList.getPopularProduct().length ,
+        maxCrossAxisExtent: 200,
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 20,
+      ),
+      itemCount: popularProductList.getPopularProduct().length,
       itemBuilder: (ctx, i) {
         Product currentProduct = popularProductList.getPopularProduct()[i];
         return AnimationConfiguration.staggeredGrid(
@@ -44,7 +44,11 @@ class PopularGridViewBuilder extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 10.0, bottom:10.0, right: 10.0),
+                          padding: const EdgeInsets.only(
+                            left: 10.0,
+                            bottom: 10.0,
+                            right: 10.0,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -53,7 +57,7 @@ class PopularGridViewBuilder extends StatelessWidget {
                                 child: Text(
                                   currentProduct.productName,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 14,
@@ -64,7 +68,11 @@ class PopularGridViewBuilder extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 10.0, bottom:10.0, right: 10.0),
+                          padding: const EdgeInsets.only(
+                            left: 10.0,
+                            bottom: 10.0,
+                            right: 10.0,
+                          ),
                           child: Row(
                             children: [
                               RatingBar.builder(
@@ -74,16 +82,18 @@ class PopularGridViewBuilder extends StatelessWidget {
                                 allowHalfRating: true,
                                 itemCount: 1,
                                 itemSize: 18.0,
-                                itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
-                                itemBuilder: (context, _) => Icon(
+                                itemPadding:
+                                    const EdgeInsets.symmetric(horizontal: 1.0),
+                                itemBuilder: (context, _) => const Icon(
                                   Icons.star,
                                   color: Colors.amber,
                                 ),
                                 onRatingUpdate: (rating) {},
                               ),
                               const SizedBox(width: 5.0),
-                              Text('${currentProduct.productRating.toStringAsFixed(1)}',
-                                style: TextStyle(
+                              Text(
+                                currentProduct.productRating.toStringAsFixed(1),
+                                style: const TextStyle(
                                   fontSize: 12.0,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700,
@@ -92,25 +102,27 @@ class PopularGridViewBuilder extends StatelessWidget {
                             ],
                           ),
                         ),
-
                         Padding(
-                          padding: EdgeInsets.only(left: 10.0, right:10.0, bottom: 10.0),
+                          padding: const EdgeInsets.only(
+                            left: 10.0,
+                            right: 10.0,
+                            bottom: 10.0,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Expanded(
-                                child:Text(
+                                child: Text(
                                   '\$${currentProduct.productPrice.toStringAsFixed(2)}',
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 14,
                                   ),
                                 ),
                               ),
-
                               Stack(
                                 alignment: Alignment.center,
                                 children: [
@@ -122,9 +134,10 @@ class PopularGridViewBuilder extends StatelessWidget {
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                            color: Colors.black.withOpacity(0.2),
-                                            blurRadius: 1,
-                                            offset: Offset(3, 3)),
+                                          color: Colors.black.withOpacity(0.2),
+                                          blurRadius: 1,
+                                          offset: const Offset(3, 3),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -135,12 +148,10 @@ class PopularGridViewBuilder extends StatelessWidget {
                                       border: Border.all(width: 0.5),
                                       color: currentProduct.productColors,
                                       shape: BoxShape.circle,
-
                                     ),
                                   ),
                                 ],
                               ),
-
                             ],
                           ),
                         ),
@@ -148,27 +159,40 @@ class PopularGridViewBuilder extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: NetworkImage(currentProduct.productImg),
-                          fit: BoxFit.cover,
-                          colorFilter: MyApp.themeNotifier.value == ThemeMode.light
-                              ?ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken)
-                              :ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.darken)
+                        image: NetworkImage(currentProduct.productImg),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(0.2),
+                          BlendMode.darken,
+                        ),
                       ),
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
                 ),
                 onTap: () {
-                  historyList.addToHistory(currentProduct.productName, currentProduct.productImg, currentProduct.productDetails, currentProduct.productColors, currentProduct.productCategory, currentProduct.productPrice, currentProduct.productSizes, currentProduct.productRating, currentProduct.productCount);
+                  historyList.addToHistory(
+                    currentProduct.productName,
+                    currentProduct.productImg,
+                    currentProduct.productDetails,
+                    currentProduct.productColors,
+                    currentProduct.productCategory,
+                    currentProduct.productPrice,
+                    currentProduct.productSizes,
+                    currentProduct.productRating,
+                    currentProduct.productCount,
+                  );
 
-                  Navigator.of(context).pushNamed(ProductScreen.routeName, arguments: currentProduct);
+                  Navigator.of(context).pushNamed(
+                    ProductScreen.routeName,
+                    arguments: currentProduct,
+                  );
                 },
               ),
             ),
           ),
         );
       },
-      
     );
   }
 }

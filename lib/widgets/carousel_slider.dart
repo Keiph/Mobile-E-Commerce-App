@@ -1,10 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CarouselAutoSlider extends StatefulWidget {
+  const CarouselAutoSlider({Key? key}) : super(key: key);
+
   @override
   State<CarouselAutoSlider> createState() => _CarouselAutoSliderState();
 }
@@ -28,21 +29,22 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
       children: [
         CarouselSlider(
           options: CarouselOptions(
-              viewportFraction: 1,
-              enlargeCenterPage: true,
-              autoPlay: true,
-              enableInfiniteScroll: true,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _current = index;
-                });
-              }),
+            viewportFraction: 1,
+            enlargeCenterPage: true,
+            autoPlay: true,
+            enableInfiniteScroll: true,
+            onPageChanged: (index, reason) {
+              setState(() {
+                _current = index;
+              });
+            },
+          ),
           carouselController: _controller,
           items: [
             //carousel item 1
             GestureDetector(
               onTap: () {
-                final url =
+                const url =
                     'https://www.mercedes-benz.com.sg/?gclsrc=aw.ds&csref=mc-sem_cn-PSGC_OVS_SGP_RNG_CONS_AOP_NA_Brand-BrandOverall-Brand-Brand-CID-10005851648_ci-Google_si-g_pi-kwd-21946461_cri-434180763035_ai-mercedes+benz&kpid=go_cmp-10005851648_adg-99620184623_ad-434180763035_kwd-21946461_dev-c_ext-&gclid=CjwKCAjwquWVBhBrEiwAt1Kmwlc0-9GHwmdWM-aRIgCGiDHumnxAehTaH_B16x18CmQsCDvAf_Km_hoCrRAQAvD_BwE&gclsrc=aw.ds&group=all&subgroup=see-all&view=BODYTYPE';
                 openBrowserURL(url: Uri.parse(url));
               },
@@ -51,7 +53,7 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.0),
-                      image: DecorationImage(
+                      image: const DecorationImage(
                         image: AssetImage('images/BenzCarousel1.png'),
                         fit: BoxFit.cover,
                       ),
@@ -62,16 +64,14 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
                       borderRadius: BorderRadius.circular(12.0),
                       color: Colors.black,
                       gradient: LinearGradient(
-                          begin: FractionalOffset.bottomCenter,
-                          end: FractionalOffset.topCenter,
-                          colors: [
-                            Colors.black.withOpacity(0.9),
-                            Colors.black.withOpacity(0),
-                          ],
-                          stops: [
-                            0.0,
-                            0.5
-                          ]),
+                        begin: FractionalOffset.bottomCenter,
+                        end: FractionalOffset.topCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.9),
+                          Colors.black.withOpacity(0),
+                        ],
+                        stops: const [0.0, 0.5],
+                      ),
                     ),
                   ),
                   Positioned(
@@ -116,7 +116,7 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
                       ),
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     bottom: 20,
                     right: 10,
                     child: Icon(
@@ -131,7 +131,7 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
 
             GestureDetector(
               onTap: () {
-                final url = 'https://www.ralphlauren.com/';
+                const url = 'https://www.ralphlauren.com/';
                 openBrowserURL(url: Uri.parse(url));
               },
               child: Stack(
@@ -140,7 +140,7 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.0),
-                      image: DecorationImage(
+                      image: const DecorationImage(
                         image: AssetImage('images/sheesh_bois.png'),
                         fit: BoxFit.cover,
                       ),
@@ -151,16 +151,14 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
                       borderRadius: BorderRadius.circular(12.0),
                       color: Colors.black,
                       gradient: LinearGradient(
-                          begin: FractionalOffset.bottomCenter,
-                          end: FractionalOffset.topCenter,
-                          colors: [
-                            Colors.black.withOpacity(0.9),
-                            Colors.black.withOpacity(0),
-                          ],
-                          stops: [
-                            0.0,
-                            0.5
-                          ]),
+                        begin: FractionalOffset.bottomCenter,
+                        end: FractionalOffset.topCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.9),
+                          Colors.black.withOpacity(0),
+                        ],
+                        stops: const [0.0, 0.5],
+                      ),
                     ),
                   ),
                   Positioned(
@@ -200,7 +198,7 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
                       ),
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     height: 35,
                     indent: 20,
                     endIndent: 220,
@@ -220,7 +218,7 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
                       ),
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     height: 35,
                     indent: 230,
                     endIndent: 20,
@@ -233,7 +231,7 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
 
             GestureDetector(
               onTap: () {
-                final url = 'https://www.mobil.com/en/sap/';
+                const url = 'https://www.mobil.com/en/sap/';
                 openBrowserURL(url: Uri.parse(url));
               },
               child: Stack(
@@ -241,7 +239,7 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.0),
-                      image: DecorationImage(
+                      image: const DecorationImage(
                         image: AssetImage('images/me-bean.gif'),
                         fit: BoxFit.cover,
                       ),
@@ -252,16 +250,17 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
                       borderRadius: BorderRadius.circular(12.0),
                       color: Colors.black,
                       gradient: LinearGradient(
-                          begin: FractionalOffset.centerRight,
-                          end: FractionalOffset.centerLeft,
-                          colors: [
-                            Colors.black.withOpacity(0.9),
-                            Colors.black.withOpacity(0),
-                          ],
-                          stops: [
-                            0.0,
-                            0.5,
-                          ]),
+                        begin: FractionalOffset.centerRight,
+                        end: FractionalOffset.centerLeft,
+                        colors: [
+                          Colors.black.withOpacity(0.9),
+                          Colors.black.withOpacity(0),
+                        ],
+                        stops: const [
+                          0.0,
+                          0.5,
+                        ],
+                      ),
                     ),
                   ),
                   Positioned(
@@ -324,13 +323,15 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
               child: Container(
                 width: 10.0,
                 height: 10.0,
-                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: (Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black)
-                        .withOpacity(_current == 0 ? 0.9 : 0.4)),
+                  shape: BoxShape.circle,
+                  color: (Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black)
+                      .withOpacity(_current == 0 ? 0.9 : 0.4),
+                ),
               ),
             ),
             GestureDetector(
@@ -338,13 +339,15 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
               child: Container(
                 width: 10.0,
                 height: 10.0,
-                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: (Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black)
-                        .withOpacity(_current == 1 ? 0.9 : 0.4)),
+                  shape: BoxShape.circle,
+                  color: (Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black)
+                      .withOpacity(_current == 1 ? 0.9 : 0.4),
+                ),
               ),
             ),
             GestureDetector(
@@ -352,13 +355,15 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
               child: Container(
                 width: 10.0,
                 height: 10.0,
-                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: (Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black)
-                        .withOpacity(_current == 2 ? 0.9 : 0.4)),
+                  shape: BoxShape.circle,
+                  color: (Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black)
+                      .withOpacity(_current == 2 ? 0.9 : 0.4),
+                ),
               ),
             ),
           ],

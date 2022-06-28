@@ -1,44 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import '../main.dart';
+import 'package:boogle_mobile/main.dart';
 
 class PurchaseCompletion extends StatelessWidget {
+  const PurchaseCompletion({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: double.infinity,
       child: Stack(
         children: [
-          Lottie.asset('lotties/74644-add-to-basket.json', fit: BoxFit.cover, repeat: false),
+          Lottie.asset('lotties/74644-add-to-basket.json',
+              fit: BoxFit.cover, repeat: false,),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              margin: EdgeInsets.only(left: 20.0,right: 20.0, bottom: 150),
+              margin:
+                  const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 150),
               child: Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      child: Text('Shop More'),
-                      onPressed: (){Navigator.of(context).pushReplacementNamed(MainScreen.routeName);}
+                      child: const Text('Shop More'),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(MainScreen.routeName);
+                      },
                     ),
                   ),
-                  const SizedBox(width: 12,),
-
+                  const SizedBox(
+                    width: 12,
+                  ),
                   Expanded(
                     child: ElevatedButton(
-                      child: Text('Check Order'),
-                      onPressed: (){}
+                      child: const Text('Check Order'),
+                      onPressed: () {},
                     ),
                   ),
                 ],
-
               ),
             ),
           )
-
         ],
       ),
     );

@@ -24,17 +24,73 @@ linter:
   # Additional information about this file can be found at
   ## https://dart.dev/guides/language/analysis-options
   rules:
-    avoid_print: true
-    prefer_single_quotes: true
-    always_use_package_imports: true
-    avoid_relative_lib_imports: true
-    avoid_dynamic_calls: true
-    comment_references: true
-    list_remove_unrelated_type: true
-    no_adjacent_strings_in_list: true
-    prefer_void_to_null: true
-    use_key_in_widget_constructors: true
-    valid_regexps: true #helps prevents FormatException in TextFormFields
-    always_put_control_body_on_new_line: true
-    always_put_required_named_parameters_first: true
-    avoid_as: true
+    # Prevents accidental return type changes which results in a breaking API change.
+    # Enforcing return type makes API changes visible in a diff
+    # pedantic: enabled
+    # http://dart-lang.github.io/linter/lints/always_declare_return_types.html
+    - always_declare_return_types
+
+    # Don't call print in production code
+    # pedantic: disabled
+    # https://dart-lang.github.io/linter/lints/avoid_print.html
+    - avoid_print
+
+    # Use whatever makes you happy. noexcuse doesn't define a style
+    # pedantic: enabled
+    # https://dart-lang.github.io/linter/lints/prefer_single_quotes.html
+    - prefer_single_quotes
+
+    # Use full path
+    - always_use_package_imports
+
+    # avoid relative importing of packages
+    - avoid_relative_lib_imports
+
+    # False positives:
+    # - https://github.com/dart-lang/linter/issues/1142
+    #
+    # https://dart-lang.github.io/linter/lints/comment_references.html
+    - comment_references
+
+    # Type check for List<T>.remove(item) where item is! T
+    # The list can't contain item. Those errors are not directly obvious especially when refactoring.
+    # https://dart-lang.github.io/linter/lints/list_remove_unrelated_type.html
+    - list_remove_unrelated_type
+
+     # Concat Strings obviously with `+` inside a list.
+    # pedantic: disabled
+    # https://dart-lang.github.io/linter/lints/no_adjacent_strings_in_list.html
+    - no_adjacent_strings_in_list
+
+    # Null is not a type, use void
+    # https://dart-lang.github.io/linter/lints/prefer_void_to_null.html
+    - prefer_void_to_null
+
+    # Adding a key without using it isn't helpful in applications, only for the Flutter SDK
+    # Dart SDK: >= 2.8.0-dev.1.0 • (Linter v0.1.108)
+    # https://dart-lang.github.io/linter/lints/use_key_in_widget_constructors.html
+    - use_key_in_widget_constructors
+
+    # Catches invalid regular expressions.
+    # pedantic: enabled
+    # https://dart-lang.github.io/linter/lints/valid_regexps.html
+    - valid_regexps
+
+    # Single line `if`s are fine as recommended in Effective Dart "DO format your code using dartfmt"
+    # pedantic: disabled
+    # http://dart-lang.github.io/linter/lints/always_put_control_body_on_new_line.html
+    - always_put_control_body_on_new_line
+
+    # Flutter widgets always put a Key as first optional parameter which breaks this rule.
+    # Also violates other orderings like matching the class fields or alphabetically.
+    # pedantic: disabled
+    # http://dart-lang.github.io/linter/lints/always_declare_return_types.html
+    - always_put_required_named_parameters_first
+
+    # Follow dart style use triple slashes
+    # pedantic: enabled
+    # https://dart-lang.github.io/linter/lints/slash_for_doc_comments.html
+    - slash_for_doc_comments
+
+
+    - require_trailing_commas

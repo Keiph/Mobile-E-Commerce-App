@@ -5,11 +5,13 @@ import 'package:boogle_mobile/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../main.dart';
-import '../screens/login_screen.dart';
-import '../screens/order_screen.dart';
+import 'package:boogle_mobile/main.dart';
+import 'package:boogle_mobile/screens/login_screen.dart';
+import 'package:boogle_mobile/screens/order_screen.dart';
 
 class AppDrawer extends StatelessWidget {
+  const AppDrawer({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -24,22 +26,22 @@ class AppDrawer extends StatelessWidget {
                 color: Colors.blue.shade700,
                 padding: EdgeInsets.only(top: size.height * 0.1, bottom: 20),
                 child: Column(
-                  children: [
+                  children: const [
                     CircleAvatar(
                       radius: 54,
                       backgroundImage: NetworkImage(
-                        "https://randomuser.me/api/portraits/men/32.jpg",
+                        'https://randomuser.me/api/portraits/men/32.jpg',
                       ),
                     ),
                     Text(
-                      "Keiph",
+                      'Keiph',
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w500,
                           fontSize: 18),
                     ),
                     Text(
-                      "2100860@student.tp.edu.sg",
+                      '2100860@student.tp.edu.sg',
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -54,8 +56,8 @@ class AppDrawer extends StatelessWidget {
                     : Colors.white,
               ),
               ListTile(
-                leading: Icon(Icons.add),
-                title: Text('Add Product'),
+                leading: const Icon(Icons.add),
+                title: const Text('Add Product'),
                 onTap: () {
                   Navigator.pop(context);
 
@@ -69,8 +71,8 @@ class AppDrawer extends StatelessWidget {
                     : Colors.white,
               ),
               ListTile(
-                leading: Icon(Icons.access_time),
-                title: Text('History'),
+                leading: const Icon(Icons.access_time),
+                title: const Text('History'),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.of(context).pushNamed(HistoryScreen.routeName);
@@ -83,8 +85,8 @@ class AppDrawer extends StatelessWidget {
                     : Colors.white,
               ),
               ListTile(
-                leading: Icon(Icons.question_mark),
-                title: Text('Random'),
+                leading: const Icon(Icons.question_mark),
+                title: const Text('Random'),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.of(context)
@@ -98,8 +100,8 @@ class AppDrawer extends StatelessWidget {
                     : Colors.white,
               ),
               ListTile(
-                leading: FaIcon(FontAwesomeIcons.boxOpen),
-                title: Text('Orders'),
+                leading: const FaIcon(FontAwesomeIcons.boxOpen),
+                title: const Text('Orders'),
                 onTap: () {
                   Navigator.of(context).pushNamed(OrderScreen.routeName);
                 },
@@ -111,8 +113,8 @@ class AppDrawer extends StatelessWidget {
                     : Colors.white,
               ),
               ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Settings'),
+                leading: const Icon(Icons.settings),
+                title: const Text('Settings'),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.of(context).pushNamed(SettingsScreen.routeName);
@@ -125,8 +127,8 @@ class AppDrawer extends StatelessWidget {
                     : Colors.white,
               ),
               ListTile(
-                leading: Icon(Icons.logout),
-                title: Text('Log Out'),
+                leading: const Icon(Icons.logout),
+                title: const Text('Log Out'),
                 onTap: () {
                   Navigator.of(context)
                       .pushReplacementNamed(LoginScreen.routeName);
