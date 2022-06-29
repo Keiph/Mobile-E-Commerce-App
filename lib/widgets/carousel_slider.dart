@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// [CarouselAutoSlider] Widget mainly uses package from [CarouselSlider] to
+/// perform the functionality of a Carousel. with the help of [CarouselController]
+/// which does the animation control on the carousel and the user interaction
+
 class CarouselAutoSlider extends StatefulWidget {
   const CarouselAutoSlider({Key? key}) : super(key: key);
 
@@ -11,17 +15,25 @@ class CarouselAutoSlider extends StatefulWidget {
 }
 
 class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
+
+  // the Future class allows the app to do stuff asynchronously potentially
+  // multi-threading, a Future is completed in two ways either a value or an
+  // error message
   Future openBrowserURL({
     required Uri url,
   }) async {
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     }
+    throw 'Could not launch $url';
   }
 
+  // initialise current = 0, always show the first item in the list of carousel
+  // whenever the page is route
   int _current = 0;
 
-  final CarouselController _controller = CarouselController();
+  //initialise carouselController to CarouselController factory method
+  final CarouselController _carouselController = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +41,27 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
       children: [
         CarouselSlider(
           options: CarouselOptions(
+            // takes the full available space
             viewportFraction: 1,
+            // when changes carousel option gives a Ease in animation effect
             enlargeCenterPage: true,
             autoPlay: true,
             enableInfiniteScroll: true,
+            // onPageChanged checks whether a page is changed, onChange set
+            // _current to index. The onPageChanged requires another arguments
+            // "reason", "reason" arguments checks how the page was changed:
+            // "timed" , "manually" or by "_carouselController"
+            // in the case one of the arguments is not passed correctly the page
+            // will not change its UI accordingly
             onPageChanged: (index, reason) {
               setState(() {
                 _current = index;
               });
             },
           ),
-          carouselController: _controller,
+          carouselController: _carouselController,
           items: [
-            //carousel item 1
+            //carousel item 1 (Benz Partnership)
             GestureDetector(
               onTap: () {
                 const url =
@@ -129,6 +149,7 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
               ),
             ),
 
+            //Carousel item 2 Ralph Lauren
             GestureDetector(
               onTap: () {
                 const url = 'https://www.ralphlauren.com/';
@@ -229,6 +250,7 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
               ),
             ),
 
+            // Carousel item 3
             GestureDetector(
               onTap: () {
                 const url = 'https://www.mobil.com/en/sap/';
@@ -315,11 +337,13 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
             ),
           ],
         ),
+
+        //Indicator dots
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () => _controller.animateToPage(0),
+              onTap: () => _carouselController.animateToPage(0),
               child: Container(
                 width: 10.0,
                 height: 10.0,
@@ -335,7 +359,7 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
               ),
             ),
             GestureDetector(
-              onTap: () => _controller.animateToPage(1),
+              onTap: () => _carouselController.animateToPage(1),
               child: Container(
                 width: 10.0,
                 height: 10.0,
@@ -351,7 +375,7 @@ class _CarouselAutoSliderState extends State<CarouselAutoSlider> {
               ),
             ),
             GestureDetector(
-              onTap: () => _controller.animateToPage(2),
+              onTap: () => _carouselController.animateToPage(2),
               child: Container(
                 width: 10.0,
                 height: 10.0,

@@ -1,3 +1,4 @@
+import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/screens/add_product_screen.dart';
 import 'package:boogle_mobile/screens/history_screen.dart';
 import 'package:boogle_mobile/screens/random_shuffle_screen.dart';
@@ -21,6 +22,8 @@ class AppDrawer extends StatelessWidget {
         children: [
           Column(
             children: [
+
+              //Profile Container
               Container(
                 width: double.infinity,
                 color: Colors.blue.shade700,
@@ -35,10 +38,7 @@ class AppDrawer extends StatelessWidget {
                     ),
                     Text(
                       'Keiph',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18),
+                      style: TextStyleConst.kWhiteLargeSemi,
                     ),
                     Text(
                       '2100860@student.tp.edu.sg',
@@ -55,6 +55,8 @@ class AppDrawer extends StatelessWidget {
                     ? Colors.black
                     : Colors.white,
               ),
+
+              //Route to AddProduct
               ListTile(
                 leading: const Icon(Icons.add),
                 title: const Text('Add Product'),
@@ -70,6 +72,8 @@ class AppDrawer extends StatelessWidget {
                     ? Colors.black
                     : Colors.white,
               ),
+
+              //Route to History
               ListTile(
                 leading: const Icon(Icons.access_time),
                 title: const Text('History'),
@@ -84,6 +88,8 @@ class AppDrawer extends StatelessWidget {
                     ? Colors.black
                     : Colors.white,
               ),
+
+              //Route to Random
               ListTile(
                 leading: const Icon(Icons.question_mark),
                 title: const Text('Random'),
@@ -99,6 +105,8 @@ class AppDrawer extends StatelessWidget {
                     ? Colors.black
                     : Colors.white,
               ),
+
+              //Route to Order
               ListTile(
                 leading: const FaIcon(FontAwesomeIcons.boxOpen),
                 title: const Text('Orders'),
@@ -112,6 +120,8 @@ class AppDrawer extends StatelessWidget {
                     ? Colors.black
                     : Colors.white,
               ),
+
+              //Route to Settings
               ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Settings'),
@@ -126,6 +136,8 @@ class AppDrawer extends StatelessWidget {
                     ? Colors.black
                     : Colors.white,
               ),
+
+              //Route to Login
               ListTile(
                 leading: const Icon(Icons.logout),
                 title: const Text('Log Out'),

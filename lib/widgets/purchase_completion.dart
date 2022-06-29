@@ -1,3 +1,4 @@
+import 'package:boogle_mobile/screens/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -37,7 +38,10 @@ class PurchaseCompletion extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       child: const Text('Check Order'),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(OrderScreen.routeName);
+                      },
                     ),
                   ),
                 ],

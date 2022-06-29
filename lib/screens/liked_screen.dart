@@ -1,3 +1,4 @@
+import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/providers/cart_list.dart';
 import 'package:boogle_mobile/providers/liked_list.dart';
 import 'package:boogle_mobile/screens/payment_screen.dart';
@@ -10,6 +11,8 @@ import 'package:provider/provider.dart';
 
 import 'package:boogle_mobile/main.dart';
 import 'package:boogle_mobile/models/product.dart';
+
+///
 
 class LikedScreen extends StatefulWidget {
   const LikedScreen({Key? key}) : super(key: key);
@@ -146,46 +149,46 @@ class _LikedScreenState extends State<LikedScreen> {
                                         child: Text(
                                           likedProduct.productName,
                                           overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 14,
-                                          ),
+                                          style: TextStyleConst.kSmallBold,
                                         ),
                                       ),
-                                      ClipOval(
-                                        child: Material(
-                                          color: MyApp.themeNotifier.value ==
-                                                  ThemeMode.light
-                                              ? Colors.black
-                                              : Colors.white,
-                                          child: InkWell(
-                                            splashColor:
-                                                Colors.red[300], // Splash color
-                                            onTap: () {
-                                              // calls Provider method to remove product from the list
-                                              allLikedProduct
-                                                  .removeFromLiked(i);
-                                              // shows a toast msg upon removing of product from list
-                                              Fluttertoast.showToast(
-                                                msg: likedProduct.productName +
-                                                    ' has been removed from app',
-                                                toastLength: Toast.LENGTH_LONG,
-                                                gravity: ToastGravity.TOP,
-                                                backgroundColor: Colors.black,
-                                                textColor: Colors.white,
-                                                fontSize: 16.0,
-                                              );
-                                            },
-                                            child: SizedBox(
-                                              width: 32,
-                                              height: 32,
-                                              child: Icon(
-                                                Icons.close,
-                                                color:
-                                                    MyApp.themeNotifier.value ==
-                                                            ThemeMode.light
-                                                        ? Colors.white
-                                                        : Colors.black,
+                                      Container(
+                                        margin: EdgeInsets.only(left: 3.0),
+                                        child: ClipOval(
+                                          child: Material(
+                                            color: MyApp.themeNotifier.value ==
+                                                    ThemeMode.light
+                                                ? Colors.black
+                                                : Colors.white,
+                                            child: InkWell(
+                                              splashColor:
+                                                  Colors.red[300], // Splash color
+                                              onTap: () {
+                                                // calls Provider method to remove product from the list
+                                                allLikedProduct
+                                                    .removeFromLiked(i);
+                                                // shows a toast msg upon removing of product from list
+                                                Fluttertoast.showToast(
+                                                  msg: likedProduct.productName +
+                                                      ' has been removed from liked',
+                                                  toastLength: Toast.LENGTH_LONG,
+                                                  gravity: ToastGravity.TOP,
+                                                  backgroundColor: Colors.black,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0,
+                                                );
+                                              },
+                                              child: SizedBox(
+                                                width: 32,
+                                                height: 32,
+                                                child: Icon(
+                                                  Icons.close,
+                                                  color:
+                                                      MyApp.themeNotifier.value ==
+                                                              ThemeMode.light
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                ),
                                               ),
                                             ),
                                           ),

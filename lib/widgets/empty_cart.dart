@@ -1,3 +1,4 @@
+import 'package:boogle_mobile/constants.dart';
 import 'package:flutter/material.dart';
 
 class EmptyCart extends StatelessWidget {
@@ -30,10 +31,7 @@ class EmptyCart extends StatelessWidget {
           child: Text(
             'You have not add \nany items into cart yet!',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyleConst.kMediumSemi,
           ),
         ),
       ],

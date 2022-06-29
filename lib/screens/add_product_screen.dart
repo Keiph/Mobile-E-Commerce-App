@@ -1,3 +1,4 @@
+import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/main.dart';
 import 'package:boogle_mobile/providers/product_list.dart';
 import 'package:flutter/foundation.dart';
@@ -8,6 +9,8 @@ import 'package:regexpattern/regexpattern.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AddProductScreen extends StatefulWidget {
+
+  ///[AddProductScreen]
   static String routeName = '/add-product';
 
   const AddProductScreen({Key? key}) : super(key: key);
@@ -26,8 +29,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
   // initialise form with FormState, GlobalKey is used to uniquely identify the Form Widget
   var form = GlobalKey<FormState>();
 
+  /// [productName], [productImg], [productCategory], [productSizes], [productDetails], [productColors], [productPrice] is nullable when initialise
+  /// waiting for a value to be passed from [TextFormField] to initialise to the value
+  /// [productCount] initialised to 1 as the [productCount] field exist for the sole purpose of adding and decrementing counter
+  /// [productRating initialised to 5.0 as the Review Functionality is not updated.
   // initialising params of constructor for Product Object
-  ///[productName]
   String? productName,
       productImg,
       productCategory,
@@ -49,21 +55,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
         builder: (context) {
           return AlertDialog(
             // Smoothen the border of the Dialog
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12.0)),
-            ),
+            shape: kDefaultAlertBorder,
             actionsPadding: const EdgeInsets.all(10.0),
             title: const Center(
               child: Text(
                 'Confirmation',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyleConst.kLargeBold,
               ),
             ),
             content: const Text(
               'Have you checked'
               '\n if all inputs are correct?',
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w600),
+              style: TextStyleConst.kMediumSemi,
             ),
             actions: [
               Row(
@@ -77,13 +81,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       },
                       child: const Text(
                         'Discard',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
+                        style: TextStyleConst.kBlackMediumSemi,
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xffe6f0fd),
+                        primary: ColorConst.kWhiteSecondaryBtn,
                         elevation: 5,
                       ),
                     ),
@@ -129,19 +130,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               content: Text('Product added successfully!'),
                             ),
                           );
-                        });
+                        }
+                        );
                         // Navigate out of Dialog
                         Navigator.of(context).pop();
                       },
                       child: const Text(
                         'Create',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        style: TextStyleConst.kWhiteMediumSemi,
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xff314df8),
+                        primary: ColorConst.kBluePrimaryBtn,
                         elevation: 5,
                       ),
                     ),
@@ -217,12 +216,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               : Colors.white,
                         ),
                       ),
-                      errorBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      focusedErrorBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
+                      errorBorder: kErrorBorder,
+                      focusedErrorBorder: kErrorBorder,
                     ),
                     validator: (value) {
                       // if TextFormField is empty
@@ -330,11 +325,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       else if (!value.isUrl()) {
                         return 'Invalid URL formatting';
                       }
-
-                      //checks if user input matches with image regular expression
-                      else if (!value.isImage()) {
-                        return 'Not in Image format! (jpeg| jpg| gif| png| bmp)';
-                      } else {
+                      else {
                         return null;
                       }
                     },

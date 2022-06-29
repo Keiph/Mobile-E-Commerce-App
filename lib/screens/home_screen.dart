@@ -1,4 +1,5 @@
 import 'package:boogle_mobile/animations/slide_fade_animation.dart';
+import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/widgets/carousel_slider.dart';
 
 import 'package:boogle_mobile/widgets/popular_gridview_builder.dart';
@@ -42,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
           text,
           style: TextStyle(
             fontSize: 14.0,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
             // if it is selected change text color to white else black
             color: (index == activeCategory) ? Colors.white : Colors.black,
           ),
@@ -79,11 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     const Text(
                       'Hello Keiph!',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat',
-                      ),
+                      style: TextStyleConst.kLargeBold,
                     ),
                     Container(
                       padding: const EdgeInsets.all(5.0),
@@ -124,11 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: const [
                     Text(
                       'Popular',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyleConst.kLargeBold,
                     ),
                   ],
                 ),

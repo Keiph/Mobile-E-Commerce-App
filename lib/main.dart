@@ -24,7 +24,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
 void main() {
+  //binds the framework to the Flutter engine
   WidgetsFlutterBinding.ensureInitialized();
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.black54,
@@ -32,6 +34,7 @@ void main() {
     ),
   );
   SystemChrome.setPreferredOrientations(
+    //only portrait mode for the phone is enabled turning it landscape will not work
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   );
 
@@ -90,8 +93,9 @@ class _MyAppState extends State<MyApp> {
                     fontFamily: 'Montserrat',
                   ),
             ),
+            //themeMode changes to ThemeMode.dark / ThemeMode.light
             themeMode: currentMode,
-            home: const SplashScreen(),
+            home: const MainScreen(),
             routes: {
               LoginScreen.routeName: (_) {
                 return const LoginScreen();

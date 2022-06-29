@@ -1,3 +1,4 @@
+import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/models/product.dart';
 import 'package:boogle_mobile/providers/history_list.dart';
 import 'package:boogle_mobile/screens/product_screen.dart';
@@ -14,7 +15,7 @@ class HistoryScreen extends StatefulWidget {
   ///This [HistoryScreen] mainly uses [HistoryList] provider with Create, Read and Delete functionality
   ///The delete icon opens a [AlertDialog] for users to confirm their actions, in this case we are checking if user confirm its delete action
   ///Adding of Product to [HistoryList] is automated through [GestureDetector] in [PopularGridViewBuilder], [SearchScreen] and other screen that contains the Product Card
-  ///
+
   static String routeName = '/history';
 
   const HistoryScreen({Key? key}) : super(key: key);
@@ -40,14 +41,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
           title: const Center(
             child: Text(
               'Delete History?',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyleConst.kLargeBold,
             ),
           ),
           content: const Text(
             'Upon deleting, this is an '
             '\nirreversible action.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.w600),
+            style: TextStyleConst.kMediumSemi,
           ),
           actions: [
             Row(
@@ -60,13 +61,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     },
                     child: const Text(
                       'Cancel',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
+                      style: TextStyleConst.kBlackMediumSemi,
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: const Color(0xffe6f0fd),
+                      primary: ColorConst.kWhiteSecondaryBtn,
                       elevation: 5,
                     ),
                   ),
@@ -96,13 +94,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     },
                     child: const Text(
                       'Delete',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                      style: TextStyleConst.kWhiteMediumSemi,
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: const Color(0xff314df8),
+                      primary: ColorConst.kBluePrimaryBtn,
                       elevation: 5,
                     ),
                   ),
@@ -191,11 +186,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 historyProduct.productName,
                                 // Text after constraints of Expanded to be in (...) to avoid Overflow error
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14,
-                                ),
+                                style: TextStyleConst.kWhiteMediumBold,
                               ),
                             ),
                           ],
@@ -227,11 +218,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             const SizedBox(width: 5.0),
                             Text(
                               historyProduct.productRating.toStringAsFixed(1),
-                              style: const TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                              ),
+                              style: TextStyleConst.kWhiteSmallBold,
                             ),
                           ],
                         ),
@@ -250,11 +237,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               child: Text(
                                 '\$${historyProduct.productPrice.toStringAsFixed(2)}',
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14,
-                                ),
+                                style: TextStyleConst.kWhiteMediumBold,
                               ),
                             ),
                             Stack(
@@ -295,15 +278,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     image: DecorationImage(
                       image: NetworkImage(historyProduct.productImg),
                       fit: BoxFit.cover,
-                      colorFilter: MyApp.themeNotifier.value == ThemeMode.light
-                          ? ColorFilter.mode(
-                              Colors.black.withOpacity(0.5),
-                              BlendMode.darken,
-                            )
-                          : ColorFilter.mode(
-                              Colors.black.withOpacity(0.2),
-                              BlendMode.darken,
-                            ),
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.2),
+                        BlendMode.darken,
+                      ),
                     ),
                     borderRadius: BorderRadius.circular(15),
                   ),

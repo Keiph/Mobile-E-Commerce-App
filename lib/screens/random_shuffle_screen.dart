@@ -1,10 +1,11 @@
 import 'package:boogle_mobile/providers/product_list.dart';
 import 'package:boogle_mobile/screens/product_screen.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'dart:math' ;
 
 class RandomShuffleScreen extends StatelessWidget {
   static String routeName = '/random-shuffle';
+  //Random class from in-built flutter function
   final Random random = Random();
 
   RandomShuffleScreen({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class RandomShuffleScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
+                //navigate to new Product route with the argument being randomise
                 Navigator.of(context).pushNamed(ProductScreen.routeName,
                     arguments: ProductList().getAllProductList()[random
                         .nextInt(ProductList().getAllProductList().length)],);

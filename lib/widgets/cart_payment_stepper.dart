@@ -1,3 +1,4 @@
+import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/widgets/purchase_completion.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -15,18 +16,27 @@ class CartPaymentStepper extends StatefulWidget {
 }
 
 class _CartPaymentStepperState extends State<CartPaymentStepper> {
+  //initialise a list of GlobalKey FormState for the different Stepper List
+  //content that requires form controls
   List<GlobalKey<FormState>> formKeys = [
     GlobalKey<FormState>(),
     GlobalKey<FormState>()
   ];
 
+  // initialise yourCountry with Singapore
   String yourCountry = 'Singapore';
+  // initialise addresses as nullable
   String? address1, address2;
+  // initialise postalCode as nullable
   int? postalCode;
+  // initialise _index = 0
   int _index = 0;
+  // initialise selectedRadioBtn = "Cash on Delivery"
   String selectedRadioBtn = 'Cash On Delivery';
+  // initialise isCompleted = false
   bool isCompleted = false;
 
+  //set country name to the country selected
   void _onCountryChange(country) {
     //TODO : manipulate the selected country code here
     if (kDebugMode) {
@@ -37,6 +47,7 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
     });
   }
 
+  //changes the radioBtn to active/inactive accordingly
   void _handlePaymentChange(value) {
     setState(() {
       selectedRadioBtn = value;
@@ -47,6 +58,7 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
   Widget build(BuildContext context) {
     CartList allCartProduct = Provider.of<CartList>(context);
 
+    //if isCompleted == true returns a separate widget else return Stepper Widget
     return isCompleted
         ? const PurchaseCompletion()
         : Stepper(
@@ -55,6 +67,8 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
             steps: getPaymentSteps(allCartProduct),
             currentStep: _index,
             onStepContinue: () {
+              //if isLastStep when user press on continue button set isCompleted
+              // = true and runs the separate Widget
               final isLastStep =
                   _index == getPaymentSteps(allCartProduct).length - 1;
               if (isLastStep) {
@@ -69,16 +83,25 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
 
                 setState(() => isCompleted = true);
 
+                //Successfully purchase the list of Product and thus remove
+                //items from CartList  upon calling the clearCart method
                 allCartProduct.clearCartUponCompletion();
               } else {
+                //if is not the last step we check if validation is cleared
                 if (formKeys[_index].currentState!.validate()) {
+                  // if validation is good save the value at each given stepper
                   formKeys[_index].currentState!.save();
+                  // move on to the next step
                   setState(() => _index += 1);
                 }
               }
             },
             onStepCancel:
+                // if it is the first step show return nothing, else set state
+                // of _index decrement by 1 to go to the previous Step
                 _index == 0 ? null : () => setState(() => _index -= 1),
+
+            // controlsBuilder allows us to modify the default button build by the Stepper Widget
             controlsBuilder: (BuildContext context, ControlsDetails details) {
               final isLastStep =
                   _index == getPaymentSteps(allCartProduct).length - 1;
@@ -87,6 +110,8 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                 margin: const EdgeInsets.only(top: 30.0),
                 child: Row(
                   children: [
+                    // checks if the stepper is not at the first step
+                    // if it is at the first step do not show the back button
                     if (_index != 0)
                       Expanded(
                         child: ElevatedButton(
@@ -116,9 +141,12 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
           isActive: _index >= 0,
           title: const Text(
             'Address',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            style: TextStyleConst.kSmallBold,
           ),
+
+          //UI of the first Step
           content: Form(
+            //uses one out of the 2 GlobalKey initialise at the top of the code
             key: formKeys[0],
             child: Column(
               children: [
@@ -130,6 +158,8 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                           : Colors.white,
                     ),
                   ),
+
+                  //Dropdown Selector for Country
                   child: CountryCodePicker(
                     textStyle: TextStyle(
                       color: MyApp.themeNotifier.value == ThemeMode.light
@@ -150,6 +180,8 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                   ),
                 ),
                 const SizedBox(height: 30),
+
+                //Postal Code TextFormField
                 TextFormField(
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -176,23 +208,31 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                     ),
                   ),
                   validator: (value) {
+                    //check if value is empty
                     if (value!.isEmpty) {
                       return 'Please provide your postal code!';
-                    } else if (value.length < 6 || value.length > 6) {
+                    }
+                    // check if value is 6 digit
+                    else if (value.length < 6 || value.length > 6) {
                       return 'Please provide SG postal code only!';
-                    } else if (int.tryParse(value) == null) {
+                    }
+                    //check if value is of a int data type
+                    else if (int.tryParse(value) == null) {
                       return 'Invalid Postal Code, Numbers only!';
                     } else {
                       return null;
                     }
                   },
                   onSaved: (value) {
+                    // set data type to integer data type
                     postalCode = int.tryParse(value!);
                   },
                 ),
                 const SizedBox(
                   height: 30,
                 ),
+
+                // Address 1 TextFormField
                 TextFormField(
                   decoration: InputDecoration(
                     label: const Text('Address Line 1'),
@@ -218,9 +258,12 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                     ),
                   ),
                   validator: (value) {
+                    //check if value is empty
                     if (value!.isEmpty) {
                       return 'Please provide your address!';
-                    } else if (value.length < 12) {
+                    }
+                    //check if value is less than 12
+                    else if (value.length < 12) {
                       return 'Too short to be a real address!';
                     } else {
                       return null;
@@ -233,6 +276,8 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                 const SizedBox(
                   height: 30,
                 ),
+
+                //Address Line 2 TextFormField
                 TextFormField(
                   //optional TextForm
                   decoration: InputDecoration(
@@ -266,8 +311,9 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
           isActive: _index >= 1,
           title: const Text(
             'Payment',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            style: TextStyleConst.kSmallBold,
           ),
+          //2nd Step UI Screens
           content: Form(
             key: formKeys[1],
             child: Card(
@@ -297,6 +343,8 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                     ),
                     onChanged: _handlePaymentChange,
                   ),
+
+                  //if Credit/Debit is selected Show Container with TextFormField
                   selectedRadioBtn == 'Credit/Debit Card'
                       ? Container(
                           width: double.infinity,
@@ -408,14 +456,12 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
           ),
         ),
         Step(
+          //last Step UI
           state: _index > 2 ? StepState.complete : StepState.indexed,
           isActive: _index >= 2,
           title: const Text(
             'Checkout',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyleConst.kSmallBold,
           ),
           content: Container(
             // no margin needed Stepper has default margin
@@ -470,9 +516,7 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                                             child: Text(
                                               cartProduct.productName,
                                               overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                              style: TextStyleConst.kMediumBold,
                                             ),
                                           ),
                                         ],
@@ -486,9 +530,7 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                                           children: [
                                             Text(
                                               '\$${cartProduct.productPrice.toStringAsFixed(2)}',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                              style: TextStyleConst.kMediumBold,
                                             )
                                           ],
                                         ),
@@ -540,10 +582,7 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                                         children: [
                                           Text(
                                             'X ' '${cartProduct.productCount}',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
+                                            style: TextStyleConst.kLargeBold,
                                           ),
                                         ],
                                       ),

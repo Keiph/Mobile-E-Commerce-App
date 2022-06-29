@@ -1,3 +1,4 @@
+import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/models/product.dart';
 import 'package:boogle_mobile/providers/cart_list.dart';
 import 'package:boogle_mobile/screens/cart_payment_screen.dart';
@@ -61,8 +62,8 @@ class _CartScreenState extends State<CartScreen> {
               'Cart',
               style: TextStyle(
                 color: MyApp.themeNotifier.value == ThemeMode.light
-                    ? Colors.black
-                    : Colors.white,
+                    ? Colors.white
+                    : Colors.black,
               ),
             ),
 
@@ -191,10 +192,7 @@ class _CartScreenState extends State<CartScreen> {
                                                   cartProduct.productName,
                                                   overflow:
                                                       TextOverflow.ellipsis,
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 14,
-                                                  ),
+                                                  style: TextStyleConst.kMediumBold,
                                                 ),
                                               ),
 
@@ -437,19 +435,13 @@ class _CartScreenState extends State<CartScreen> {
                           children: [
                             const Text(
                               'Total:',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyleConst.kLargeBold,
                             ),
 
                             //display total amount of $$ for all items in CartList
                             Text(
                               '\$${allCartProduct.getTotalAmount().toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyleConst.kLargeBold,
                             )
                           ],
                         ),
@@ -465,7 +457,7 @@ class _CartScreenState extends State<CartScreen> {
                                 },
                                 child: const Text('Buy Now'),
                                 style: ElevatedButton.styleFrom(
-                                  primary: const Color(0xff00AB66),
+                                  primary: ColorConst.kBuyBtn,
                                   side: BorderSide(
                                     color: MyApp.themeNotifier.value ==
                                             ThemeMode.light

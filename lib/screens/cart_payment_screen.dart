@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:boogle_mobile/main.dart';
 
 class CartPaymentScreen extends StatefulWidget {
+  ///[CartPaymentScreen] uses a separate Widget to build the content of the [Stepper]
+
   static String routeName = '/cart-payment';
 
   const CartPaymentScreen({Key? key}) : super(key: key);
@@ -27,9 +29,10 @@ class _CartPaymentScreenState extends State<CartPaymentScreen> {
         title: Text(
           'Payment',
           style: TextStyle(
-              color: MyApp.themeNotifier.value == ThemeMode.light
-                  ? Colors.white
-                  : Colors.black),
+            color: MyApp.themeNotifier.value == ThemeMode.light
+                ? Colors.white
+                : Colors.black,
+          ),
         ),
       ),
       body: Container(

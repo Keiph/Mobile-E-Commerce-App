@@ -1,9 +1,9 @@
+import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/screens/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
-import 'package:boogle_mobile/main.dart';
 import 'package:boogle_mobile/models/product.dart';
 import 'package:boogle_mobile/providers/history_list.dart';
 import 'package:boogle_mobile/providers/product_list.dart';
@@ -57,11 +57,7 @@ class PopularGridViewBuilder extends StatelessWidget {
                                 child: Text(
                                   currentProduct.productName,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                  ),
+                                  style: TextStyleConst.kWhiteSmallBold,
                                 ),
                               ),
                             ],
@@ -93,11 +89,7 @@ class PopularGridViewBuilder extends StatelessWidget {
                               const SizedBox(width: 5.0),
                               Text(
                                 currentProduct.productRating.toStringAsFixed(1),
-                                style: const TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                                style: TextStyleConst.kWhiteSmallBold,
                               ),
                             ],
                           ),
@@ -116,11 +108,7 @@ class PopularGridViewBuilder extends StatelessWidget {
                                 child: Text(
                                   '\$${currentProduct.productPrice.toStringAsFixed(2)}',
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                  ),
+                                  style: TextStyleConst.kWhiteSmallBold,
                                 ),
                               ),
                               Stack(

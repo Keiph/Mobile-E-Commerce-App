@@ -1,3 +1,4 @@
+import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/widgets/purchase_completion.dart';
 import 'package:flutter/foundation.dart';
 
@@ -113,7 +114,7 @@ class _PaymentStepperState extends State<PaymentStepper> {
           isActive: _index >= 0,
           title: const Text(
             'Address',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            style: TextStyleConst.kSmallBold,
           ),
           content: Form(
             key: formKeys[0],
@@ -263,7 +264,7 @@ class _PaymentStepperState extends State<PaymentStepper> {
           isActive: _index >= 1,
           title: const Text(
             'Payment',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            style: TextStyleConst.kSmallBold,
           ),
           content: Form(
             key: formKeys[1],
@@ -409,7 +410,7 @@ class _PaymentStepperState extends State<PaymentStepper> {
           isActive: _index >= 2,
           title: const Text(
             'Checkout',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            style: TextStyleConst.kSmallBold,
           ),
           content: Column(
             children: [
@@ -442,9 +443,7 @@ class _PaymentStepperState extends State<PaymentStepper> {
                                   child: Text(
                                     purchaseProduct.productName,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: TextStyleConst.kMediumBold,
                                   ),
                                 ),
                               ],
@@ -458,9 +457,7 @@ class _PaymentStepperState extends State<PaymentStepper> {
                                 children: [
                                   Text(
                                     '\$${purchaseProduct.productPrice.toStringAsFixed(2)}',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: TextStyleConst.kMediumBold,
                                   )
                                 ],
                               ),
@@ -507,10 +504,7 @@ class _PaymentStepperState extends State<PaymentStepper> {
                               children: [
                                 Text(
                                   'X ' '${purchaseProduct.productCount}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
+                                  style: TextStyleConst.kLargeBold,
                                 ),
                               ],
                             ),

@@ -16,8 +16,16 @@ class BottomNav extends StatefulWidget {
 }
 
 class _BottomNavState extends State<BottomNav> {
+
+  //initialise selectedIndex to 0, which means whenever the app first launches
+  //HomeScreen is shown
   int selectedIndex = 0;
+
+  //initialise _pageController to PageController class
   PageController _pageController = PageController();
+
+  //initialise ScaffoldState of _drawerKey as a GlobalKey for it to be used
+  //anywhere in this Widget tree
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
   @override
@@ -27,6 +35,7 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   void _onItemTapped(int index) {
+    //opens up an end drawer when Icon at index 3 is pressed
     index == 3
         ? _drawerKey.currentState!.openEndDrawer()
         : setState(() {

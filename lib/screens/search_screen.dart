@@ -1,4 +1,5 @@
 import 'package:boogle_mobile/animations/slide_fade_animation.dart';
+import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/screens/product_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -20,39 +21,50 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  //initialise _controller to TextEditingController class
   final _controller = TextEditingController();
+  //initialise searchList as empty
   List<Product> searchList = [];
-  //this one line of code cost me 8 hours to debug :_)
 
   @override
   void initState() {
+    //whenever this route is active initialise searchList with the value of 'return myProductList'
     searchList = ProductList().getAllProductList();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // calls ProductList provider
     ProductList allProductList = Provider.of<ProductList>(context);
+    //cals HistoryList provider
     HistoryList historyList = Provider.of<HistoryList>(context);
 
+    //Searching Functionality
     void searchProduct(String query) {
+      //initialise each Product (Object) in getAllProductList() method to searchProduct
       final results = allProductList.getAllProductList().where((searchProduct) {
         final productName = searchProduct.productName.toLowerCase();
         final input = query.toLowerCase();
+        // compares both lower cased productName and input to return productName
+        // that is similar with the input
         return productName.contains(input);
       }).toList();
+      //changes the UI screen with the new List from .toList()
       setState(() {
+        // initialise searchList to result receiving a list of instance of Product
         searchList = results;
       });
     }
 
+    //When _refresh method is called delay this function by 3 seconds
     Future<void> _refresh() {
       return Future.delayed(
         const Duration(seconds: 3),
       );
     }
 
+    //returns size of the screen (width) and (height)
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -70,9 +82,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 position: 1,
                 child: TextField(
                   controller: _controller,
-                  style: const TextStyle(
-                    color: Colors.black,
-                  ),
+                  style: TextStyleConst.kBlackMediumSemi,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(
                       Icons.search,
@@ -89,8 +99,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     contentPadding:
                         const EdgeInsets.fromLTRB(30.0, 20.0, 30, 20.0),
                     hintText: 'Search',
-                    hintStyle: const TextStyle(color: Colors.black),
+                    hintStyle: TextStyleConst.kBlackMediumSemi,
                   ),
+                  //calls searchProduct method
                   onChanged: searchProduct,
                 ),
               ),
@@ -104,22 +115,16 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: [
                     const Text(
                       'Search:',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                      style: TextStyleConst.kMediumBold,
                     ),
                     const SizedBox(
                       width: 5.0,
                     ),
                     Flexible(
                       child: Text(
+                        // takes value of TextField
                         _controller.text,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
+                        style: TextStyleConst.kSmallSemi,
                       ),
                     ),
                   ],
@@ -142,6 +147,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                       borderRadius: BorderRadius.circular(18.0),
                     ),
+
+                    //if List is empty, the screen displays Not found
+                    //else display the gridview
                     child: searchList.isEmpty
                         ? Center(
                             child: Container(
@@ -168,10 +176,15 @@ class _SearchScreenState extends State<SearchScreen> {
                                 crossAxisSpacing: 15,
                                 mainAxisSpacing: 15,
                               ),
+                              //display all items in the list
                               itemCount: searchList.length,
                               itemBuilder: (ctx, i) {
+                                //initialise each instance of the Product in the list to searchProduct
                                 Product searchProduct = searchList[i];
                                 return GestureDetector(
+                                  //Hero Widgets used for navigation from Screen A to B and vice versa,
+                                  //it is used to animate the navigation, the Hero Widgets looks for similar widget tree
+                                  //for Screen A and B and determine the animation. Which is why tag is required
                                   child: Hero(
                                     tag: searchProduct,
                                     child: Container(
@@ -197,12 +210,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     searchProduct.productName,
                                                     overflow:
                                                         TextOverflow.ellipsis,
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14,
-                                                    ),
+                                                    style: TextStyleConst
+                                                        .kWhiteSmallBold,
                                                   ),
                                                 ),
                                               ],
@@ -239,11 +248,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 Text(
                                                   searchProduct.productRating
                                                       .toStringAsFixed(1),
-                                                  style: const TextStyle(
-                                                    fontSize: 12.0,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
+                                                  style: TextStyleConst
+                                                      .kWhiteSmallBold,
                                                 ),
                                               ],
                                             ),
@@ -266,12 +272,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     '\$${searchProduct.productPrice.toStringAsFixed(2)}',
                                                     overflow:
                                                         TextOverflow.ellipsis,
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14,
-                                                    ),
+                                                    style: TextStyleConst
+                                                        .kWhiteSmallBold,
                                                   ),
                                                 ),
                                                 Stack(
@@ -334,6 +336,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     ),
                                   ),
                                   onTap: () {
+                                    //calls addToHistory method from HistoryList Provider class
                                     historyList.addToHistory(
                                       searchProduct.productName,
                                       searchProduct.productImg,
@@ -347,6 +350,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     );
 
                                     Navigator.of(context).pushNamed(
+                                      // navigate to Product route and passes arguments of a Instance of Product
                                       ProductScreen.routeName,
                                       arguments: searchProduct,
                                     );

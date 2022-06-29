@@ -1,3 +1,4 @@
+import 'package:boogle_mobile/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,6 +15,9 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  //method to check if the ThemeMode of the app is light
+  //if true return false
+  //else return false
   bool themeChecker() {
     if (MyApp.themeNotifier.value == ThemeMode.light) {
       return false;
@@ -24,14 +28,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //returns the value of the screen sizes
     Size size = MediaQuery.of(context).size;
 
+    // the Future class allows the app to do stuff asynchronously potentially
+    // multi-threading, a Future is completed in two ways either a value or an
+    // error message
     Future openBrowserURL({
       required Uri url,
     }) async {
       if (await canLaunchUrl(url)) {
         await launchUrl(url, mode: LaunchMode.externalApplication);
       }
+      throw 'Could not launch $url';
     }
 
     return Scaffold(
@@ -58,9 +67,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                  vertical: size.height * 0.05, horizontal: size.width * 0.05),
+                vertical: size.height * 0.05,
+                horizontal: size.width * 0.05,
+              ),
               child: Column(
                 children: [
+                  //Header
                   Row(
                     children: [
                       const Text('General'),
@@ -77,7 +89,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  SwitchListTile(
+
+                  //Switch button for light/dark theme
+                  SwitchListTile.adaptive(
                     title: Row(
                       children: [
                         Icon(
@@ -96,6 +110,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ],
                     ),
                     controlAffinity: ListTileControlAffinity.leading,
+                    // calls themeChecker method that returns true/false
+                    // if true button is active else inactive
                     value: themeChecker(),
                     onChanged: (value) {
                       setState(() {
@@ -113,13 +129,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               children: [
+                // Our Website
                 ListTile(
                   leading: const FaIcon(FontAwesomeIcons.globe),
                   title: const Text(
                     'Our Website',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyleConst.kMediumSemi,
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
@@ -127,13 +142,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     openBrowserURL(url: Uri.parse(url));
                   },
                 ),
+
+                //Contact Us
                 ListTile(
                   leading: const Icon(Icons.phone),
                   title: const Text(
                     'Contact Us',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyleConst.kMediumSemi,
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () async {
@@ -144,15 +159,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     }
                   },
                 ),
+
+                //Our Social Media
                 ListTile(
                   title: const Text(
                     'Our Social Media',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyleConst.kMediumSemi,
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
+                    //Opens a Bottom Sheet
                     showModalBottomSheet(
                       context: context,
                       builder: (context) {
@@ -167,10 +183,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                               title: const Text(
                                 'Facebook',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                                style: TextStyleConst.kWhiteMediumSemi,
                               ),
                               onTap: () async {
                                 const url = 'https://www.facebook.com/';
@@ -185,10 +198,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                               title: const Text(
                                 'LinkedIn',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                                style: TextStyleConst.kWhiteMediumSemi,
                               ),
                               onTap: () {
                                 const url =
@@ -204,10 +214,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                               title: const Text(
                                 'Twitter',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                                style: TextStyleConst.kWhiteMediumSemi,
                               ),
                               onTap: () {
                                 const url = 'https://twitter.com/home?lang=en';
@@ -222,10 +229,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                               title: const Text(
                                 'Instagram',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                                style: TextStyleConst.kWhiteMediumSemi,
                               ),
                               onTap: () {
                                 const url = 'https://www.instagram.com/?hl=en';
@@ -238,6 +242,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     );
                   },
                 ),
+
+                //More Info
                 ListTile(
                   leading: const Icon(Icons.info_outline),
                   title: const Text(
@@ -247,6 +253,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                   onTap: () {
+                    //Opens Simple Dialog
                     showAboutDialog(
                       context: context,
                       applicationName: 'Boogle',

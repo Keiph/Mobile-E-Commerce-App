@@ -6,6 +6,8 @@ import 'package:boogle_mobile/main.dart';
 class PaymentScreen extends StatefulWidget {
   static String routeName = '/payment';
 
+  /// [PaymentScreen] uses a separate Widget to build the content of the [Stepper]
+
   const PaymentScreen({Key? key}) : super(key: key);
 
   @override

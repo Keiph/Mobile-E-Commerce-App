@@ -25,26 +25,30 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  // initialise i = 0
   int i = 0;
+
+  // initialise isLiked = false
   bool isLiked = false;
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    //gets the size of the screen width & and height
     Size size = MediaQuery.of(context).size;
-    LikedList allLikedProduct = Provider.of<LikedList>(context);
-    CartList cartProduct = Provider.of<CartList>(context);
-    ProductList productList = Provider.of<ProductList>(context);
 
+    //call to use LikedList Provider
+    LikedList allLikedProduct = Provider.of<LikedList>(context);
+    //call to use CartList Provider
+    CartList cartProduct = Provider.of<CartList>(context);
+    //call to use ProductList Provider
+    ProductList productList = Provider.of<ProductList>(context);
+    //uses arguments passed from navigated screen
     Product selectedProduct =
         ModalRoute.of(context)?.settings.arguments as Product;
 
+    // this function does event handling when user clicks on '+' and '-' to increase the amount of product they are going to buy
     void _decrementValidator() {
+      // if productCount is less than 2 set productCount else set productCount -= 1
       selectedProduct.productCount < 2
           ? selectedProduct.productCount
           : setState(() {
@@ -52,6 +56,8 @@ class _ProductScreenState extends State<ProductScreen> {
             });
     }
 
+    //This method calls upon an Alert Dialog to check if user wants to delete
+    //the Product Object of the "selectedProduct"
     void deleteProduct(selectedProduct) {
       showDialog<void>(
         context: context,
@@ -62,54 +68,54 @@ class _ProductScreenState extends State<ProductScreen> {
             ),
             actionsPadding: const EdgeInsets.all(10.0),
             title: const Center(
-                child: Text('Delete Product?',
-                    style: TextStyle(fontWeight: FontWeight.bold),),),
+              child: Text(
+                'Delete Product?',
+                style: TextStyleConst.kLargeBold,
+              ),
+            ),
             content: const Text(
               'Upon deleting, this is an '
               '\nirreversible action.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w600),
+              style: TextStyleConst.kMediumSemi,
             ),
             actions: [
               Row(
                 children: [
                   Expanded(
+                    //Cancel Button
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                       child: const Text(
                         'Cancel',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: Colors.black,),
+                        style: TextStyleConst.kBlackMediumSemi,
                       ),
                       style: ElevatedButton.styleFrom(
                         primary: ColorConst.kWhiteSecondaryBtn,
                         elevation: 5,
                       ),
                     ),
-                    /*TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Cancel')),*/
                   ),
                   const SizedBox(
                     width: 20,
                   ),
+                  //Delete Button
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
                         setState(
-                            () => productList.deleteProduct(selectedProduct),);
+                          () => productList.deleteProduct(selectedProduct),
+                        );
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
 
                         Fluttertoast.showToast(
-                          msg: selectedProduct.productName +
-                              ' has been removed from app',
-                          toastLength: Toast.LENGTH_LONG,
-                          gravity: ToastGravity.TOP,
+                          msg: '${selectedProduct.productName} '
+                              'has been removed from app',
+                          toastLength: Toast.LENGTH_LONG, // timer 5 sec
+                          gravity: ToastGravity.TOP, // places at top of screen
                           timeInSecForIosWeb: 5,
                           backgroundColor: Colors.black,
                           textColor: Colors.white,
@@ -118,23 +124,13 @@ class _ProductScreenState extends State<ProductScreen> {
                       },
                       child: const Text(
                         'Delete',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white,),
+                        style: TextStyleConst.kWhiteMediumSemi,
                       ),
                       style: ElevatedButton.styleFrom(
                         primary: ColorConst.kBluePrimaryBtn,
                         elevation: 5,
                       ),
                     ),
-
-                    /*TextButton(
-                        onPressed: () {
-                          setState(() {
-                            historyList.clearHistory();
-                          });
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('Delete')),*/
                   ),
                 ],
               ),
@@ -167,11 +163,14 @@ class _ProductScreenState extends State<ProductScreen> {
             children: [
               IconButton(
                 icon: const Icon(Icons.edit),
-                onPressed: () {},
+                onPressed: () {
+                  //TODO: Implement Update Functionality upon setting up firebase
+                },
               ),
               IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () {
+                  // calls deleteProduct method from ProductList Provider
                   deleteProduct(selectedProduct);
                 },
               ),
@@ -188,9 +187,13 @@ class _ProductScreenState extends State<ProductScreen> {
               children: [
                 //Lottie Animation only appear as the background when image is smaller than it
                 Lottie.network(
-                    'https://assets5.lottiefiles.com/packages/lf20_fvw9spld.json',),
+                  'https://assets5.lottiefiles.com/packages/lf20_fvw9spld.json',
+                ),
+
+                //This Hero connects to the hero from our previous route
                 Hero(
                   tag: selectedProduct,
+                  // Product Image
                   child: Container(
                     child: SizedBox(
                       width: size.width * 0.8,
@@ -204,6 +207,8 @@ class _ProductScreenState extends State<ProductScreen> {
                     ),
                   ),
                 ),
+
+                //Liked Button
                 Positioned(
                   top: 30,
                   right: 30,
@@ -215,6 +220,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       color: Colors.white,
                     ),
                     child: IconButton(
+                      //if isLiked is true, Icon turn red else Icon stays black
                       icon: isLiked
                           ? const Icon(
                               CupertinoIcons.heart_fill,
@@ -226,8 +232,11 @@ class _ProductScreenState extends State<ProductScreen> {
                             ),
                       onPressed: () {
                         setState(() {
+                          //switches between true/false
                           isLiked = !isLiked;
 
+                          // if isLiked is true call addToLiked method from LikedList Provider
+                          // else call removeFromLiked method from LikedList Provider
                           if (isLiked) {
                             allLikedProduct.addToLiked(
                               selectedProduct.productName,
@@ -241,6 +250,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               selectedProduct.productCount,
                             );
                           } else {
+
                             allLikedProduct.removeFromLiked(i);
                           }
                         });
@@ -252,7 +262,11 @@ class _ProductScreenState extends State<ProductScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 20, right: 20, top: 20, bottom: 50,),
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 50,
+              ),
               child: Column(
                 children: [
                   Row(
@@ -261,22 +275,18 @@ class _ProductScreenState extends State<ProductScreen> {
                     children: [
                       Flexible(
                         child: Text(
+                          //Product Name
                           selectedProduct.productName,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyleConst.kMediumBold,
                         ),
                       ),
                       const SizedBox(
                         width: 20,
                       ),
                       Text(
+                        //Product Price
                         '\$${selectedProduct.productPrice.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: TextStyleConst.kMediumBold,
                       ),
                     ],
                   ),
@@ -287,15 +297,16 @@ class _ProductScreenState extends State<ProductScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+
+                      // Product Size
                       Flexible(
                         child: Text(
                           'Size: ' + selectedProduct.productSizes,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: TextStyleConst.kMediumSemi,
                         ),
                       ),
+
+                      // Product Color
                       Stack(
                         alignment: Alignment.center,
                         children: [
@@ -330,6 +341,8 @@ class _ProductScreenState extends State<ProductScreen> {
                   const SizedBox(
                     height: 20,
                   ),
+
+                  //Review Rating
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Row(
@@ -352,10 +365,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         const SizedBox(width: 5.0),
                         Text(
                           '${selectedProduct.productRating}',
-                          style: const TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyleConst.kMediumBold,
                         ),
                       ],
                     ),
@@ -367,25 +377,20 @@ class _ProductScreenState extends State<ProductScreen> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Details:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
+                      style: TextStyleConst.kMediumSemi,
                     ),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
+                  // Product Detail
                   Row(
                     children: [
                       Flexible(
                         child: ReadMoreText(
                           selectedProduct.productDetails,
                           trimLines: 3,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
+                          style: TextStyleConst.kSmallSemi,
                           trimMode: TrimMode.Line,
                           trimCollapsedText: '...Read more',
                           trimExpandedText: ' Less',
@@ -396,6 +401,8 @@ class _ProductScreenState extends State<ProductScreen> {
                   const SizedBox(
                     height: 20,
                   ),
+
+                  //Add & Remove Product Count Buttons
                   Row(
                     children: [
                       GestureDetector(
@@ -406,10 +413,11 @@ class _ProductScreenState extends State<ProductScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5.0),
                             border: Border.all(
-                                color:
-                                    MyApp.themeNotifier.value == ThemeMode.light
-                                        ? Colors.black
-                                        : Colors.white,),
+                              color:
+                                  MyApp.themeNotifier.value == ThemeMode.light
+                                      ? Colors.black
+                                      : Colors.white,
+                            ),
                           ),
                         ),
                         onTap: _decrementValidator,
@@ -426,10 +434,10 @@ class _ProductScreenState extends State<ProductScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5.0),
                           border: Border.all(
-                              color:
-                                  MyApp.themeNotifier.value == ThemeMode.light
-                                      ? Colors.black
-                                      : Colors.white,),
+                            color: MyApp.themeNotifier.value == ThemeMode.light
+                                ? Colors.black
+                                : Colors.white,
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -443,10 +451,11 @@ class _ProductScreenState extends State<ProductScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5.0),
                             border: Border.all(
-                                color:
-                                    MyApp.themeNotifier.value == ThemeMode.light
-                                        ? Colors.black
-                                        : Colors.white,),
+                              color:
+                                  MyApp.themeNotifier.value == ThemeMode.light
+                                      ? Colors.black
+                                      : Colors.white,
+                            ),
                           ),
                         ),
                         onTap: () =>
@@ -471,15 +480,17 @@ class _ProductScreenState extends State<ProductScreen> {
                         style: ElevatedButton.styleFrom(
                           primary: const Color(0xff00AB66),
                           side: BorderSide(
-                              color:
-                                  MyApp.themeNotifier.value == ThemeMode.light
-                                      ? Colors.black
-                                      : Colors.white,),
+                            color: MyApp.themeNotifier.value == ThemeMode.light
+                                ? Colors.black
+                                : Colors.white,
+                          ),
                         ),
                       ),
                       ElevatedButton(
                         onPressed: () {
+                          // hide any existing snackbar
                           ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          //call addToCart method from CartList Provider
                           cartProduct.addToCart(
                             selectedProduct.productName,
                             selectedProduct.productImg,
@@ -491,6 +502,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             selectedProduct.productRating,
                             selectedProduct.productCount,
                           );
+                          //show a snackbar upon calling method
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               duration: const Duration(seconds: 2),
@@ -519,10 +531,10 @@ class _ProductScreenState extends State<ProductScreen> {
                         style: ElevatedButton.styleFrom(
                           primary: const Color(0xff5890FF),
                           side: BorderSide(
-                              color:
-                                  MyApp.themeNotifier.value == ThemeMode.light
-                                      ? Colors.black
-                                      : Colors.white,),
+                            color: MyApp.themeNotifier.value == ThemeMode.light
+                                ? Colors.black
+                                : Colors.white,
+                          ),
                         ),
                       ),
                     ],
