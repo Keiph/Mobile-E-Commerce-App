@@ -1,40 +1,23 @@
 import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/main.dart';
-import 'package:boogle_mobile/providers/product_list.dart';
+import 'package:boogle_mobile/models/product.dart';
 import 'package:boogle_mobile/services/firestore_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:regexpattern/regexpattern.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
-class AddProductScreen extends StatefulWidget {
+class EditProductScreen extends StatefulWidget {
+  const EditProductScreen({Key? key}) : super(key: key);
+  static String routeName ='/edit-product';
 
-  ///[AddProductScreen]
-  static String routeName = '/add-product';
-
-  const AddProductScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddProductScreen> createState() => _AddProductScreenState();
+  State<EditProductScreen> createState() => _EditProductScreenState();
 }
 
-class _AddProductScreenState extends State<AddProductScreen> {
-  // initialise urlController with TextEditingController class to do event handling for user inputs
-  TextEditingController urlController = TextEditingController();
+class _EditProductScreenState extends State<EditProductScreen> {
 
-  // initialise urlPattern with String literals ( used in RegExpression)
-  var urlPattern = r'(https?|http)://';
-
-  // initialise form with FormState, GlobalKey is used to uniquely identify the Form Widget
-  var form = GlobalKey<FormState>();
-
-  /// [productName], [productImg], [productCategory], [productSizes], [productDetails], [productColors], [productPrice] is nullable when initialise
-  /// waiting for a value to be passed from [TextFormField] to initialise to the value
-  /// [productCount] initialised to 1 as the [productCount] field exist for the sole purpose of adding and decrementing counter
-  /// [productRating initialised to 5.0 as the Review Functionality is not updated.
-  // initialising params of constructor for Product Object
   String? productName,
       productImg,
       productCategory,
@@ -45,7 +28,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
   int productCount = 1;
   double productRating = 5.0;
 
-  void saveForm() {
+  var urlPattern = r'(https?|http)://';
+
+  var form = GlobalKey<FormState>();
+
+  void saveForm( String id ) {
     bool isValid = form.currentState!.validate();
     // check if all TextFormField are validated
     if (isValid) {
@@ -66,7 +53,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             ),
             content: const Text(
               'Have you checked'
-              '\n if all inputs are correct?',
+                  '\n if all inputs are correct?',
               textAlign: TextAlign.center,
               style: TextStyleConst.kMediumSemi,
             ),
@@ -99,7 +86,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         setState(() {
                           // make call to provider addProduct Function and added required params into the constructor
                           FirestoreService fsService = FirestoreService();
-                          fsService.addProduct(productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating, productCount);
+                          fsService.editProduct(id, productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating, productCount);
                           FocusScope.of(context).unfocus();
 
                           if (kDebugMode) {
@@ -126,6 +113,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         );
                         // Navigate out of Dialog
                         Navigator.of(context).pop();
+                        // Navigate out of edit screen
+                        Navigator.of(context).pop();
+                        // Navigate out of product screen
+                        Navigator.of(context).pop();
                       },
                       child: const Text(
                         'Create',
@@ -145,11 +136,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
-    //Call Product Provider class
-
+    Product selectedProduct = ModalRoute.of(context)?.settings.arguments as Product;
+    TextEditingController urlController = TextEditingController(text: selectedProduct.productImg);
     return GestureDetector(
       //hide mobile keyboard upon click
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -164,7 +154,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               ? Colors.black
               : Colors.white,
           title: Text(
-            'Add Product',
+            'Edit Product',
             style: TextStyle(
               color: MyApp.themeNotifier.value == ThemeMode.light
                   ? Colors.white
@@ -173,10 +163,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.add),
+              icon: const Icon(Icons.save),
               // call method
               onPressed: () {
-                saveForm();
+                saveForm(selectedProduct.id);
               },
             ),
           ],
@@ -191,6 +181,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 children: [
                   //Product Name Text Form
                   TextFormField(
+                    initialValue: selectedProduct.productName,
                     decoration: InputDecoration(
                       label: const Text('Enter Product Name'),
                       enabledBorder: OutlineInputBorder(
@@ -336,22 +327,23 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       Expanded(
                         // TextFormField for Product Size
                         child: TextFormField(
+                          initialValue: selectedProduct.productSizes,
                           decoration: InputDecoration(
                             label: const Text('Enter Size'),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color:
-                                    MyApp.themeNotifier.value == ThemeMode.light
-                                        ? Colors.black
-                                        : Colors.white,
+                                MyApp.themeNotifier.value == ThemeMode.light
+                                    ? Colors.black
+                                    : Colors.white,
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color:
-                                    MyApp.themeNotifier.value == ThemeMode.light
-                                        ? Colors.black
-                                        : Colors.white,
+                                MyApp.themeNotifier.value == ThemeMode.light
+                                    ? Colors.black
+                                    : Colors.white,
                               ),
                             ),
                             errorBorder: const OutlineInputBorder(
@@ -385,23 +377,24 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       Expanded(
                         // TextFormField for Product Price
                         child: TextFormField(
+                          initialValue: selectedProduct.productPrice.toStringAsFixed(2),
                           decoration: InputDecoration(
                             label: const Text('Enter Price'),
                             hintText: '\$2.50',
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color:
-                                    MyApp.themeNotifier.value == ThemeMode.light
-                                        ? Colors.black
-                                        : Colors.white,
+                                MyApp.themeNotifier.value == ThemeMode.light
+                                    ? Colors.black
+                                    : Colors.white,
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color:
-                                    MyApp.themeNotifier.value == ThemeMode.light
-                                        ? Colors.black
-                                        : Colors.white,
+                                MyApp.themeNotifier.value == ThemeMode.light
+                                    ? Colors.black
+                                    : Colors.white,
                               ),
                             ),
                             errorBorder: const OutlineInputBorder(
@@ -440,6 +433,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                   //Dropdown Option Field for Product Category
                   DropdownButtonFormField(
+                    value: selectedProduct.productCategory,
                     decoration: InputDecoration(
                       label: const Text('Select One Product Category'),
                       enabledBorder: OutlineInputBorder(
@@ -505,6 +499,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     onChanged: (value) {
                       productCategory = value as String;
                     },
+                    onSaved: (value) {
+                      productCategory = value as String;
+                    },
                   ),
                   const SizedBox(
                     height: 20,
@@ -512,6 +509,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                   //Dropdown Option for Product Color
                   DropdownButtonFormField(
+                    value: selectedProduct.productColors,
                     decoration: InputDecoration(
                       label: const Text('Select One Product Color'),
                       enabledBorder: OutlineInputBorder(
@@ -749,6 +747,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     onChanged: (value) {
                       productColors = value as int? ;
                     },
+                    onSaved: (value) {
+                      productColors = value as int? ;
+                    },
                   ),
                   const SizedBox(
                     height: 30,
@@ -760,19 +761,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(10.0),
                       child: TextFormField(
+                        initialValue: selectedProduct.productDetails,
                         maxLines:
-                            null, // do a line break whenever the line reaches the max width and height of sized box
+                        null, // do a line break whenever the line reaches the max width and height of sized box
                         maxLength:
-                            512, // amount of characters this field allows is 512 characters
+                        512, // amount of characters this field allows is 512 characters
                         decoration: InputDecoration(
                           label: const Text('Enter Product Details'),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color:
-                                  MyApp.themeNotifier.value == ThemeMode.light
-                                      ? Colors.black
-                                      : Colors.white,
+                              MyApp.themeNotifier.value == ThemeMode.light
+                                  ? Colors.black
+                                  : Colors.white,
                             ),
                             borderRadius: BorderRadius.circular(15),
                           ),

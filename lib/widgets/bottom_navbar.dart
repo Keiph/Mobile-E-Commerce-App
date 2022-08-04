@@ -70,7 +70,7 @@ class _BottomNavState extends State<BottomNav> {
           onPageChanged: (index) {
             setState(() => selectedIndex = index);
           },
-          children: const [
+          children: [
             HomeScreen(),
             SearchScreen(),
             LikedScreen(),

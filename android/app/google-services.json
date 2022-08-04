@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1062474301852",
+    "project_id": "boogle-78f98",
+    "storage_bucket": "boogle-78f98.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062474301852:android:30b4e465a4ab4843640859",
+        "android_client_info": {
+          "package_name": "com.example.boogle_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1062474301852-9t0d127av7f4u5cj3ovp58fm3uc0fmj0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfDOQic11sPwf4wkXgM9WhYWeYrALX0BI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062474301852-9t0d127av7f4u5cj3ovp58fm3uc0fmj0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

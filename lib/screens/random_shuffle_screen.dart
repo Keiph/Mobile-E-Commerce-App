@@ -2,7 +2,7 @@ import 'package:boogle_mobile/providers/product_list.dart';
 import 'package:boogle_mobile/screens/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' ;
-
+/*
 class RandomShuffleScreen extends StatelessWidget {
   static String routeName = '/random-shuffle';
   //Random class from in-built flutter function
@@ -34,4 +34,4 @@ class RandomShuffleScreen extends StatelessWidget {
       ),
     );
   }
-}
+}*/

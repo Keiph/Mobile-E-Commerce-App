@@ -25,6 +25,17 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+apply plugin: 'com.google.gms.google-services'
+
+dependencies {
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+
+
+    // Add the dependencies for the desired Firebase products
+    // https://firebase.google.com/docs/android/setup#available-libraries
+}
+
 android {
     compileSdkVersion flutter.compileSdkVersion
 
@@ -36,7 +47,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.boogle_mobile"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

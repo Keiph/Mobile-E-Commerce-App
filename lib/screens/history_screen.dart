@@ -10,7 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'package:boogle_mobile/main.dart';
-
+/*
 class HistoryScreen extends StatefulWidget {
   ///This [HistoryScreen] mainly uses [HistoryList] provider with Create, Read and Delete functionality
   ///The delete icon opens a [AlertDialog] for users to confirm their actions, in this case we are checking if user confirm its delete action
@@ -301,3 +301,4 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 }
+*/

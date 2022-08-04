@@ -1,8 +1,13 @@
 import 'package:boogle_mobile/animations/slide_fade_animation.dart';
 import 'package:boogle_mobile/constants.dart';
+import 'package:boogle_mobile/models/product.dart';
+import 'package:boogle_mobile/models/users.dart';
+import 'package:boogle_mobile/services/auth_service.dart';
+import 'package:boogle_mobile/services/firestore_service.dart';
 import 'package:boogle_mobile/widgets/carousel_slider.dart';
 
 import 'package:boogle_mobile/widgets/popular_gridview_builder.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:boogle_mobile/main.dart';
@@ -10,7 +15,6 @@ import 'package:boogle_mobile/main.dart';
 class HomeScreen extends StatefulWidget {
   static String routeName = '/home';
 
-  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -62,108 +66,124 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    FirestoreService fsService = FirestoreService();
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          minimum: EdgeInsets.symmetric(
-            vertical: size.height * 0.1,
-            horizontal: size.width * 0.05,
-          ),
-          child: Column(
-            children: [
-              //Onboard Message + Notification
-              SlideFadeAnimation(
-                position: 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Hello Keiph!',
-                      style: TextStyleConst.kLargeBold,
+
+        return StreamBuilder<FirestoreUser>(
+            stream: fsService.getAuthUserFromFirestore(),
+            builder: (context, snapshotUsers) {
+
+              return snapshotUsers.connectionState == ConnectionState.waiting ?
+              Center(child: CircularProgressIndicator()) :
+                  snapshotUsers.hasData ?
+              Scaffold(
+                body: SingleChildScrollView(
+                  child: SafeArea(
+                    minimum: EdgeInsets.symmetric(
+                      vertical: size.height * 0.1,
+                      horizontal: size.width * 0.05,
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                        color: MyApp.themeNotifier.value == ThemeMode.light
-                            ? Colors.white
-                            : Colors.black,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: MyApp.themeNotifier.value == ThemeMode.light
-                              ? Colors.black
-                              : Colors.white,
+                    child: Column(
+                      children: [
+                        //Onboard Message + Notification
+                        SlideFadeAnimation(
+                          position: 1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  'Hello ' + snapshotUsers.data!.userName + '!',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyleConst.kLargeBold,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                  color: MyApp.themeNotifier.value ==
+                                      ThemeMode.light
+                                      ? Colors.white
+                                      : Colors.black,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: MyApp.themeNotifier.value ==
+                                        ThemeMode.light
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
+                                ),
+                                child: const Icon(Icons.notifications),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      child: const Icon(Icons.notifications),
+                        const SizedBox(
+                          height: 30,
+                        ),
+
+                        //Carousel Slider
+                        const SlideFadeAnimation(
+                          position: 2,
+                          // Calls Widget Class
+                          child: CarouselAutoSlider(),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+
+                        //Heading Text
+                        SlideFadeAnimation(
+                          position: 3,
+                          child: Row(
+                            children: const [
+                              Text(
+                                'Popular',
+                                style: TextStyleConst.kLargeBold,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+
+                        //Filter by category Chips
+                        SlideFadeAnimation(
+                          position: 4,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                // Calls helper method (homeCategory) to build the Widgets in this format
+                                homeCategory('All', 1),
+                                homeCategory('Shoes', 2),
+                                homeCategory('Clothes', 3),
+                                homeCategory('Computer & Games', 4),
+                                homeCategory('Grocery', 5),
+                                homeCategory('Pet Supplies', 6),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+
+                        //GridView Product Cards
+                        SlideFadeAnimation(
+                          position: 5,
+                          child: AspectRatio(
+                            aspectRatio: 0.65,
+                            child: PopularGridViewBuilder(activeCategory),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-
-              //Carousel Slider
-              const SlideFadeAnimation(
-                position: 2,
-                // Calls Widget Class
-                child: CarouselAutoSlider(),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-
-              //Heading Text
-              SlideFadeAnimation(
-                position: 3,
-                child: Row(
-                  children: const [
-                    Text(
-                      'Popular',
-                      style: TextStyleConst.kLargeBold,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-
-              //Filter by category Chips
-              SlideFadeAnimation(
-                position: 4,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      // Calls helper method (homeCategory) to build the Widgets in this format
-                      homeCategory('All', 1),
-                      homeCategory('Shoes', 2),
-                      homeCategory('Clothes', 3),
-                      homeCategory('Computer & Games', 4),
-                      homeCategory('Grocery', 5),
-                      homeCategory('Pet Supplies', 6),
-                    ],
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
+              ) : Center();
+            }
+        );
+      }}
 
-              //GridView Product Cards
-              const SlideFadeAnimation(
-                position: 5,
-                child: AspectRatio(
-                  aspectRatio: 0.65,
-                  child: PopularGridViewBuilder(),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

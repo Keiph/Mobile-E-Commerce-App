@@ -1,6 +1,7 @@
 import 'package:boogle_mobile/animations/slide_fade_animation.dart';
 import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/screens/product_screen.dart';
+import 'package:boogle_mobile/services/firestore_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -21,41 +22,20 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  FirestoreService fsService = FirestoreService();
   //initialise _controller to TextEditingController class
   final _controller = TextEditingController();
-  //initialise searchList as empty
-  List<Product> searchList = [];
 
   @override
   void initState() {
-    //whenever this route is active initialise searchList with the value of 'return myProductList'
-    searchList = ProductList().getAllProductList();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // calls ProductList provider
-    ProductList allProductList = Provider.of<ProductList>(context);
-    //cals HistoryList provider
-    HistoryList historyList = Provider.of<HistoryList>(context);
+
 
     //Searching Functionality
-    void searchProduct(String query) {
-      //initialise each Product (Object) in getAllProductList() method to searchProduct
-      final results = allProductList.getAllProductList().where((searchProduct) {
-        final productName = searchProduct.productName.toLowerCase();
-        final input = query.toLowerCase();
-        // compares both lower cased productName and input to return productName
-        // that is similar with the input
-        return productName.contains(input);
-      }).toList();
-      //changes the UI screen with the new List from .toList()
-      setState(() {
-        // initialise searchList to result receiving a list of instance of Product
-        searchList = results;
-      });
-    }
 
     //When _refresh method is called delay this function by 3 seconds
     Future<void> _refresh() {
@@ -101,8 +81,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     hintText: 'Search',
                     hintStyle: TextStyleConst.kBlackMediumSemi,
                   ),
-                  //calls searchProduct method
-                  onChanged: searchProduct,
                 ),
               ),
               const SizedBox(
@@ -147,218 +125,411 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                       borderRadius: BorderRadius.circular(18.0),
                     ),
-
-                    //if List is empty, the screen displays Not found
-                    //else display the gridview
-                    child: searchList.isEmpty
-                        ? Center(
-                            child: Container(
-                              child: const SizedBox(
-                                width: double.infinity,
-                                height: 300,
-                              ),
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    'images/153-1533013_sorry-no-results-found.png',
-                                  ),
-                                  fit: BoxFit.fitWidth,
+                    child: StreamBuilder<List<Product>>(
+                      stream: fsService.getProducts(),
+                      builder: (context,allSnapshot){
+                      return StreamBuilder<List<Product>>(
+                          stream: fsService.getProductsByText(_controller.text),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError || allSnapshot.hasError){
+                              return Center(child: Text('Oh No Something Went Wrong on our side!'));
+                            }
+                            else if (snapshot.connectionState == ConnectionState.waiting || allSnapshot.connectionState == ConnectionState.waiting)
+                              return Center(child: CircularProgressIndicator());
+                            else if (_controller.text.isEmpty){
+                              return GridView.builder(
+                                gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 200,
+                                  crossAxisSpacing: 15,
+                                  mainAxisSpacing: 15,
                                 ),
-                              ),
-                            ),
-                          )
-                        : RefreshIndicator(
-                            onRefresh: _refresh,
-                            child: GridView.builder(
-                              gridDelegate:
-                                  const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 200,
-                                crossAxisSpacing: 15,
-                                mainAxisSpacing: 15,
-                              ),
-                              //display all items in the list
-                              itemCount: searchList.length,
-                              itemBuilder: (ctx, i) {
-                                //initialise each instance of the Product in the list to searchProduct
-                                Product searchProduct = searchList[i];
-                                return GestureDetector(
-                                  //Hero Widgets used for navigation from Screen A to B and vice versa,
-                                  //it is used to animate the navigation, the Hero Widgets looks for similar widget tree
-                                  //for Screen A and B and determine the animation. Which is why tag is required
-                                  child: Hero(
-                                    tag: searchProduct,
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 10.0,
-                                              bottom: 10.0,
-                                              right: 10.0,
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    searchProduct.productName,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyleConst
-                                                        .kWhiteSmallBold,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 10.0,
-                                              bottom: 10.0,
-                                              right: 10.0,
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                RatingBar.builder(
-                                                  ignoreGestures: true,
-                                                  initialRating: searchProduct
-                                                      .productRating,
-                                                  direction: Axis.horizontal,
-                                                  allowHalfRating: true,
-                                                  itemCount: 1,
-                                                  itemSize: 18.0,
-                                                  itemPadding: const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 1.0,
-                                                  ),
-                                                  itemBuilder: (context, _) =>
-                                                      const Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
-                                                  ),
-                                                  onRatingUpdate: (rating) {},
-                                                ),
-                                                const SizedBox(width: 5.0),
-                                                Text(
-                                                  searchProduct.productRating
-                                                      .toStringAsFixed(1),
-                                                  style: TextStyleConst
-                                                      .kWhiteSmallBold,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 10.0,
-                                              right: 10.0,
-                                              bottom: 10.0,
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    '\$${searchProduct.productPrice.toStringAsFixed(2)}',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyleConst
-                                                        .kWhiteSmallBold,
-                                                  ),
-                                                ),
-                                                Stack(
-                                                  alignment: Alignment.center,
-                                                  children: [
-                                                    Container(
-                                                      width: 15,
-                                                      height: 15,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        shape: BoxShape.circle,
-                                                        boxShadow: [
-                                                          BoxShadow(
-                                                            color: Colors.black
-                                                                .withOpacity(
-                                                              0.2,
-                                                            ),
-                                                            blurRadius: 1,
-                                                            offset:
-                                                                const Offset(
-                                                              5,
-                                                              5,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
+                                //display all items in the list
+                                itemCount: allSnapshot.data!.length,
+                                itemBuilder: (ctx, i) {
+                                  return GestureDetector(
+                                    child: Hero(
+                                      tag: allSnapshot.data![i].id,
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.end,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 10.0,
+                                                bottom: 10.0,
+                                                right: 10.0,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      allSnapshot
+                                                          .data![i].productName,
+                                                      overflow:
+                                                      TextOverflow.ellipsis,
+                                                      style: TextStyleConst
+                                                          .kWhiteSmallBold,
                                                     ),
-                                                    Container(
-                                                      width: 10,
-                                                      height: 10,
-                                                      decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                          width: 0.5,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 10.0,
+                                                bottom: 10.0,
+                                                right: 10.0,
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  RatingBar.builder(
+                                                    ignoreGestures: true,
+                                                    initialRating: allSnapshot
+                                                        .data![i].productRating,
+                                                    direction: Axis.horizontal,
+                                                    allowHalfRating: true,
+                                                    itemCount: 1,
+                                                    itemSize: 18.0,
+                                                    itemPadding:
+                                                    const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 1.0,
+                                                    ),
+                                                    itemBuilder: (context, _) =>
+                                                    const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    ),
+                                                    onRatingUpdate: (rating) {},
+                                                  ),
+                                                  const SizedBox(width: 5.0),
+                                                  Text(
+                                                    allSnapshot
+                                                        .data![i].productRating
+                                                        .toStringAsFixed(1),
+                                                    style: TextStyleConst
+                                                        .kWhiteSmallBold,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 10.0,
+                                                right: 10.0,
+                                                bottom: 10.0,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .spaceBetween,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      '\$${allSnapshot.data![i].productPrice.toStringAsFixed(2)}',
+                                                      overflow:
+                                                      TextOverflow.ellipsis,
+                                                      style: TextStyleConst
+                                                          .kWhiteSmallBold,
+                                                    ),
+                                                  ),
+                                                  Stack(
+                                                    alignment: Alignment.center,
+                                                    children: [
+                                                      Container(
+                                                        width: 15,
+                                                        height: 15,
+                                                        decoration:
+                                                        BoxDecoration(
+                                                          color: Colors.white,
+                                                          shape:
+                                                          BoxShape.circle,
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                0.2,
+                                                              ),
+                                                              blurRadius: 1,
+                                                              offset:
+                                                              const Offset(
+                                                                5,
+                                                                5,
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                        color: searchProduct
-                                                            .productColors,
-                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      Container(
+                                                        width: 10,
+                                                        height: 10,
+                                                        decoration:
+                                                        BoxDecoration(
+                                                          border: Border.all(
+                                                            width: 0.5,
+                                                          ),
+                                                          color: Color(allSnapshot
+                                                              .data![i]
+                                                              .productColors),
+                                                          shape:
+                                                          BoxShape.circle,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                              allSnapshot.data![i].productImg,
+                                            ),
+                                            fit: BoxFit.cover,
+                                            colorFilter: ColorFilter.mode(
+                                              Colors.black.withOpacity(0.2),
+                                              BlendMode.darken,
+                                            ),
+                                          ),
+                                          borderRadius:
+                                          BorderRadius.circular(15),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      //calls addToHistory method from HistoryList Provider class
+                                      /*historyList.addToHistory(
+                                          snapshot.data![i].productName,
+                                          snapshot.data![i].productImg,
+                                          snapshot.data![i].productDetails,
+                                          snapshot.data![i].productColors,
+                                          snapshot.data![i].productCategory,
+                                          snapshot.data![i].productPrice,
+                                          snapshot.data![i].productSizes,
+                                          snapshot.data![i].productRating,
+                                          snapshot.data![i].productCount,
+                                        );
+*/
+                                      Navigator.of(context).pushNamed(
+                                        // navigate to Product route and passes arguments of a Instance of Product
+                                        ProductScreen.routeName,
+                                        arguments: allSnapshot.data![i],
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            }
+                            else {
+                              return GridView.builder(
+                                gridDelegate:
+                                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 200,
+                                  crossAxisSpacing: 15,
+                                  mainAxisSpacing: 15,
+                                ),
+                                //display all items in the list
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (ctx, i) {
+                                    return GestureDetector(
+                                      child: Hero(
+                                        tag: snapshot.data![i].id,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                  left: 10.0,
+                                                  bottom: 10.0,
+                                                  right: 10.0,
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        snapshot
+                                                            .data![i].productName,
+                                                        overflow:
+                                                        TextOverflow.ellipsis,
+                                                        style: TextStyleConst
+                                                            .kWhiteSmallBold,
                                                       ),
                                                     ),
                                                   ],
                                                 ),
-                                              ],
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                  left: 10.0,
+                                                  bottom: 10.0,
+                                                  right: 10.0,
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    RatingBar.builder(
+                                                      ignoreGestures: true,
+                                                      initialRating: snapshot
+                                                          .data![i].productRating,
+                                                      direction: Axis.horizontal,
+                                                      allowHalfRating: true,
+                                                      itemCount: 1,
+                                                      itemSize: 18.0,
+                                                      itemPadding:
+                                                      const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 1.0,
+                                                      ),
+                                                      itemBuilder: (context, _) =>
+                                                      const Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
+                                                      ),
+                                                      onRatingUpdate: (rating) {},
+                                                    ),
+                                                    const SizedBox(width: 5.0),
+                                                    Text(
+                                                      snapshot
+                                                          .data![i].productRating
+                                                          .toStringAsFixed(1),
+                                                      style: TextStyleConst
+                                                          .kWhiteSmallBold,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                  left: 10.0,
+                                                  right: 10.0,
+                                                  bottom: 10.0,
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        '\$${snapshot.data![i].productPrice.toStringAsFixed(2)}',
+                                                        overflow:
+                                                        TextOverflow.ellipsis,
+                                                        style: TextStyleConst
+                                                            .kWhiteSmallBold,
+                                                      ),
+                                                    ),
+                                                    Stack(
+                                                      alignment: Alignment.center,
+                                                      children: [
+                                                        Container(
+                                                          width: 15,
+                                                          height: 15,
+                                                          decoration:
+                                                          BoxDecoration(
+                                                            color: Colors.white,
+                                                            shape:
+                                                            BoxShape.circle,
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                color: Colors
+                                                                    .black
+                                                                    .withOpacity(
+                                                                  0.2,
+                                                                ),
+                                                                blurRadius: 1,
+                                                                offset:
+                                                                const Offset(
+                                                                  5,
+                                                                  5,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          width: 10,
+                                                          height: 10,
+                                                          decoration:
+                                                          BoxDecoration(
+                                                            border: Border.all(
+                                                              width: 0.5,
+                                                            ),
+                                                            color: Color(snapshot
+                                                                .data![i]
+                                                                .productColors),
+                                                            shape:
+                                                            BoxShape.circle,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                snapshot.data![i].productImg,
+                                              ),
+                                              fit: BoxFit.cover,
+                                              colorFilter: ColorFilter.mode(
+                                                Colors.black.withOpacity(0.2),
+                                                BlendMode.darken,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                            searchProduct.productImg,
-                                          ),
-                                          fit: BoxFit.cover,
-                                          colorFilter: ColorFilter.mode(
-                                            Colors.black.withOpacity(0.2),
-                                            BlendMode.darken,
+                                            borderRadius:
+                                            BorderRadius.circular(15),
                                           ),
                                         ),
-                                        borderRadius: BorderRadius.circular(15),
                                       ),
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    //calls addToHistory method from HistoryList Provider class
-                                    historyList.addToHistory(
-                                      searchProduct.productName,
-                                      searchProduct.productImg,
-                                      searchProduct.productDetails,
-                                      searchProduct.productColors,
-                                      searchProduct.productCategory,
-                                      searchProduct.productPrice,
-                                      searchProduct.productSizes,
-                                      searchProduct.productRating,
-                                      searchProduct.productCount,
-                                    );
-
-                                    Navigator.of(context).pushNamed(
-                                      // navigate to Product route and passes arguments of a Instance of Product
-                                      ProductScreen.routeName,
-                                      arguments: searchProduct,
+                                      onTap: () {
+                                        //calls addToHistory method from HistoryList Provider class
+                                        /*historyList.addToHistory(
+                                          snapshot.data![i].productName,
+                                          snapshot.data![i].productImg,
+                                          snapshot.data![i].productDetails,
+                                          snapshot.data![i].productColors,
+                                          snapshot.data![i].productCategory,
+                                          snapshot.data![i].productPrice,
+                                          snapshot.data![i].productSizes,
+                                          snapshot.data![i].productRating,
+                                          snapshot.data![i].productCount,
+                                        );
+*/
+                                        Navigator.of(context).pushNamed(
+                                          // navigate to Product route and passes arguments of a Instance of Product
+                                          ProductScreen.routeName,
+                                          arguments: snapshot.data![i],
+                                        );
+                                      },
                                     );
                                   },
-                                );
-                              },
-                            ),
-                          ),
+                              );
+                            }
+                          },);}
+                    ),
                   ),
                 ),
               ),
