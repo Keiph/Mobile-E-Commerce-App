@@ -54,7 +54,7 @@ class OrderScreen extends StatelessWidget {
                       leading: const CircleAvatar(child: Icon(Icons.done, size: 30, color: Colors.white,),backgroundColor: Colors.grey,),
                       title: Text(snapshot.data![i].id, style: TextStyleConst.kSmallSemi,),
                       subtitle: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Purchased on: ' + DateFormat('dd/MM/yyyy').format(snapshot.data![i].purchasedBy)),
                           Text('Total Price: ' '\$${snapshot.data![i].amount.toStringAsFixed(2)}'),

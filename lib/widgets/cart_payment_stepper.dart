@@ -6,11 +6,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:boogle_mobile/main.dart';
 import 'package:boogle_mobile/models/product.dart';
 import 'package:boogle_mobile/providers/cart_list.dart';
 
+import '../api/notification_api.dart';
 import '../models/orders.dart';
 
 class CartPaymentStepper extends StatefulWidget {
@@ -98,7 +100,11 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
 
                     fsService.addToOrder(postalCode,address1,paidBy,amount,totalItem,DateTime.now(), DateTime.now().add(Duration(days: 3)));
 
-                    NotificationApi.showNotification()
+                    NotificationApi.showNotification(
+                      title: 'Purchase Complete',
+                      body: 'Thanks for buying with Boogle, You have purchase $totalItem Items for \$$amount at ${DateFormat('dd/MM/yyyy').format(DateTime.now())}. Estimated Delivery Date is at ${DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days:3)))}'
+
+                    );
                     setState(() => isCompleted = true);
 
                     //Successfully purchase the list of Product and thus remove
