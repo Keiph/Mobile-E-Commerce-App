@@ -17,7 +17,7 @@ import 'package:readmore/readmore.dart';
 import 'package:boogle_mobile/providers/liked_list.dart';
 import 'package:boogle_mobile/providers/product_list.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ProductScreen extends StatefulWidget {
   static String routeName = '/product';
@@ -215,6 +215,18 @@ class _ProductScreenState extends State<ProductScreen> {
                         selectedProduct.productImg,
                         width: size.width
                       ),
+                    ),
+
+                    Positioned(
+                      bottom:30,
+                      right:30,
+                      child: QrImage(
+                        data: selectedProduct.productImg,
+                        size: 100,
+                        backgroundColor: Colors.white,
+                        
+                      )
+
                     ),
 
                     //Liked Button

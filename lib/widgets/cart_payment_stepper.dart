@@ -95,10 +95,17 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                       print(address1);
                       print(address2);
                       print(paidBy);
+
                       print('Completed');
                     }
 
-                    fsService.addToOrder(postalCode,address1,paidBy,amount,totalItem,DateTime.now(), DateTime.now().add(Duration(days: 3)));
+                    fsService.addToOrder(postalCode,address1,paidBy,amount,totalItem,DateTime.now(), DateTime.now().add(Duration(days: 3))).then((value){
+                      print(value.id);
+                      snapshot.data!.forEach((doc) {
+                        fsService.addProductItems(value.id, doc.ownerEmail, doc.productName, doc.productImg, doc.productColors,doc.productPrice, doc.productSizes,doc.productRating,doc.productCount);
+
+                      });
+                    });
 
                     NotificationApi.showNotification(
                       title: 'Purchase Complete',
@@ -500,6 +507,7 @@ class _CartPaymentStepperState extends State<CartPaymentStepper> {
                   snapshot.data!.forEach((doc) {
                     amount += doc.productPrice * doc.productCount;
                     totalItem += doc.productCount;
+
                   });
                   }
 

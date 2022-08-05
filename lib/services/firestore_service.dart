@@ -36,12 +36,23 @@ class FirestoreService{
         .add({'ownerEmail': ownerEmail,'productCategory': productCategory, 'productName':productName, 'productImg':productImg, 'productColors':productColors, 'productPrice':productPrice,'productSizes':productSizes,'productRating':productRating,'productCount':productCount});
   }
 
-  addToOrder(postalCode, address1, paidBy, amount, totalItem, purchasedBy, deliveryDate){
+  Future<DocumentReference<Map<String,dynamic>>> addToOrder(postalCode, address1, paidBy, amount, totalItem, purchasedBy, deliveryDate){
     return FirebaseFirestore.instance
         .collection('users')
         .doc(authService.getCurrentUser()!.email)
         .collection('users-orders-history')
         .add({'postalCode': postalCode, 'address1': address1, 'paidBy': paidBy, 'amount':amount, 'totalItem': totalItem, 'purchasedBy':purchasedBy, 'deliveryDate': deliveryDate});
+  }
+
+  addProductItems(id,ownerEmail,productName, productImg, productColors,productPrice,productSizes,productRating,productCount){
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(authService.getCurrentUser()!.email)
+        .collection('users-orders-history')
+        .doc(id)
+        .collection('purchased-items')
+        .add({'ownerEmail': ownerEmail, 'productName':productName, 'productImg':productImg, 'productColors':productColors, 'productPrice':productPrice,'productSizes':productSizes,'productRating':productRating,'productCount':productCount});
+
   }
 
   //Delete
@@ -158,11 +169,11 @@ Stream<FirestoreUser> getAuthUserFromFirestore(){
 
 
   //Update
-  editProduct(id, productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating, productCount) {
+  editProduct(id,productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating, productCount) {
     return FirebaseFirestore.instance
         .collection('products')
         .doc(id)
-        .set({'productName': productName, 'productImg': productImg, 'productDetails': productDetails, 'productCategory': productCategory,'productColors': productColors, 'productPrice': productPrice, 'productSizes': productSizes, 'productRating': productRating, 'productCount': productCount});
+        .set({'ownerEmail': authService.getCurrentUser()!.email,'productName': productName, 'productImg': productImg, 'productDetails': productDetails, 'productCategory': productCategory,'productColors': productColors, 'productPrice': productPrice, 'productSizes': productSizes, 'productRating': productRating, 'productCount': productCount});
   }
 
   increaseCartProductCount(id, productCount){
@@ -172,6 +183,15 @@ Stream<FirestoreUser> getAuthUserFromFirestore(){
         .collection('users-cart-items')
         .doc(id)
         .update({'productCount': productCount + 1});
+  }
+
+  decreaseCartProductCount(id, productCount){
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(authService.getCurrentUser()!.email)
+        .collection('users-cart-items')
+        .doc(id)
+        .update({'productCount': productCount - 1});
   }
 
 

@@ -7,12 +7,14 @@ class Orders {
   double amount;
   DateTime purchasedBy;
   DateTime deliveryDate;
+  List<Product> products;
 
   Orders(
       {required this.id,
       required this.postalCode,
         required this.totalItem,
       required this.address1,
+        required this.products,
       required this.paidBy,
       required this.amount,
       required this.purchasedBy,
@@ -25,6 +27,7 @@ class Orders {
         address1 = snapshot['address1'] ?? '',
         paidBy = snapshot['paidBy'] ?? '',
         amount = snapshot['amount'] ?? 0,
+        products = snapshot['products'] ?? [],
         purchasedBy = (snapshot['purchasedBy'] ?? Timestamp.now()).toDate(),
         deliveryDate = (snapshot['deliveryDate'] ?? Timestamp.now()).toDate();
 }

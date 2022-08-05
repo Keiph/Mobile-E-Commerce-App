@@ -2,6 +2,7 @@ import 'package:boogle_mobile/constants.dart';
 import 'package:boogle_mobile/models/users.dart';
 import 'package:boogle_mobile/screens/add_product_screen.dart';
 import 'package:boogle_mobile/screens/history_screen.dart';
+import 'package:boogle_mobile/screens/qr_code_scanner_screen.dart';
 import 'package:boogle_mobile/screens/random_shuffle_screen.dart';
 import 'package:boogle_mobile/screens/settings_screen.dart';
 import 'package:boogle_mobile/services/auth_service.dart';
@@ -155,6 +156,20 @@ class _AppDrawerState extends State<AppDrawer> {
                       title: const Text('Orders'),
                       onTap: () {
                         Navigator.of(context).pushNamed(OrderScreen.routeName);
+                      },
+                    ),
+                    Divider(
+                      height: 3,
+                      color: MyApp.themeNotifier.value == ThemeMode.light
+                          ? Colors.black
+                          : Colors.white,
+                    ),
+
+                    ListTile(
+                      leading: const FaIcon(FontAwesomeIcons.qrcode),
+                      title: const Text('QR Scanner'),
+                      onTap: () {
+                        Navigator.of(context).pushNamed(QRCodeScannerScreen.routeName);
                       },
                     ),
                     Divider(

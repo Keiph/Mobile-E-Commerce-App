@@ -14,6 +14,7 @@ import 'package:boogle_mobile/screens/login_screen.dart';
 import 'package:boogle_mobile/screens/order_screen.dart';
 import 'package:boogle_mobile/screens/payment_screen.dart';
 import 'package:boogle_mobile/screens/product_screen.dart';
+import 'package:boogle_mobile/screens/qr_code_scanner_screen.dart';
 import 'package:boogle_mobile/screens/random_shuffle_screen.dart';
 import 'package:boogle_mobile/screens/register_screen.dart';
 import 'package:boogle_mobile/screens/reset_password_screen.dart';
@@ -148,6 +149,9 @@ class _MyAppState extends State<MyApp> {
               },*/
                         OrderScreen.routeName: (_) {
                           return OrderScreen();
+                        },
+                        QRCodeScannerScreen.routeName: (_) {
+                          return QRCodeScannerScreen();
                         },
                       },
                     );

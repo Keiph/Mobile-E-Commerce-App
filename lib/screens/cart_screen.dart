@@ -105,9 +105,8 @@ class _CartScreenState extends State<CartScreen> {
                           // if productCount is less than 2 set productCount else set productCount -= 1
                           snapshot.data![i].productCount < 2
                               ? snapshot.data![i].productCount
-                              : setState(() {
-                            snapshot.data![i].productCount -= 1;
-                          });
+                              : fsService.decreaseCartProductCount(snapshot.data![i].id, snapshot.data![i].productCount);
+
                         }
 
                         //List View product card
