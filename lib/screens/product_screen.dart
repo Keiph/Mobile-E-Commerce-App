@@ -4,7 +4,9 @@ import 'package:boogle_mobile/models/product.dart';
 import 'package:boogle_mobile/providers/cart_list.dart';
 import 'package:boogle_mobile/screens/edit_product_screen.dart';
 import 'package:boogle_mobile/screens/payment_screen.dart';
+import 'package:boogle_mobile/services/auth_service.dart';
 import 'package:boogle_mobile/services/firestore_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +50,7 @@ class _ProductScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
 
     FirestoreService fsService = FirestoreService();
+    AuthService authService = AuthService();
     //gets the size of the screen width & and height
     Size size = MediaQuery.of(context).size;
 
@@ -55,14 +58,8 @@ class _ProductScreenState extends State<ProductScreen> {
     Product selectedProduct =
         ModalRoute.of(context)?.settings.arguments as Product;
 
-    // this function does event handling when user clicks on '+' and '-' to increase the amount of product they are going to buy
-    void _decrementValidator() {
-      // if productCount is less than 2 set productCount else set productCount -= 1
-      selectedProduct.productCount < 2
-          ? selectedProduct.productCount
-          : selectedProduct.productCount -= 1;
 
-    }
+
 
     //This method calls upon an Alert Dialog to check if user wants to delete
     //the Product Object of the "selectedProduct"
@@ -113,12 +110,10 @@ class _ProductScreenState extends State<ProductScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        setState(
-                          () {
-                            fsService.removeProduct(id);
+                        fsService.removeProduct(id);
+                        fsService.removeFromCart(id);
+                        fsService.removeFromLiked(id);
 
-                          }
-                        );
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                         Fluttertoast.showToast(
@@ -174,9 +169,10 @@ class _ProductScreenState extends State<ProductScreen> {
                     : Colors.black,
               ),
             ),
-            actions: [
+            actions: [authService.getCurrentUser()!.email == selectedProduct.ownerEmail ?
               Row(
                 children: [
+
                   IconButton(
                     icon: const Icon(Icons.edit),
                     onPressed: () {
@@ -191,7 +187,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     },
                   ),
                 ],
-              ),
+              ): Container()
             ],
           ),
           body: SingleChildScrollView(
@@ -259,9 +255,9 @@ class _ProductScreenState extends State<ProductScreen> {
                               // if isLiked is true call addToLiked method from LikedList Provider
                               // else call removeFromLiked method from LikedList Provider
                               if (isLiked) {
-                                fsService.addToLiked(selectedProduct.ownerEmail,selectedProduct.productCategory ,selectedProduct.productName, selectedProduct.productImg, selectedProduct.productColors, selectedProduct.productPrice, selectedProduct.productSizes, selectedProduct.productRating, selectedProduct.productCount);
+                                fsService.addToLiked(selectedProduct.id, selectedProduct.ownerEmail, selectedProduct.productName, selectedProduct.productImg, selectedProduct.productDetails, selectedProduct.productCategory, selectedProduct.productColors, selectedProduct.productPrice, selectedProduct.productSizes, selectedProduct.productRating, selectedProduct.productCount);
                               } else {
-                                fsService.removeFromLiked(selectedProduct.id);
+                                fsService.removeFromLiked('selectedProduct.id');
                               }
                             });
                           },
@@ -429,19 +425,8 @@ class _ProductScreenState extends State<ProductScreen> {
                             child: ElevatedButton(
                               onPressed: () {
                                 // hide any existing snackbar
-                                fsService.addToCart(selectedProduct.ownerEmail ,selectedProduct.productName, selectedProduct.productImg, selectedProduct.productColors, selectedProduct.productPrice, selectedProduct.productSizes, selectedProduct.productRating, selectedProduct.productCount);
-                                //call addToCart method from CartList Provider
-                                /*cartProduct.addToCart(
-                                  selectedProduct.productName,
-                                  selectedProduct.productImg,
-                                  selectedProduct.productDetails,
-                                  selectedProduct.productColors,
-                                  selectedProduct.productCategory,
-                                  selectedProduct.productPrice,
-                                  selectedProduct.productSizes,
-                                  selectedProduct.productRating,
-                                  selectedProduct.productCount,
-                                );*/
+                                fsService.addToCart(selectedProduct.id, selectedProduct.ownerEmail, selectedProduct.productName, selectedProduct.productImg, selectedProduct.productDetails, selectedProduct.productCategory, selectedProduct.productColors, selectedProduct.productPrice, selectedProduct.productSizes, selectedProduct.productRating, selectedProduct.productCount);
+
                                 //show a snackbar upon calling method
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

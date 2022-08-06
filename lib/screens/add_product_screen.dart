@@ -41,9 +41,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
       productSizes,
       productDetails;
   int? productColors;
-  double? productPrice;
+  double? productPrice, productRating;
   int productCount = 1;
-  double productRating = 5.0;
+
 
   void saveForm() {
     bool isValid = form.currentState!.validate();
@@ -97,9 +97,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          // make call to provider addProduct Function and added required params into the constructor
+
                           FirestoreService fsService = FirestoreService();
-                          fsService.addProduct(productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating, productCount);
+                          fsService.addProduct().then((value){
+                            fsService.addProductUniqueID(value.id, productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating,productCount);
+                          });
                           FocusScope.of(context).unfocus();
 
                           if (kDebugMode) {
@@ -748,6 +750,60 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     },
                     onChanged: (value) {
                       productColors = value as int? ;
+                    },
+                  ),
+                  const SizedBox(
+                    height:20,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      label: const Text('Enter your own Rating'),
+                      hintText: '4.9',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color:
+                          MyApp.themeNotifier.value == ThemeMode.light
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color:
+                          MyApp.themeNotifier.value == ThemeMode.light
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                      ),
+                      errorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      focusedErrorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
+                    keyboardType: TextInputType
+                        .number, //opens up keyboard in number only
+                    validator: (value) {
+                      //checks if user input is empty
+                      if (value!.isEmpty) {
+                        return 'Please provide a rating';
+                      }else if(double.tryParse(value) != null){
+                        if(double.parse(value) > 5 || double.parse(value) < 0){
+                          return 'Please give in range of 0 to 5';
+                        }
+                      }
+
+                      //checks if user input is of a double data type
+                      else if (double.tryParse(value) == null) {
+                        return 'Invalid price format';
+                      } else {
+                        return null;
+                      }
+                    },
+                    onSaved: (value) {
+                      //change value to double data type from default String data type
+                      productRating = double.parse(value!);
                     },
                   ),
                   const SizedBox(

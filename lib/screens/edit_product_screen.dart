@@ -86,7 +86,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         setState(() {
                           // make call to provider addProduct Function and added required params into the constructor
                           FirestoreService fsService = FirestoreService();
-                          fsService.editProduct(id, productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating, productCount);
+                          fsService.editProduct(id, productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating, productCount).then((value){
+                            fsService.updateCartProduct(id,productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating, productCount);
+                            fsService.updateLikedProduct(id ,productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating, productCount);
+                          });
                           FocusScope.of(context).unfocus();
 
                           if (kDebugMode) {

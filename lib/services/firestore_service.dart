@@ -7,10 +7,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirestoreService{
   AuthService authService = AuthService();
   //Create
-  addProduct(productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating, productCount) {
+  addProduct() {
     return FirebaseFirestore.instance
         .collection('products')
-        .add({'ownerEmail':authService.getCurrentUser()!.email,'productName': productName, 'productImg': productImg, 'productDetails': productDetails, 'productCategory': productCategory,'productColors': productColors, 'productPrice': productPrice, 'productSizes': productSizes, 'productRating': productRating, 'productCount': productCount});
+        .add({});
+  }
+
+  addProductUniqueID(id, productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating,productCount){
+    return FirebaseFirestore.instance
+        .collection('products')
+        .doc(id)
+        .set({'id': id, 'ownerEmail': authService.getCurrentUser()!.email, 'productName': productName, 'productImg': productImg, 'productDetails': productDetails, 'productCategory': productCategory,'productColors': productColors, 'productPrice': productPrice, 'productSizes': productSizes, 'productRating': productRating, 'productCount': productCount});
+
   }
 
   Future<void> addUser(email, userName,phoneNo){
@@ -20,20 +28,23 @@ class FirestoreService{
         .set({'userName': userName, 'phoneNo': phoneNo});
   }
 
-  addToCart(ownerEmail,productName, productImg, productColors,productPrice,productSizes,productRating,productCount){
+  addToCart(id,ownerEmail, productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating,productCount){
     return FirebaseFirestore.instance
         .collection('users')
         .doc(authService.getCurrentUser()!.email)
         .collection('users-cart-items')
-        .add({'ownerEmail': ownerEmail, 'productName':productName, 'productImg':productImg, 'productColors':productColors, 'productPrice':productPrice,'productSizes':productSizes,'productRating':productRating,'productCount':productCount});
+        .doc(id)
+        .set({'id': id, 'ownerEmail': ownerEmail, 'productName': productName, 'productImg': productImg, 'productDetails': productDetails, 'productCategory': productCategory,'productColors': productColors, 'productPrice': productPrice, 'productSizes': productSizes, 'productRating': productRating, 'productCount': productCount});
+
   }
 
-  addToLiked(ownerEmail,productCategory,productName, productImg, productColors,productPrice,productSizes,productRating,productCount){
+  addToLiked(id,ownerEmail, productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating,productCount){
     return FirebaseFirestore.instance
         .collection('users')
         .doc(authService.getCurrentUser()!.email)
         .collection('users-liked-items')
-        .add({'ownerEmail': ownerEmail,'productCategory': productCategory, 'productName':productName, 'productImg':productImg, 'productColors':productColors, 'productPrice':productPrice,'productSizes':productSizes,'productRating':productRating,'productCount':productCount});
+        .doc(id)
+        .set({'id': id, 'ownerEmail': ownerEmail, 'productName': productName, 'productImg': productImg, 'productDetails': productDetails, 'productCategory': productCategory,'productColors': productColors, 'productPrice': productPrice, 'productSizes': productSizes, 'productRating': productRating, 'productCount': productCount});
   }
 
   Future<DocumentReference<Map<String,dynamic>>> addToOrder(postalCode, address1, paidBy, amount, totalItem, purchasedBy, deliveryDate){
@@ -169,11 +180,30 @@ Stream<FirestoreUser> getAuthUserFromFirestore(){
 
 
   //Update
-  editProduct(id,productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating, productCount) {
+  editProduct(id, productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating,productCount) {
     return FirebaseFirestore.instance
         .collection('products')
         .doc(id)
-        .set({'ownerEmail': authService.getCurrentUser()!.email,'productName': productName, 'productImg': productImg, 'productDetails': productDetails, 'productCategory': productCategory,'productColors': productColors, 'productPrice': productPrice, 'productSizes': productSizes, 'productRating': productRating, 'productCount': productCount});
+        .update({'id':id,'ownerEmail': authService.getCurrentUser()!.email,'productName': productName, 'productImg': productImg, 'productDetails': productDetails, 'productCategory': productCategory,'productColors': productColors, 'productPrice': productPrice, 'productSizes': productSizes, 'productRating': productRating, 'productCount': productCount});
+  }
+
+  updateCartProduct(id, productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating,productCount){
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(authService.getCurrentUser()!.email)
+        .collection('users-cart-items')
+        .doc(id)
+        .update({'id': id, 'ownerEmail': authService.getCurrentUser()!.email, 'productName': productName, 'productImg': productImg, 'productDetails': productDetails, 'productCategory': productCategory,'productColors': productColors, 'productPrice': productPrice, 'productSizes': productSizes, 'productRating': productRating, 'productCount': productCount});
+  }
+
+  updateLikedProduct(id, productName, productImg, productDetails, productCategory,productColors, productPrice, productSizes, productRating,productCount){
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(authService.getCurrentUser()!.email)
+        .collection('users-liked-items')
+        .doc(id)
+        .update({'id': id, 'ownerEmail': authService.getCurrentUser()!.email, 'productName': productName, 'productImg': productImg, 'productDetails': productDetails, 'productCategory': productCategory,'productColors': productColors, 'productPrice': productPrice, 'productSizes': productSizes, 'productRating': productRating, 'productCount': productCount});
+
   }
 
   increaseCartProductCount(id, productCount){
